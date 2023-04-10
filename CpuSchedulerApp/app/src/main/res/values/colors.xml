@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+<!--    Colores base -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+<!--    Colores de la guia de estilo web de la UCO -->
+
+<!--    Colores base de la marca -->
+    <color name="amarillo_base">#DB912F</color>
+    <color name="azul_base">#221C35</color>
+    <color name="rojo_base">#A41E34</color>
+
+<!--    Colores complementarios al grupo base -->
+    <color name="amarillo_com_1">#D6A305</color>
+    <color name="amarillo_com_2">#A37C13</color>
+
+    <color name="azul_com_1">#614C9A</color>
+    <color name="azul_com_2">#352663</color>
+
+    <color name="rojo_com_1">#E73057</color>
+    <color name="rojo_com_2">#691320</color>
+
+<!--    Colores complementarios no derivados de los base -->
+    <color name="amarillo_deriv_1">#565220</color>
+    <color name="amarillo_deriv_2">#A39A39</color>
+    <color name="amarillo_deriv_3">#E3D553</color>
+
+    <color name="verde_deriv_1">#206F30</color>
+    <color name="verde_deriv_2">#259624</color>
+    <color name="verde_deriv_3">#5CB244</color>
+</resources>

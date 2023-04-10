@@ -1,0 +1,11 @@
+<resources>
+<!--    Nombres de las paginas -->
+    <string name="app_name">UCO - CpuScheduler</string>
+    <string name="home_name">Estamos en la pantalla de HOME</string>
+    <string name="tutorial_name">Estamos en la pantalla de TUTORIAL</string>
+    <string name="results_name">Estamos en la pantalla de RESULTADOS</string>
+    <string name="graphs_name">Estamos en la pantalla de GRAFICOS</string>
+
+<!--    Strings para los elementos comunes -> Common -->
+    <string name="common_buttonNext">Siguiente</string>
+</resources>
