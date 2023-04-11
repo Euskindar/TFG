@@ -54,15 +54,7 @@ sealed class AppNavigationAnimations(
                 fullWidth / 3
             } + fadeIn(tween(fadeAnimationSpeed))
         },
-        exit = {
-            slideOutHorizontally(
-                animationSpec = tween(
-                    durationMillis = slideAnimationSpeed,
-                    easing = LinearOutSlowInEasing
-                ),
-                targetOffsetX = { fullWidth -> fullWidth }
-            ) + fadeOut(tween(fadeAnimationSpeed))
-        },
+        exit = { fadeOut(tween(fadeAnimationSpeed)) },
         popEnter = {
             expandHorizontally()
         },

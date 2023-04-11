@@ -1,5 +1,7 @@
 package com.i72pehej.cpuschedulerapp.util
 
+import com.i72pehej.cpuschedulerapp.R
+
 /**
  * @author Julen Perez Hernandez
  */
@@ -21,6 +23,8 @@ const val buttonDefaultPadding = 16
 
 // ==============================================================
 
+// Iconos comunes
+const val appIcon = R.drawable.logos_version_uco
 
 // ==============================================================
 
