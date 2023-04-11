@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.i72pehej.cpuschedulerapp.SplashScreen
+import com.i72pehej.cpuschedulerapp.usecases.launch.SplashScreen
 import com.i72pehej.cpuschedulerapp.usecases.home.HomeScreen
 import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
 import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen

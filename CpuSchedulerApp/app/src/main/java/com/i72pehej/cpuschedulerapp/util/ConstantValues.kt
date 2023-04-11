@@ -1,18 +1,31 @@
 package com.i72pehej.cpuschedulerapp.util
 
-// ==============================================================
-// Valores constantes para las animaciones
-val slideAnimationSpeed = 300
-val fadeAnimationSpeed = 300
-val exitOffsetXValue = -300
-val enterOffsetXValue = 300
+/**
+ * @author Julen Perez Hernandez
+ */
 
-// ==============================================================\
-// Valores para los botones basicos comunes a la app
-val buttonCornerRadius = 50
-val buttonBorderWith = 1
-val buttonDefaultPadding = 16
 // ==============================================================
+
+// Valores constantes para las animaciones
+const val slideAnimationSpeed = 300
+const val fadeAnimationSpeed = 300
+const val exitOffsetXValue = -300
+const val enterOffsetXValue = 300
+
 // ==============================================================
+
+// Valores para los botones basicos comunes de la app
+const val buttonCornerRadius = 50
+const val buttonBorderWith = 1
+const val buttonDefaultPadding = 16
+
 // ==============================================================
+
+
+// ==============================================================
+
+
+// ==============================================================
+
+
 // ==============================================================

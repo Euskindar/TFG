@@ -10,6 +10,12 @@ import androidx.compose.ui.graphics.Color
 import com.i72pehej.cpuschedulerapp.navigation.AppNavigation
 import com.i72pehej.cpuschedulerapp.ui.theme.CpuSchedulerAppTheme
 
+/**
+ * @author Julen Perez Hernandez
+ * Main activity
+ *
+ * @constructor Crea la actividad Main para la llamada a las funciones iniciales
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    // Llamamos al gestor de navegacion, que se encargara de visualizar las pantallas en el orden selecionado
+                    // Llamamos al gestor de navegacion, que se encargara de visualizar las pantallas en el orden seleccionado
                     AppNavigation()
                 }
             }

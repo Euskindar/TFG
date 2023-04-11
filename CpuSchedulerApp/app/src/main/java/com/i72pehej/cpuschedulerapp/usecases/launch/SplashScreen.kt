@@ -1,4 +1,4 @@
-package com.i72pehej.cpuschedulerapp
+package com.i72pehej.cpuschedulerapp.usecases.launch
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
@@ -20,13 +20,21 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
+import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import kotlinx.coroutines.delay
 
-// Pantalla de carga para cuando se inicia la aplicacion de forma que de tiempo a que cargue lo necesario
+/**
+ * @author Julen Perez Hernandez
+ */
 
 // ==================================================================================
 
+/**
+ * Pantalla de carga para cuando se inicia la aplicacion de forma que de tiempo a que cargue lo necesario
+ *
+ * @param navController Elemento para controlar la informacion de navegacion
+ */
 @Composable
 fun SplashScreen(navController: NavHostController) {
     // Variable para la animacion de salida de circulo
@@ -48,7 +56,13 @@ fun SplashScreen(navController: NavHostController) {
 
 // ==================================================================================
 
-// Creacion del efecto de bote del icono de la pantalla de carga
+/**
+ * Creacion del efecto de bote del icono de la pantalla de carga
+ *
+ * @param navController Elemento para controlar la informacion de navegacion
+ * @param scaleBallIcon Escala inicial del circulo
+ * @param scaleUcoIcon Escala inicial del icono de la app
+ */
 @Composable
 fun LaunchScreen(
     navController: NavHostController,
@@ -64,7 +78,11 @@ fun LaunchScreen(
 
 // ==================================================================================
 
-// Animacion del circulo de salida
+/**
+ * Animacion del circulo de salida
+ *
+ * @param scaleBallIcon Escala inicial del circulo
+ */
 @Composable
 fun TransitionCircleExit(scaleBallIcon: Animatable<Float, AnimationVector1D>) {
     // Efecto para el circulo que sale
@@ -83,7 +101,12 @@ fun TransitionCircleExit(scaleBallIcon: Animatable<Float, AnimationVector1D>) {
 
 // ==================================================================================
 
-// Animacion de icono de app
+/**
+ * Animacion de icono de app
+ *
+ * @param navController Controlador de la navegacion
+ * @param scaleUcoIcon Escala inicial del icono de la app
+ */
 @Composable
 fun AppIconAnimationEnter(
     navController: NavHostController,
@@ -101,7 +124,7 @@ fun AppIconAnimationEnter(
         delay(400)
 
         // Se llama primero a esta funcion para que el Home sea la primera pantalla
-        // y en caso de darle hacia antras no volvamos a la splashscreen
+        // y en caso de darle hacia atras no volvamos a la splashscreen
         navController.popBackStack()
         navController.navigate(AppScreens.HomeScreen.route)
     }
@@ -109,7 +132,12 @@ fun AppIconAnimationEnter(
 
 // ==================================================================================
 
-// Visualizacion de los elementos de la pantalla de carga
+/**
+ * Visualizacion de los elementos de la pantalla de carga
+ *
+ * @param scaleUco Escala inicial del icono de la app
+ * @param scaleBall Escala inicial del circulo
+ */
 @Composable
 fun Splash(
     scaleUco: Animatable<Float, AnimationVector1D>,
