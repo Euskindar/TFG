@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +13,7 @@ import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
-import com.i72pehej.cpuschedulerapp.usecases.common.CommonTopAppBar
+import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 
 /**
  * @author Julen Perez Hernandez
@@ -24,23 +23,22 @@ import com.i72pehej.cpuschedulerapp.usecases.common.CommonTopAppBar
  */
 @Composable
 fun ResultsScreen(navController: NavHostController) {
-    Scaffold(
-        topBar = { CommonTopAppBar() }
+    CommonScaffold(
+        content = { scaffoldPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(scaffoldPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = stringResource(id = R.string.results_name))
 
-    ) { scaffoldPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(scaffoldPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = stringResource(id = R.string.results_name))
-
-            CommonRoundedButton(
-                text = stringResource(id = R.string.common_buttonNext),
-                onClick = { navController.navigate(AppScreens.GraphsScreen.route) }
-            )
+                CommonRoundedButton(
+                    text = stringResource(id = R.string.common_buttonNext),
+                    onClick = { navController.navigate(AppScreens.GraphsScreen.route) }
+                )
+            }
         }
-    }
+    )
 }
