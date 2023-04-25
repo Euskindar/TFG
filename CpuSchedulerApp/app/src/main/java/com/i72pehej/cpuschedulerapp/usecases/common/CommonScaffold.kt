@@ -1,6 +1,10 @@
 package com.i72pehej.cpuschedulerapp.usecases.common
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -19,6 +23,10 @@ import com.i72pehej.cpuschedulerapp.util.appIcon
  */
 
 /**
+ * ===================================================================
+ */
+
+/**
  * Common scaffold para toda la app
  *
  * @param content Contenido que mostrar en pantalla
@@ -32,6 +40,10 @@ fun CommonScaffold(
         content = content
     )
 }
+
+/**
+ * ===================================================================
+ */
 
 /**
  * Funcion que crea la top bar comun de la app
@@ -57,3 +69,7 @@ fun CommonTopAppBar() {
         }
     )
 }
+
+/**
+ * ===================================================================
+ */
