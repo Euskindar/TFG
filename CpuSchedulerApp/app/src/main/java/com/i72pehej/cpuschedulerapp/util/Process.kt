@@ -20,7 +20,7 @@ package com.i72pehej.cpuschedulerapp.util
  * @constructor Crea la representacion de un Proceso de CPU
  */
 class Proceso(
-    val id: Int,
+    val id: Int = 0,
     val nombre: String,
     val tiempoLlegada: Int,
     val duracion: Int,
