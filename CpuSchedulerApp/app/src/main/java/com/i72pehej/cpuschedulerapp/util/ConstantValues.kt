@@ -1,6 +1,7 @@
 package com.i72pehej.cpuschedulerapp.util
 
 import com.i72pehej.cpuschedulerapp.R
+import kotlin.random.Random
 
 /**
  * @author Julen Perez Hernandez
@@ -28,6 +29,22 @@ const val appIcon = R.drawable.logos_version_uco
 
 // ==============================================================
 
+// Lista de procesos de prueba
+val listaDeProcesosPrueba = mutableListOf<Proceso>()
+
+fun crearProcesosDePrueba(): MutableList<Proceso> {
+    for (i in 1..5) {
+        val nombre = "Proceso $i"
+        val tiempoLlegada = Random.nextInt(1, 11)
+        val duracion = Random.nextInt(1, 11)
+        val estado = Proceso.EstadoDeProceso.NUEVO
+        val progreso = 0
+
+        listaDeProcesosPrueba.add(Proceso(i, nombre, tiempoLlegada, duracion, estado, progreso))
+    }
+
+    return listaDeProcesosPrueba
+}
 
 // ==============================================================
 

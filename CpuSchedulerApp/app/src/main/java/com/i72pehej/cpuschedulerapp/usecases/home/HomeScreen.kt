@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
-import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
+import com.i72pehej.cpuschedulerapp.util.crearProcesosDePrueba
 
 /**
  * @author Julen Perez Hernandez
@@ -36,7 +36,8 @@ fun HomeScreen(navController: NavHostController) {
 
                 CommonRoundedButton(
                     text = stringResource(id = R.string.common_buttonNext),
-                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) },
+//                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
+                    onClick = { algoritmoFifo(crearProcesosDePrueba()) }
                 )
             }
         }

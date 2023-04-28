@@ -1,7 +1,9 @@
 package com.i72pehej.cpuschedulerapp.usecases.home
 
 import com.i72pehej.cpuschedulerapp.util.Proceso
-import com.i72pehej.cpuschedulerapp.util.orderProcessList
+import com.i72pehej.cpuschedulerapp.util.imprimirListaProcesos
+import com.i72pehej.cpuschedulerapp.util.imprimirProceso
+import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
 /**
  * @author Julen Perez Hernandez
@@ -11,42 +13,52 @@ import com.i72pehej.cpuschedulerapp.util.orderProcessList
  * ===================================================================
  */
 
-val listaDeProcesos = mutableListOf<Proceso>()
+/**
+ * Funcion para implementar el algoritmo FIFO considerando estados
+ *
+ * @param listaDeProcesos Recibe una lista con los procesos creados para aplicar el algoritmo
+ */
+fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
 
-fun FifoAlgorithm(listaDeProcesos: MutableList<Proceso>) {
-    val listaProcesosOrdenada = listaDeProcesos
-    orderProcessList(listaProcesosOrdenada)
+    println("LISTA DE PROCESOS SIN ORDENAR")
+    imprimirListaProcesos(listaDeProcesos)
+
+    val listaProcesosOrdenada = (listaDeProcesos).also {
+        ordenarListaProcesos(it)
+    }
+
+    println("LISTA DE PROCESOS ORDENADA")
+    imprimirListaProcesos(listaProcesosOrdenada)
 
     for (proceso in listaProcesosOrdenada) {
-
-        // TODO
         // Comprobar que el proceso no se encuentra bloqueado o algo asi antes de nada
-
-
-
-        // Actualizar el estado del proceso a "Ejecutándose"
-        proceso.estado = Proceso.EstadoDeProceso.CORRIENDO
-
-        // Simular la ejecución del proceso
-        for (time in 1..proceso.duracion) {
-            // Aquí puedes realizar las operaciones necesarias durante la ejecución del proceso
-
-
-
-
-
-            // Actualizar el progreso del proceso
-            proceso.progreso = time
-
-            // Pausar la ejecución para simular el tiempo de ráfaga del proceso
-            Thread.sleep(1000) // 1 segundo de pausa
-
-            // Actualizar el estado del proceso a "Esperando"
-            proceso.estado = Proceso.EstadoDeProceso.BLOQUEADO
+        if (proceso.estado == Proceso.EstadoDeProceso.BLOQUEADO) {
+            println("Proceso bloqueado")
         }
 
-        // Actualizar el estado del proceso a "Terminado"
-        proceso.estado = Proceso.EstadoDeProceso.COMPLETADO
+        // Comprobar que el proceso esta listo para su ejecucion
+        if (proceso.estado != Proceso.EstadoDeProceso.LISTO) {
+            println("PROCESO NO LISTO")
+        } else {
+            // Actualizar el estado del proceso a "Corriendo"
+            proceso.estado = Proceso.EstadoDeProceso.CORRIENDO
+
+            // Simular la ejecucion del proceso
+            for (time in 1..proceso.duracion) {
+                // Aqui puedes realizar las operaciones necesarias durante la ejecucion del proceso
+
+
+                // Actualizar el progreso del proceso
+                proceso.progreso = time
+
+                // Actualizar el estado del proceso a "Esperando"
+                proceso.estado = Proceso.EstadoDeProceso.ESPERANDO
+            }
+
+            // Actualizar el estado del proceso a "Completado"
+            proceso.estado = Proceso.EstadoDeProceso.COMPLETADO
+            imprimirProceso(proceso)
+        }
     }
 }
 
