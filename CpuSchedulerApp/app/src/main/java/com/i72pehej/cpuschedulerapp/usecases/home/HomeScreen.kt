@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
+import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
-import com.i72pehej.cpuschedulerapp.util.crearProcesosDePrueba
 
 /**
  * @author Julen Perez Hernandez
@@ -63,8 +63,8 @@ fun HomeScreen(navController: NavHostController) {
 
                 CommonRoundedButton(
                     text = stringResource(id = R.string.common_buttonNext),
-//                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
-                    onClick = { algoritmoFifo(crearProcesosDePrueba()) }
+                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
+//                    onClick = { algoritmoFifo(crearProcesosDePrueba()) }
                 )
 
 
@@ -173,15 +173,21 @@ fun TablaProcesos(procesos: List<Proceso>) {
             // Agregamos una fila para el encabezado de la tabla
             item {
                 Row(modifier = Modifier.background(Color.Gray)) {
-                    Text("Nombre", modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp))
-                    Text("Tiempo de llegada", modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp))
-                    Text("Duración", modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp))
+                    Text(
+                        "Nombre", modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                    )
+                    Text(
+                        "Tiempo de llegada", modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                    )
+                    Text(
+                        "Duración", modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                    )
                 }
             }
             // Agregamos una fila para cada proceso en la lista de procesos
