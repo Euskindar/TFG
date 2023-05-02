@@ -22,16 +22,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
-import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
 
@@ -61,12 +62,11 @@ fun HomeScreen(navController: NavHostController) {
             ) {
                 Text(text = stringResource(id = R.string.home_name))
 
-                CommonRoundedButton(
-                    text = stringResource(id = R.string.common_buttonNext),
-                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
+//                CommonRoundedButton(
+//                    text = stringResource(id = R.string.common_buttonNext),
+//                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
 //                    onClick = { algoritmoFifo(crearProcesosDePrueba()) }
-                )
-
+//                )
 
                 // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
                 val procesos = remember { mutableStateListOf<Proceso>() }
@@ -82,6 +82,16 @@ fun HomeScreen(navController: NavHostController) {
 
                     // Creamos la tabla de procesos, y le pasamos la lista de procesos
                     TablaProcesos(procesos = procesos)
+
+                    // Agregamos el botón "Siguiente"
+                    Button(
+                        onClick = { navController.navigate(AppScreens.TutorialScreen.route) },
+                        modifier = Modifier
+                            .align(End)
+                            .padding(16.dp)
+                    ) {
+                        Text("Siguiente")
+                    }
                 }
 
             }
@@ -105,6 +115,40 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     var tiempoLlegada by remember { mutableStateOf("") }
     var duracion by remember { mutableStateOf("") }
 
+    // Estado para almacenar los errores del formulario
+    var errorFormulario by remember { mutableStateOf("") }
+
+    // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
+    fun agregarProceso() {
+        // Validar los campos del formulario
+        errorFormulario = when {
+            nombre.isBlank() -> "Ingrese un nombre"
+            tiempoLlegada.isBlank() -> "Ingrese un tiempo de llegada"
+            !tiempoLlegada.isDigitsOnly() -> "Ingrese un número entero para el tiempo de llegada"
+            duracion.isBlank() -> "Ingrese una duración"
+            !duracion.isDigitsOnly() -> "Ingrese un número entero para la duración"
+
+            else -> {
+                // Si los campos son válidos, agregamos un nuevo proceso
+                val proceso = Proceso(
+                    nombre = nombre,
+                    tiempoLlegada = tiempoLlegada.toInt(),
+                    duracion = duracion.toInt()
+                )
+                onSubmit(proceso)
+
+                // Limpiamos los campos del formulario
+                nombre = ""
+                tiempoLlegada = ""
+                duracion = ""
+
+                // Reseteamos el estado del error del formulario
+                ""
+            }
+        }
+    }
+
+    // Contenido de la pagina
     Column {
         // Agregamos un titulo al formulario
         Text("Nuevo proceso", fontSize = 20.sp)
@@ -133,21 +177,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
         Button(
-            onClick = {
-                val proceso = Proceso(
-                    nombre = nombre,
-                    tiempoLlegada = tiempoLlegada.toInt(),
-                    duracion = duracion.toInt()
-                )
-                onSubmit(proceso)
-                nombre = ""
-                tiempoLlegada = ""
-                duracion = ""
-            },
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text("+ Agregar")
-        }
+            onClick = { agregarProceso() },
+            modifier = Modifier.align(End)
+        ) { Text("+") }
     }
 }
 

@@ -25,7 +25,7 @@ const val buttonDefaultPadding = 16
 // ==============================================================
 
 // Iconos comunes
-const val appIcon = R.drawable.logos_version_uco
+val appIcon = R.drawable.logos_version_uco
 
 // ==============================================================
 
