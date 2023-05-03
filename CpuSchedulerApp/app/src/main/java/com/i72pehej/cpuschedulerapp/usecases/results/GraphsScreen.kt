@@ -24,6 +24,7 @@ import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 @Composable
 fun GraphsScreen(navController: NavHostController) {
     CommonScaffold(
+        navController,
         content = { scaffoldPadding ->
             Column(
                 modifier = Modifier

@@ -5,14 +5,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,14 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
-import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -52,15 +52,15 @@ import com.i72pehej.cpuschedulerapp.util.Proceso
 @Composable
 fun HomeScreen(navController: NavHostController) {
     CommonScaffold(
+        navController,
         content = { scaffoldPadding ->
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(scaffoldPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.home_name))
+//                Text(text = stringResource(id = R.string.home_name))
 
 //                CommonRoundedButton(
 //                    text = stringResource(id = R.string.common_buttonNext),
@@ -71,7 +71,12 @@ fun HomeScreen(navController: NavHostController) {
                 // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
                 val procesos = remember { mutableStateListOf<Proceso>() }
 
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(16.dp)
+                ) {
                     // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
                     FormularioProceso {
                         procesos.add(it)
@@ -81,19 +86,30 @@ fun HomeScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Creamos la tabla de procesos, y le pasamos la lista de procesos
-                    TablaProcesos(procesos = procesos)
+                    Column(
+                        Modifier.height(400.dp)
+                    ) {
+                        TablaProcesos(procesos = procesos)
+                    }
 
                     // Agregamos el botón "Siguiente"
-                    Button(
-                        onClick = { navController.navigate(AppScreens.TutorialScreen.route) },
+                    Row(
                         modifier = Modifier
-                            .align(End)
-                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .weight(1f, false),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        Text("Siguiente")
+                        Button(
+                            onClick = { navController.navigate(AppScreens.TutorialScreen.route) },
+                            modifier = Modifier
+                                .padding(16.dp)
+//                                .align(End)
+                        ) {
+                            Text("Siguiente")
+                        }
                     }
                 }
-
             }
         }
     )
@@ -160,20 +176,24 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             label = { Text("Nombre") },
             modifier = Modifier.fillMaxWidth()
         )
-        OutlinedTextField(
-            value = tiempoLlegada,
-            onValueChange = { tiempoLlegada = it },
-            label = { Text("Tiempo de llegada") },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = duracion,
-            onValueChange = { duracion = it },
-            label = { Text("Duracion") },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
+
+        Row(Modifier.fillMaxWidth()) {
+            OutlinedTextField(
+                value = tiempoLlegada,
+                onValueChange = { tiempoLlegada = it },
+                label = { Text("Tiempo de llegada") },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth(fraction = 0.5f)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            OutlinedTextField(
+                value = duracion,
+                onValueChange = { duracion = it },
+                label = { Text("Duración") },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
         Button(
@@ -195,46 +215,54 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 @Composable
 fun TablaProcesos(procesos: List<Proceso>) {
     // Si la lista de procesos no está vacía, creamos una tabla utilizando LazyColumn
-    if (procesos.isNotEmpty()) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray)
-                .padding(8.dp)
-        ) {
-            // Agregamos una fila para el encabezado de la tabla
-            item {
-                Row(modifier = Modifier.background(Color.Gray)) {
-                    Text(
-                        "Nombre", modifier = Modifier
-                            .weight(1f)
-                            .padding(4.dp)
-                    )
-                    Text(
-                        "Tiempo de llegada", modifier = Modifier
-                            .weight(1f)
-                            .padding(4.dp)
-                    )
-                    Text(
-                        "Duración", modifier = Modifier
-                            .weight(1f)
-                            .padding(4.dp)
-                    )
-                }
-            }
-            // Agregamos una fila para cada proceso en la lista de procesos
-            items(procesos) { proceso ->
-                Row(modifier = Modifier.padding(4.dp)) {
-                    Text(proceso.nombre, modifier = Modifier.weight(1f))
-                    Text(proceso.tiempoLlegada.toString(), modifier = Modifier.weight(1f))
-                    Text(proceso.duracion.toString(), modifier = Modifier.weight(1f))
-                }
+//    if (procesos.isNotEmpty()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.primary)
+            .padding(8.dp)
+    ) {
+        // Agregamos una fila para el encabezado de la tabla
+        item {
+            Row(
+                modifier = Modifier.background(MaterialTheme.colors.secondary),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    "Nombre", modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                    color = MaterialTheme.colors.onPrimary
+                )
+                Text(
+                    "Tiempo de llegada", modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                    color = MaterialTheme.colors.onPrimary
+                )
+                Text(
+                    "Duración", modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                    color = MaterialTheme.colors.onPrimary
+                )
             }
         }
-    } else {
-        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Text("No hay procesos ingresados", modifier = Modifier.padding(8.dp))
+
+        // Agregamos una fila para cada proceso en la lista de procesos
+        items(procesos) { proceso ->
+            Row(modifier = Modifier.padding(4.dp)) {
+                Text(proceso.nombre, modifier = Modifier.weight(1f))
+                Text(proceso.tiempoLlegada.toString(), modifier = Modifier.weight(1f))
+                Text(proceso.duracion.toString(), modifier = Modifier.weight(1f))
+            }
+        }
     }
+//    }
+//    else {
+//        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
+//        Text("No hay procesos ingresados", modifier = Modifier.padding(8.dp))
+//    }
 }
 
 /**
