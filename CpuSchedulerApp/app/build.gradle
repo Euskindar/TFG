@@ -54,7 +54,7 @@ dependencies {
     //noinspection GradleDependency
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.activity:activity-compose:1.7.0'
+    implementation 'androidx.activity:activity-compose:1.7.1'
     //noinspection GradleDependency
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     //noinspection GradleDependency
@@ -80,5 +80,5 @@ dependencies {
     implementation 'com.google.accompanist:accompanist-navigation-animation:0.31.0-alpha'
 
     // Libreria de iconos extendida
-    implementation 'androidx.compose.material:material-icons-extended:1.4.1'
+    implementation 'androidx.compose.material:material-icons-extended:1.4.3'
 }

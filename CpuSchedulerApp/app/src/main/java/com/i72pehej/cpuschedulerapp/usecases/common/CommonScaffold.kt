@@ -54,11 +54,20 @@ fun CommonScaffold(
  */
 @Composable
 fun CommonTopAppBar(navController: NavHostController) {
+    // Funcion para volver a la pantalla de Home
+    fun topIconButtonHome() {
+        // Eliminar la pagina anterior de la navegacion
+        navController.popBackStack()
+
+        // Navegar a la pantalla de inicio
+        navController.navigate(AppScreens.HomeScreen.route)
+    }
+
     TopAppBar(
         title = {
             Row {
                 IconButton(
-                    onClick = { navController.navigate(AppScreens.HomeScreen.route) }
+                    onClick = { topIconButtonHome() }
                 ) {
                     Icon(
                         painter = painterResource(id = appIcon),
@@ -74,7 +83,8 @@ fun CommonTopAppBar(navController: NavHostController) {
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
-        }
+        },
+        elevation = 10.dp
     )
 }
 

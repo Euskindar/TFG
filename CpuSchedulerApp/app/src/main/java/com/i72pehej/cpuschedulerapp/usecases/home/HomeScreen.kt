@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,9 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material.icons.filled.Memory
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -26,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,9 +91,11 @@ fun HomeScreen(navController: NavHostController) {
                     // Agregamos un espacio en blanco para separar el formulario de la tabla de procesos
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    // TODO -> Asignar el espacio entre elementos a la seccion de la tabla
+
                     // Creamos la tabla de procesos, y le pasamos la lista de procesos
                     Column(
-                        Modifier.height(400.dp)
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         TablaProcesos(procesos = procesos)
                     }
@@ -124,6 +132,7 @@ fun HomeScreen(navController: NavHostController) {
  *
  * @param onSubmit Se encarga de agregar el proceso a la lista de procesos y limpiar el formulario.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Definimos tres variables para almacenar los datos del proceso que esta siendo ingresado
@@ -174,16 +183,30 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             value = nombre,
             onValueChange = { nombre = it },
             label = { Text("Nombre") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Memory,
+                    contentDescription = "Icono Nombre Proceso"
+                )
+            },
+            singleLine = true
         )
 
         Row(Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = tiempoLlegada,
                 onValueChange = { tiempoLlegada = it },
-                label = { Text("Tiempo de llegada") },
+                label = { Text("Llegada") },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(fraction = 0.5f)
+                modifier = Modifier.fillMaxWidth(fraction = 0.5f),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = "Icono tiempo de llegada"
+                    )
+                },
+                singleLine = true
             )
             Spacer(modifier = Modifier.width(10.dp))
             OutlinedTextField(
@@ -191,13 +214,26 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 onValueChange = { duracion = it },
                 label = { Text("Duración") },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.HourglassBottom,
+                        contentDescription = "Icono duracion de proceso"
+                    )
+                },
+                singleLine = true
             )
         }
 
+        val keyboardController = LocalSoftwareKeyboardController.current
+
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
         Button(
-            onClick = { agregarProceso() },
+            onClick =
+            {
+                agregarProceso()
+                keyboardController?.hide()
+            },
             modifier = Modifier.align(End)
         ) { Text("+") }
     }
@@ -218,7 +254,7 @@ fun TablaProcesos(procesos: List<Proceso>) {
 //    if (procesos.isNotEmpty()) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(MaterialTheme.colors.primary)
             .padding(8.dp)
     ) {
