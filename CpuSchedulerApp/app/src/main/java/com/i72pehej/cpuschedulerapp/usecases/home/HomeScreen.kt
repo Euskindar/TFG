@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -64,7 +65,7 @@ fun HomeScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(scaffoldPadding),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = CenterHorizontally
             ) {
 //                Text(text = stringResource(id = R.string.home_name))
 
@@ -142,10 +143,30 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     // Estado para almacenar los errores del formulario
     var errorFormulario by remember { mutableStateOf("") }
+    var errorNombre by remember { mutableStateOf(false) }
+    var errorLlegada by remember { mutableStateOf(false) }
+    var errorDuracion by remember { mutableStateOf(false) }
 
     // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
     fun agregarProceso() {
         // Validar los campos del formulario
+        errorNombre = when {
+            nombre.isBlank() -> true
+            else -> false
+        }
+
+        errorLlegada = when {
+            tiempoLlegada.isBlank() -> true
+            !tiempoLlegada.isDigitsOnly() -> true
+            else -> false
+        }
+
+        errorDuracion = when {
+            duracion.isBlank() -> true
+            !duracion.isDigitsOnly() -> true
+            else -> false
+        }
+
         errorFormulario = when {
             nombre.isBlank() -> "Ingrese un nombre"
             tiempoLlegada.isBlank() -> "Ingrese un tiempo de llegada"
@@ -153,8 +174,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             duracion.isBlank() -> "Ingrese una duración"
             !duracion.isDigitsOnly() -> "Ingrese un número entero para la duración"
 
+            // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
-                // Si los campos son válidos, agregamos un nuevo proceso
                 val proceso = Proceso(
                     nombre = nombre,
                     tiempoLlegada = tiempoLlegada.toInt(),
@@ -190,7 +211,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                     contentDescription = "Icono Nombre Proceso"
                 )
             },
-            singleLine = true
+            singleLine = true,
+            isError = errorNombre
         )
 
         Row(Modifier.fillMaxWidth()) {
@@ -206,9 +228,12 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         contentDescription = "Icono tiempo de llegada"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                isError = errorLlegada
             )
+
             Spacer(modifier = Modifier.width(10.dp))
+
             OutlinedTextField(
                 value = duracion,
                 onValueChange = { duracion = it },
@@ -221,10 +246,24 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         contentDescription = "Icono duracion de proceso"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                isError = errorDuracion
             )
         }
 
+        // Mensaje de error
+        if (errorFormulario.isNotBlank()) {
+            Text(
+                text = errorFormulario,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.align(CenterHorizontally)
+            )
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Control para ocultar el teclado al terminar de agregar cada proceso
         val keyboardController = LocalSoftwareKeyboardController.current
 
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
