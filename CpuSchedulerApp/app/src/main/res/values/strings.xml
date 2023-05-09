@@ -4,8 +4,22 @@
     <string name="home_name">Estamos en la pantalla de HOME</string>
     <string name="tutorial_name">Estamos en la pantalla de TUTORIAL</string>
     <string name="results_name">Estamos en la pantalla de RESULTADOS</string>
-    <string name="graphs_name">Estamos en la pantalla de GRAFICOS</string>
+    <string name="graphs_name">Estamos en la pantalla de GRÁFICOS</string>
 
 <!--    Strings para los elementos comunes -> Common -->
     <string name="common_buttonNext">Siguiente</string>
+
+<!--    Mensajes de formulario -->
+    <string name="nuevo_proceso">Nuevo proceso</string>
+
+    <string name="formulario_nombre">Nombre</string>
+    <string name="error_nombre">Ingrese un nombre válido</string>
+
+    <string name="formulario_llegada">LLegada</string>
+    <string name="error_llegada_blank">Ingrese un tiempo de llegada</string>
+    <string name="error_llegada_digit">Ingrese un número entero para el tiempo de llegada</string>
+
+    <string name="formulario_duracion">Duración</string>
+    <string name="error_duracion_blank">Ingrese una duración</string>
+    <string name="error_duracion_digit">Ingrese un número entero para la duración</string>
 </resources>

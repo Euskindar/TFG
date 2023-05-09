@@ -34,11 +34,13 @@ import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
+import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -115,7 +117,7 @@ fun HomeScreen(navController: NavHostController) {
                                 .padding(16.dp)
 //                                .align(End)
                         ) {
-                            Text("Siguiente")
+                            Text(stringResource(id = R.string.common_buttonNext))
                         }
                     }
                 }
@@ -148,6 +150,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     var errorDuracion by remember { mutableStateOf(false) }
 
     // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
+    @Composable
     fun agregarProceso() {
         // Validar los campos del formulario
         errorNombre = when {
@@ -168,11 +171,11 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         }
 
         errorFormulario = when {
-            nombre.isBlank() -> "Ingrese un nombre"
-            tiempoLlegada.isBlank() -> "Ingrese un tiempo de llegada"
-            !tiempoLlegada.isDigitsOnly() -> "Ingrese un número entero para el tiempo de llegada"
-            duracion.isBlank() -> "Ingrese una duración"
-            !duracion.isDigitsOnly() -> "Ingrese un número entero para la duración"
+            nombre.isBlank() -> stringResource(R.string.error_nombre)
+            tiempoLlegada.isBlank() -> stringResource(R.string.error_llegada_blank)
+            !tiempoLlegada.isDigitsOnly() -> stringResource(R.string.error_llegada_digit)
+            duracion.isBlank() -> stringResource(R.string.error_duracion_blank)
+            !duracion.isDigitsOnly() -> stringResource(R.string.error_duracion_digit)
 
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
@@ -203,7 +206,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
-            label = { Text("Nombre") },
+            label = { Text(stringResource(id = R.string.formulario_nombre)) },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = {
                 Icon(
@@ -219,7 +222,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             OutlinedTextField(
                 value = tiempoLlegada,
                 onValueChange = { tiempoLlegada = it },
-                label = { Text("Llegada") },
+                label = { Text(stringResource(id = R.string.formulario_llegada)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(fraction = 0.5f),
                 leadingIcon = {
@@ -237,7 +240,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             OutlinedTextField(
                 value = duracion,
                 onValueChange = { duracion = it },
-                label = { Text("Duración") },
+                label = { Text(stringResource(id = R.string.formulario_duracion)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
@@ -263,6 +266,11 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        // Control de estado de ejecucion de funcion agregarProceso()
+        var procesoAgregado by remember {
+            mutableStateOf(false)
+        }
+
         // Control para ocultar el teclado al terminar de agregar cada proceso
         val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -270,11 +278,17 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         Button(
             onClick =
             {
-                agregarProceso()
+                procesoAgregado = true
                 keyboardController?.hide()
             },
             modifier = Modifier.align(End)
         ) { Text("+") }
+
+        // Si es correcto se agrega el proceso y reinicia estado
+        if (procesoAgregado) {
+            agregarProceso()
+            procesoAgregado = false
+        }
     }
 }
 
