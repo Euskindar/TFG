@@ -318,19 +318,19 @@ fun TablaProcesos(procesos: List<Proceso>) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    "Nombre", modifier = Modifier
+                    stringResource(id = R.string.formulario_nombre), modifier = Modifier
                         .weight(1f)
                         .padding(4.dp),
                     color = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    "Tiempo de llegada", modifier = Modifier
+                    stringResource(id = R.string.formulario_llegada), modifier = Modifier
                         .weight(1f)
                         .padding(4.dp),
                     color = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    "Duración", modifier = Modifier
+                    stringResource(id = R.string.formulario_duracion), modifier = Modifier
                         .weight(1f)
                         .padding(4.dp),
                     color = MaterialTheme.colors.onPrimary
