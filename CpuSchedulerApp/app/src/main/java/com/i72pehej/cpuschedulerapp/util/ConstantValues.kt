@@ -48,5 +48,7 @@ fun crearProcesosDePrueba(): MutableList<Proceso> {
 
 // ==============================================================
 
+// Variable para almacenar el indice del algoritmo seleccionado de la lista de algoritmos en el formulario de Home
+var algoritmo = 0
 
 // ==============================================================

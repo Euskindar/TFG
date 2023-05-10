@@ -14,10 +14,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.filled.Memory
@@ -33,6 +38,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +50,8 @@ import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
+import com.i72pehej.cpuschedulerapp.util.algoritmo
+import com.i72pehej.cpuschedulerapp.util.crearProcesosDePrueba
 
 /**
  * @author Julen Perez Hernandez
@@ -74,7 +82,7 @@ fun HomeScreen(navController: NavHostController) {
 //                CommonRoundedButton(
 //                    text = stringResource(id = R.string.common_buttonNext),
 //                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
-//                    onClick = { algoritmoFifo(crearProcesosDePrueba()) }
+//                    onClick = { LlamarAlgoritmo() }
 //                )
 
                 // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
@@ -131,11 +139,27 @@ fun HomeScreen(navController: NavHostController) {
  */
 
 /**
+ * Llamada a la ejecucion de cada algoritmo dependiendo de la opcion seleccionada en el formulario
+ */
+fun LlamarAlgoritmo() {
+    when (algoritmo) {
+        // FIFO
+        0 -> algoritmoFifo(crearProcesosDePrueba())
+        // RoundRobin
+        // 1 ->
+    }
+}
+
+/**
+ * ===========================================================================================
+ */
+
+/**
  * Formulario de ingreso de procesos
  *
  * @param onSubmit Se encarga de agregar el proceso a la lista de procesos y limpiar el formulario.
  */
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Definimos tres variables para almacenar los datos del proceso que esta siendo ingresado
@@ -199,8 +223,47 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     // Contenido de la pagina
     Column {
+        // Menu para seleccionar el metodo a utilizar
+        val algoritmosImplementados = listOf("FIFO", "RoundRobin", "etc...")
+        val defAlgorithm = 0
+
+        var expandir by remember { mutableStateOf(value = false) }
+        var selectedAlgorithm by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
+
+        ExposedDropdownMenuBox(
+            expanded = expandir,
+            onExpandedChange = { expandir = !expandir }
+        ) {
+            TextField(
+                readOnly = true,
+                value = selectedAlgorithm,
+                onValueChange = { },
+                label = { Text("Método") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandir) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors()
+            )
+            ExposedDropdownMenu(
+                expanded = expandir,
+                onDismissRequest = { expandir = false }
+            ) {
+                algoritmosImplementados.forEachIndexed { posicion, opcionSeleccionada ->
+                    DropdownMenuItem(
+                        onClick = {
+                            selectedAlgorithm = opcionSeleccionada
+                            expandir = false
+
+                            // Guardado de la opcion seleccionada
+                            algoritmo = posicion
+                        }
+                    ) { Text(text = opcionSeleccionada) }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Agregamos un titulo al formulario
-        Text("Nuevo proceso", fontSize = 20.sp)
+        Text(stringResource(id = R.string.nuevo_proceso), fontSize = 20.sp)
 
         // Creamos tres campos de texto para ingresar los datos del proceso
         OutlinedTextField(
@@ -271,8 +334,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             mutableStateOf(false)
         }
 
-        // Control para ocultar el teclado al terminar de agregar cada proceso
+        // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
         val keyboardController = LocalSoftwareKeyboardController.current
+        val focusManager = LocalFocusManager.current
 
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
         Button(
@@ -280,6 +344,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             {
                 procesoAgregado = true
                 keyboardController?.hide()
+                focusManager.clearFocus()
             },
             modifier = Modifier.align(End)
         ) { Text("+") }
@@ -303,8 +368,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
  */
 @Composable
 fun TablaProcesos(procesos: List<Proceso>) {
-    // Si la lista de procesos no está vacía, creamos una tabla utilizando LazyColumn
+    // Si la lista de procesos no está vacía
 //    if (procesos.isNotEmpty()) {
+    // Creamos una tabla utilizando LazyColumn
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
