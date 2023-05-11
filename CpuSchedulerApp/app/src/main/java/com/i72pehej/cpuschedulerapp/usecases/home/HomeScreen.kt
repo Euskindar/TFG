@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,10 +39,13 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
@@ -73,7 +77,7 @@ fun HomeScreen(navController: NavHostController) {
         content = { scaffoldPadding ->
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(scaffoldPadding),
                 horizontalAlignment = CenterHorizontally
             ) {
@@ -82,7 +86,7 @@ fun HomeScreen(navController: NavHostController) {
 //                CommonRoundedButton(
 //                    text = stringResource(id = R.string.common_buttonNext),
 //                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
-//                    onClick = { LlamarAlgoritmo() }
+//                    onClick = { llamarAlgoritmo() }
 //                )
 
                 // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
@@ -95,21 +99,15 @@ fun HomeScreen(navController: NavHostController) {
                         .padding(16.dp)
                 ) {
                     // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
-                    FormularioProceso {
-                        procesos.add(it)
-                    }
+                    FormularioProceso { proceso -> procesos.add(proceso) }
 
                     // Agregamos un espacio en blanco para separar el formulario de la tabla de procesos
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // TODO -> Asignar el espacio entre elementos a la seccion de la tabla
-
                     // Creamos la tabla de procesos, y le pasamos la lista de procesos
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        TablaProcesos(procesos = procesos)
-                    }
+                    TablaProcesos(procesos = procesos)
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Agregamos el botón "Siguiente"
                     Row(
@@ -120,10 +118,7 @@ fun HomeScreen(navController: NavHostController) {
                         horizontalArrangement = Arrangement.End
                     ) {
                         Button(
-                            onClick = { navController.navigate(AppScreens.TutorialScreen.route) },
-                            modifier = Modifier
-                                .padding(16.dp)
-//                                .align(End)
+                            onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
                         ) {
                             Text(stringResource(id = R.string.common_buttonNext))
                         }
@@ -141,7 +136,7 @@ fun HomeScreen(navController: NavHostController) {
 /**
  * Llamada a la ejecucion de cada algoritmo dependiendo de la opcion seleccionada en el formulario
  */
-fun LlamarAlgoritmo() {
+fun llamarAlgoritmo() {
     when (algoritmo) {
         // FIFO
         0 -> algoritmoFifo(crearProcesosDePrueba())
@@ -362,58 +357,72 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
  */
 
 /**
- * Creacion la tabla de procesos
+ * Creacion de la tabla de procesos agregados
  *
- * @param procesos Lista de los procesos
+ * @param procesos Lista de los procesos agregados
  */
 @Composable
 fun TablaProcesos(procesos: List<Proceso>) {
     // Si la lista de procesos no está vacía
-//    if (procesos.isNotEmpty()) {
-    // Creamos una tabla utilizando LazyColumn
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
-            .padding(8.dp)
-    ) {
-        // Agregamos una fila para el encabezado de la tabla
-        item {
-            Row(
-                modifier = Modifier.background(MaterialTheme.colors.secondary),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    stringResource(id = R.string.formulario_nombre), modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                    color = MaterialTheme.colors.onPrimary
-                )
-                Text(
-                    stringResource(id = R.string.formulario_llegada), modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                    color = MaterialTheme.colors.onPrimary
-                )
-                Text(
-                    stringResource(id = R.string.formulario_duracion), modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp),
-                    color = MaterialTheme.colors.onPrimary
-                )
+    if (procesos.isNotEmpty()) {
+        // Creamos una tabla utilizando LazyColumn
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .padding(8.dp)
+        ) {
+            // Agregamos una fila para el encabezado de la tabla
+            item {
+                Row(
+                    modifier = Modifier
+                        .background(Color.Gray)
+                        .padding(4.dp)
+                ) {
+                    // Agregamos cada columna a la fila de encabezado con un peso de 1f para que tengan el mismo ancho
+                    Text(
+                        stringResource(id = R.string.formulario_nombre),
+                        modifier = Modifier.weight(1f), // Le damos un peso de 1f para que tenga el mismo ancho que las otras columnas.
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(id = R.string.formulario_llegada),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(id = R.string.formulario_duracion),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-        }
 
-        // Agregamos una fila para cada proceso en la lista de procesos
-        items(procesos) { proceso ->
-            Row(modifier = Modifier.padding(4.dp)) {
-                Text(proceso.nombre, modifier = Modifier.weight(1f))
-                Text(proceso.tiempoLlegada.toString(), modifier = Modifier.weight(1f))
-                Text(proceso.duracion.toString(), modifier = Modifier.weight(1f))
+            // Agregamos una fila para cada proceso en la lista de procesos
+            items(procesos) { proceso ->
+                Row(modifier = Modifier.padding(4.dp)) {
+                    Text(
+                        proceso.nombre,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        proceso.tiempoLlegada.toString(),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        proceso.duracion.toString(),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
-//    }
 //    else {
 //        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
 //        Text("No hay procesos ingresados", modifier = Modifier.padding(8.dp))
