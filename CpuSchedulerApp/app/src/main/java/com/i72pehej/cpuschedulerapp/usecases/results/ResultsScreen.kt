@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,8 +25,17 @@ import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
  */
 @Composable
 fun ResultsScreen(navController: NavHostController) {
+    // Variable para guardar el estado del menu lateral
+    val scaffoldState = rememberScaffoldState()
+
+    // Control para abrir o cerrar el menu lateral
+    val scope = rememberCoroutineScope()
+
+    // Disposicion principal de la pantalla
     CommonScaffold(
-        navController,
+        navController = navController,
+        scope = scope,
+        scaffoldState = scaffoldState,
         content = { scaffoldPadding ->
             Column(
                 modifier = Modifier

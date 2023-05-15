@@ -28,11 +28,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -51,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
-import com.i72pehej.cpuschedulerapp.navigation.AppScreens
+import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.algoritmo
@@ -72,8 +74,17 @@ import com.i72pehej.cpuschedulerapp.util.crearProcesosDePrueba
  */
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    // Variable para guardar el estado del menu lateral
+    val scaffoldState = rememberScaffoldState()
+
+    // Control para abrir o cerrar el menu lateral
+    val scope = rememberCoroutineScope()
+
+    // Disposicion principal de la pantalla
     CommonScaffold(
-        navController,
+        navController = navController,
+        scope = scope,
+        scaffoldState = scaffoldState,
         content = { scaffoldPadding ->
             Column(
                 modifier = Modifier
@@ -82,12 +93,6 @@ fun HomeScreen(navController: NavHostController) {
                 horizontalAlignment = CenterHorizontally
             ) {
 //                Text(text = stringResource(id = R.string.home_name))
-
-//                CommonRoundedButton(
-//                    text = stringResource(id = R.string.common_buttonNext),
-//                    onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
-//                    onClick = { llamarAlgoritmo() }
-//                )
 
                 // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
                 val procesos = remember { mutableStateListOf<Proceso>() }
@@ -117,11 +122,10 @@ fun HomeScreen(navController: NavHostController) {
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.End
                     ) {
-                        Button(
-                            onClick = { navController.navigate(AppScreens.TutorialScreen.route) }
-                        ) {
-                            Text(stringResource(id = R.string.common_buttonNext))
-                        }
+                        CommonRoundedButton(
+                            text = stringResource(id = R.string.common_buttonNext),
+                            onClick = { llamarAlgoritmo() }
+                        )
                     }
                 }
             }
