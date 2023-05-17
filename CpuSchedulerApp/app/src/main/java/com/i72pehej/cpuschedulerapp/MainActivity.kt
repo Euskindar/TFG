@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.i72pehej.cpuschedulerapp.navigation.AppNavigation
 import com.i72pehej.cpuschedulerapp.ui.theme.CpuSchedulerAppTheme
+import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
 
 /**
  * @author Julen Perez Hernandez
@@ -27,6 +28,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
+                    // Inicializacion del control de salida por error al pulsar back
+                    ConfirmacionBackPress()
+
                     // Llamamos al gestor de navegacion, que se encargara de visualizar las pantallas en el orden seleccionado
                     AppNavigation()
                 }

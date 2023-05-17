@@ -1,5 +1,6 @@
 package com.i72pehej.cpuschedulerapp.usecases.common
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -72,7 +73,7 @@ fun CommonScaffold(
  */
 @Composable
 fun MenuLateral() {
-    val menu_list = listOf("Basura 1", "Basura 2", "Basura 3", "Basura 4")
+    val menuList = listOf("Basura 1", "Basura 2", "Basura 3", "Basura 4")
 
     // Contenido del menu
     Column {
@@ -86,7 +87,7 @@ fun MenuLateral() {
         Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.padding(15.dp))
 
         // Listado de elementos del menu
-        menu_list.forEach { item ->
+        menuList.forEach { item ->
             // TODO ->  Cambiar TextButton por IconButton al cual se le agrega el texto para hacer la navegacion mas amigable
             TextButton(onClick = { /*TODO*/ }) {
                 Text(
@@ -127,6 +128,12 @@ fun CommonTopAppBar(
         navController.navigate(AppScreens.HomeScreen.route)
     }
 
+    // Control del boton de back para cerrar menu lateral
+    BackHandler(scaffoldState.drawerState.isOpen) {
+        scope.launch { scaffoldState.drawerState.close() }
+    }
+
+    // Barra superior de la pantalla
     TopAppBar(
         title = {
             Row {
@@ -154,7 +161,7 @@ fun CommonTopAppBar(
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = "Icono de Menu")
             }
         },
-        elevation = 10.dp,
+        elevation = 10.dp
     )
 }
 

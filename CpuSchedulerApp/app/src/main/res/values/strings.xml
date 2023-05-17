@@ -22,4 +22,7 @@
     <string name="formulario_duracion">Duración</string>
     <string name="error_duracion_blank">Ingrese una duración</string>
     <string name="error_duracion_digit">Ingrese un número entero para la duración</string>
+
+<!--    Mensaje de confirmacion de salida-->
+    <string name="back_press_confirmacion">Pulsa de nuevo para salir</string>
 </resources>
