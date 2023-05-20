@@ -32,25 +32,25 @@ fun TutorialScreen(navController: NavHostController) {
     val scope = rememberCoroutineScope()
 
     // Disposicion principal de la pantalla
-    CommonScaffold(
-        navController = navController,
-        scope = scope,
-        scaffoldState = scaffoldState,
-        content = { scaffoldPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(scaffoldPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = stringResource(id = R.string.tutorial_name))
-
-                CommonRoundedButton(
-                    text = stringResource(id = R.string.common_buttonNext),
-                    onClick = { navController.navigate(AppScreens.ResultsScreen.route) }
-                )
-            }
-        },
-    )
+//    CommonScaffold(
+//        navController = navController,
+//        scope = scope,
+//        scaffoldState = scaffoldState,
+//        content = { scaffoldPadding ->
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(scaffoldPadding),
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.Center
+//            ) {
+//                Text(text = stringResource(id = R.string.tutorial_name))
+//
+//                CommonRoundedButton(
+//                    text = stringResource(id = R.string.common_buttonNext),
+//                    onClick = { navController.navigate(AppScreens.ResultsScreen.route) }
+//                )
+//            }
+//        },
+//    )
 }

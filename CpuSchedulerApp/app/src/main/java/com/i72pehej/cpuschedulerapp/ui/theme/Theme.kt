@@ -25,7 +25,7 @@ private val LightColorPalette = lightColors(
     primary = Azul_base,
     primaryVariant = Azul_com_1,
     secondary = Azul_com_2,
-    secondaryVariant = Verde_deriv_1
+    secondaryVariant = Verde_deriv_2
 
     /* Other default colors to override
     background = Color.White,

@@ -32,25 +32,25 @@ fun GraphsScreen(navController: NavHostController) {
     val scope = rememberCoroutineScope()
 
     // Disposicion principal de la pantalla
-    CommonScaffold(
-        navController = navController,
-        scope = scope,
-        scaffoldState = scaffoldState,
-        content = { scaffoldPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(scaffoldPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = stringResource(id = R.string.graphs_name))
-
-                CommonRoundedButton(
-                    text = stringResource(id = R.string.common_buttonNext),
-                    onClick = { navController.navigate(AppScreens.HomeScreen.route) }
-                )
-            }
-        }
-    )
+//    CommonScaffold(
+//        navController = navController,
+//        scope = scope,
+//        scaffoldState = scaffoldState,
+//        content = { scaffoldPadding ->
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(scaffoldPadding),
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.Center
+//            ) {
+//                Text(text = stringResource(id = R.string.graphs_name))
+//
+//                CommonRoundedButton(
+//                    text = stringResource(id = R.string.common_buttonNext),
+//                    onClick = { navController.navigate(AppScreens.HomeScreen.route) }
+//                )
+//            }
+//        }
+//    )
 }

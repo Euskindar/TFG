@@ -73,7 +73,11 @@ import com.i72pehej.cpuschedulerapp.util.crearProcesosDePrueba
  * @param navController Control de navegacion
  */
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    navController: NavHostController,
+    temaOscuro: Boolean,
+    onActualizarTema: () -> Unit
+) {
     // Variable para guardar el estado del menu lateral
     val scaffoldState = rememberScaffoldState()
 
@@ -82,6 +86,8 @@ fun HomeScreen(navController: NavHostController) {
 
     // Disposicion principal de la pantalla
     CommonScaffold(
+        temaOscuro = temaOscuro,
+        onActualizarTema = onActualizarTema,
         navController = navController,
         scope = scope,
         scaffoldState = scaffoldState,

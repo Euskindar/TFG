@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.i72pehej.cpuschedulerapp.navigation.AppNavigation
@@ -22,7 +26,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CpuSchedulerAppTheme {
+            // Varibale para almacenar el tema
+            var temaOscuro by remember { mutableStateOf(false) }
+
+            CpuSchedulerAppTheme(darkTheme = temaOscuro) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -32,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     ConfirmacionBackPress()
 
                     // Llamamos al gestor de navegacion, que se encargara de visualizar las pantallas en el orden seleccionado
-                    AppNavigation()
+                    AppNavigation(temaOscuro, onActualizarTema = { temaOscuro = !temaOscuro })
                 }
             }
         }

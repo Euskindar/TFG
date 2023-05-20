@@ -5,11 +5,11 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.i72pehej.cpuschedulerapp.usecases.launch.SplashScreen
 import com.i72pehej.cpuschedulerapp.usecases.home.HomeScreen
-import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
-import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen
+import com.i72pehej.cpuschedulerapp.usecases.launch.SplashScreen
 import com.i72pehej.cpuschedulerapp.usecases.onboarding.TutorialScreen
+import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen
+import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
 
 /**
  * @author Julen Perez Hernandez
@@ -18,7 +18,7 @@ import com.i72pehej.cpuschedulerapp.usecases.onboarding.TutorialScreen
  */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation() {
+fun AppNavigation(temaOscuro: Boolean, onActualizarTema: () -> Unit) {
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -44,7 +44,7 @@ fun AppNavigation() {
             popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
         ) {
             // Llamada a la funcion que maneja el contenido de la pagina
-            HomeScreen(navController)
+            HomeScreen(navController, temaOscuro, onActualizarTema)
         }
 
         // Elemento composable para la Results Screen
