@@ -24,7 +24,8 @@ import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
  * @param navController Control de navegacion
  */
 @Composable
-fun GraphsScreen(navController: NavHostController) {
+//fun GraphsScreen(navController: NavHostController) {
+fun GraphsScreen() {
     // Variable para guardar el estado del menu lateral
     val scaffoldState = rememberScaffoldState()
 
@@ -37,20 +38,20 @@ fun GraphsScreen(navController: NavHostController) {
 //        scope = scope,
 //        scaffoldState = scaffoldState,
 //        content = { scaffoldPadding ->
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
 //                    .padding(scaffoldPadding),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center
-//            ) {
-//                Text(text = stringResource(id = R.string.graphs_name))
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = stringResource(id = R.string.graphs_name))
 //
 //                CommonRoundedButton(
 //                    text = stringResource(id = R.string.common_buttonNext),
 //                    onClick = { navController.navigate(AppScreens.HomeScreen.route) }
 //                )
-//            }
+            }
 //        }
 //    )
 }

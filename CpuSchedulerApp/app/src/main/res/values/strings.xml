@@ -23,6 +23,13 @@
     <string name="error_duracion_blank">Ingrese una duración</string>
     <string name="error_duracion_digit">Ingrese un número entero para la duración</string>
 
-<!--    Mensaje de confirmacion de salida-->
+    <string name="tabla_vacia">Agregue nuevos procesos</string>
+
+<!--    Mensaje de confirmacion de salida -->
     <string name="back_press_confirmacion">Pulsa de nuevo para salir</string>
+
+<!--    Nombre de los tabs -->
+    <string name="tab_inicio">Inicio</string>
+    <string name="tab_resultados">Resultados</string>
+    <string name="tab_graficas">Gráficos</string>
 </resources>

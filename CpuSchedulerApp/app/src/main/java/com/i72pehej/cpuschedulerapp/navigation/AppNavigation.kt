@@ -56,7 +56,7 @@ fun AppNavigation(temaOscuro: Boolean, onActualizarTema: () -> Unit) {
             popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
         ) {
             // Llamada a la funcion que maneja el contenido de la pagina
-            ResultsScreen(navController)
+//            ResultsScreen(navController)
         }
 
         // Elemento composable para la Graphs Screen
@@ -68,7 +68,7 @@ fun AppNavigation(temaOscuro: Boolean, onActualizarTema: () -> Unit) {
             popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
         ) {
             // Llamada a la funcion que maneja el contenido de la pagina
-            GraphsScreen(navController)
+//            GraphsScreen(navController)
         }
 
         // Elemento composable para la Tutorial Screen

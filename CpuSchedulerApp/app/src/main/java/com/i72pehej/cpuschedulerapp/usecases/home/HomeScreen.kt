@@ -3,6 +3,7 @@ package com.i72pehej.cpuschedulerapp.usecases.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -52,7 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.i72pehej.cpuschedulerapp.R
+import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -91,52 +94,68 @@ fun HomeScreen(
         navController = navController,
         scope = scope,
         scaffoldState = scaffoldState,
-        content = { scaffoldPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(scaffoldPadding),
-                horizontalAlignment = CenterHorizontally
-            ) {
+//        content = { ContenidoHome(scaffoldPadding = it) }
+        content = { CrearTabs() }
+    )
+}
+
+/**
+ * ===========================================================================================
+ */
+
+/**
+ * Contenido de la pagina para introducir en el scaffold
+ *
+ * @param scaffoldPadding Padding predefinido del scaffold
+ */
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun ContenidoHome(scaffoldPadding: PaddingValues) {
+    // Contenedor padre de los elementos a mostrar en la pagina
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(scaffoldPadding),
+        horizontalAlignment = CenterHorizontally
+    ) {
 //                Text(text = stringResource(id = R.string.home_name))
 
-                // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
-                val procesos = remember { mutableStateListOf<Proceso>() }
+        // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
+        val procesos = remember { mutableStateListOf<Proceso>() }
 
-                Column(
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(16.dp)
-                ) {
-                    // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
-                    FormularioProceso { proceso -> procesos.add(proceso) }
+        // Contenedor de los elementos principales
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(16.dp)
+        ) {
+            // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
+            FormularioProceso { proceso -> procesos.add(proceso) }
 
-                    // Agregamos un espacio en blanco para separar el formulario de la tabla de procesos
-                    Spacer(modifier = Modifier.height(16.dp))
+            // Agregamos un espacio en blanco para separar el formulario de la tabla de procesos
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    // Creamos la tabla de procesos, y le pasamos la lista de procesos
-                    TablaProcesos(procesos = procesos)
+            // Creamos la tabla de procesos, y le pasamos la lista de procesos
+            TablaProcesos(procesos = procesos)
 
-                    Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    // Agregamos el botón "Siguiente"
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f, false),
-                        verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        CommonRoundedButton(
-                            text = stringResource(id = R.string.common_buttonNext),
-                            onClick = { llamarAlgoritmo() }
-                        )
-                    }
-                }
+            // Agregamos el botón "Siguiente"
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f, false),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.End
+            ) {
+                CommonRoundedButton(
+                    text = stringResource(id = R.string.common_buttonNext),
+                    onClick = { llamarAlgoritmo() }
+                )
             }
         }
-    )
+    }
 }
 
 /**
@@ -433,10 +452,10 @@ fun TablaProcesos(procesos: List<Proceso>) {
             }
         }
     }
-//    else {
-//        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-//        Text("No hay procesos ingresados", modifier = Modifier.padding(8.dp))
-//    }
+    else {
+        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
+        Text(stringResource(id = R.string.tabla_vacia), modifier = Modifier.padding(8.dp))
+    }
 }
 
 /**

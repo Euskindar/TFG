@@ -81,4 +81,8 @@ dependencies {
 
     // Libreria de iconos extendida
     implementation 'androidx.compose.material:material-icons-extended:1.4.3'
+
+    // Creacion de tabs para navegar en la misma pagina
+    implementation "com.google.accompanist:accompanist-pager:0.20.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.20.0"
 }

@@ -19,6 +19,7 @@ import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
  * @param listaDeProcesos Recibe una lista con los procesos creados para aplicar el algoritmo
  */
 fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
+    println("Algoritmo FIFO seleccionado")
     println("LISTA DE PROCESOS SIN ORDENAR")
     imprimirListaProcesos(listaDeProcesos)
 
