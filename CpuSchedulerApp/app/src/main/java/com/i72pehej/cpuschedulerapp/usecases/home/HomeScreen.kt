@@ -3,7 +3,6 @@ package com.i72pehej.cpuschedulerapp.usecases.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -105,17 +104,15 @@ fun HomeScreen(
 
 /**
  * Contenido de la pagina para introducir en el scaffold
- *
- * @param scaffoldPadding Padding predefinido del scaffold
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ContenidoHome(scaffoldPadding: PaddingValues) {
+fun ContenidoHome() {
     // Contenedor padre de los elementos a mostrar en la pagina
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(scaffoldPadding),
+            .padding(10.dp),
         horizontalAlignment = CenterHorizontally
     ) {
 //                Text(text = stringResource(id = R.string.home_name))
@@ -451,8 +448,7 @@ fun TablaProcesos(procesos: List<Proceso>) {
                 }
             }
         }
-    }
-    else {
+    } else {
         // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
         Text(stringResource(id = R.string.tabla_vacia), modifier = Modifier.padding(8.dp))
     }

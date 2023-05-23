@@ -20,6 +20,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.i72pehej.cpuschedulerapp.navigation.HomeTabs.*
+import com.i72pehej.cpuschedulerapp.usecases.home.ContenidoHome
 import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen
 import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
 import kotlinx.coroutines.launch
@@ -41,7 +42,9 @@ sealed class HomeTabs(
     var titulo: String,
     var pantalla: NuevoTab
 ) {
-    object TabInicio : HomeTabs(icono = Icons.Default.Home, titulo = "Inicio", {})
+    object TabInicio :
+        HomeTabs(icono = Icons.Default.Home, titulo = "Inicio", { ContenidoHome() })
+
     object TabResultados :
         HomeTabs(icono = Icons.Default.Toc, titulo = "Resultados", { ResultsScreen() })
 

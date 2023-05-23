@@ -8,8 +8,6 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.i72pehej.cpuschedulerapp.usecases.home.HomeScreen
 import com.i72pehej.cpuschedulerapp.usecases.launch.SplashScreen
 import com.i72pehej.cpuschedulerapp.usecases.onboarding.TutorialScreen
-import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen
-import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
 
 /**
  * @author Julen Perez Hernandez
@@ -48,28 +46,28 @@ fun AppNavigation(temaOscuro: Boolean, onActualizarTema: () -> Unit) {
         }
 
         // Elemento composable para la Results Screen
-        composable(
-            AppScreens.ResultsScreen.route,
-            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
-            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
-            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
-            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
-        ) {
-            // Llamada a la funcion que maneja el contenido de la pagina
+//        composable(
+//            AppScreens.ResultsScreen.route,
+//            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
+//            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
+//            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
+//            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
+//        ) {
+//            // Llamada a la funcion que maneja el contenido de la pagina
 //            ResultsScreen(navController)
-        }
+//        }
 
         // Elemento composable para la Graphs Screen
-        composable(
-            AppScreens.GraphsScreen.route,
-            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
-            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
-            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
-            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
-        ) {
-            // Llamada a la funcion que maneja el contenido de la pagina
+//        composable(
+//            AppScreens.GraphsScreen.route,
+//            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
+//            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
+//            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
+//            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
+//        ) {
+//            // Llamada a la funcion que maneja el contenido de la pagina
 //            GraphsScreen(navController)
-        }
+//        }
 
         // Elemento composable para la Tutorial Screen
         composable(
