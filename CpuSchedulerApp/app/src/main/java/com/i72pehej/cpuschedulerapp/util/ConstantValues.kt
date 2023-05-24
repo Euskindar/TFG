@@ -1,7 +1,6 @@
 package com.i72pehej.cpuschedulerapp.util
 
 import com.i72pehej.cpuschedulerapp.R
-import kotlin.random.Random
 
 /**
  * @author Julen Perez Hernandez
@@ -12,8 +11,6 @@ import kotlin.random.Random
 // Valores constantes para las animaciones
 const val slideAnimationSpeed = 300
 const val fadeAnimationSpeed = 300
-const val exitOffsetXValue = -300
-const val enterOffsetXValue = 300
 
 // ==============================================================
 
@@ -30,21 +27,21 @@ val appIcon = R.drawable.logos_version_uco
 // ==============================================================
 
 // Lista de procesos de prueba
-val listaDeProcesosPrueba = mutableListOf<Proceso>()
-
-fun crearProcesosDePrueba(): MutableList<Proceso> {
-    for (i in 1..5) {
-        val nombre = "Proceso $i"
-        val tiempoLlegada = Random.nextInt(1, 11)
-        val duracion = Random.nextInt(1, 11)
-        val estado = Proceso.EstadoDeProceso.NUEVO
-        val progreso = 0
-
-        listaDeProcesosPrueba.add(Proceso(i, nombre, tiempoLlegada, duracion, estado, progreso))
-    }
-
-    return listaDeProcesosPrueba
-}
+//val listaDeProcesosPrueba = mutableListOf<Proceso>()
+//
+//fun crearProcesosDePrueba(): MutableList<Proceso> {
+//    for (i in 1..5) {
+//        val nombre = "Proceso $i"
+//        val tiempoLlegada = Random.nextInt(1, 11)
+//        val duracion = Random.nextInt(1, 11)
+//        val estado = Proceso.EstadoDeProceso.NUEVO
+//        val progreso = 0
+//
+//        listaDeProcesosPrueba.add(Proceso(i, nombre, tiempoLlegada, duracion, estado, progreso))
+//    }
+//
+//    return listaDeProcesosPrueba
+//}
 
 // ==============================================================
 

@@ -36,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
@@ -52,14 +53,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.algoritmo
-import com.i72pehej.cpuschedulerapp.util.crearProcesosDePrueba
 
 /**
  * @author Julen Perez Hernandez
@@ -105,14 +104,13 @@ fun HomeScreen(
 /**
  * Contenido de la pagina para introducir en el scaffold
  */
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ContenidoHome() {
     // Contenedor padre de los elementos a mostrar en la pagina
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(5.dp),
         horizontalAlignment = CenterHorizontally
     ) {
 //                Text(text = stringResource(id = R.string.home_name))
@@ -140,15 +138,14 @@ fun ContenidoHome() {
 
             // Agregamos el botón "Siguiente"
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f, false),
+                modifier = Modifier.weight(1f, false),
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.End
             ) {
                 CommonRoundedButton(
                     text = stringResource(id = R.string.common_buttonNext),
-                    onClick = { llamarAlgoritmo() }
+                    isEnabled = procesos.isNotEmpty(),
+                    onClick = { llamarAlgoritmo(procesos) }
                 )
             }
         }
@@ -161,13 +158,17 @@ fun ContenidoHome() {
 
 /**
  * Llamada a la ejecucion de cada algoritmo dependiendo de la opcion seleccionada en el formulario
+ *
+ * @param procesos Listado de procesos con los que operar
  */
-fun llamarAlgoritmo() {
+fun llamarAlgoritmo(procesos: SnapshotStateList<Proceso>) {
     when (algoritmo) {
         // FIFO
-        0 -> algoritmoFifo(crearProcesosDePrueba())
+        0 -> {
+            algoritmoFifo(procesos)
+        }
         // RoundRobin
-        // 1 ->
+        // 1 -> algoritmoRoundRobin(procesos)
     }
 }
 
@@ -249,7 +250,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         val defAlgorithm = 0
 
         var expandir by remember { mutableStateOf(value = false) }
-        var selectedAlgorithm by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
+        var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
 
         ExposedDropdownMenuBox(
             expanded = expandir,
@@ -257,7 +258,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         ) {
             TextField(
                 readOnly = true,
-                value = selectedAlgorithm,
+                value = algoritmoSeleccionado,
                 onValueChange = { },
                 label = { Text("Método") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandir) },
@@ -270,7 +271,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 algoritmosImplementados.forEachIndexed { posicion, opcionSeleccionada ->
                     DropdownMenuItem(
                         onClick = {
-                            selectedAlgorithm = opcionSeleccionada
+                            algoritmoSeleccionado = opcionSeleccionada
                             expandir = false
 
                             // Guardado de la opcion seleccionada
@@ -364,6 +365,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             onClick =
             {
                 procesoAgregado = true
+                // Limpiar el foco para ocultar teclado y deseleccionar el campo del formulario
                 keyboardController?.hide()
                 focusManager.clearFocus()
             },
@@ -450,7 +452,13 @@ fun TablaProcesos(procesos: List<Proceso>) {
         }
     } else {
         // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Text(stringResource(id = R.string.tabla_vacia), modifier = Modifier.padding(8.dp))
+        Text(
+            stringResource(id = R.string.tabla_vacia),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        )
     }
 }
 

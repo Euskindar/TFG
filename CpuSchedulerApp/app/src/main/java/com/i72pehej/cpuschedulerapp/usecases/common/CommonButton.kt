@@ -27,10 +27,12 @@ import com.i72pehej.cpuschedulerapp.util.buttonDefaultPadding
 fun CommonRoundedButton(
     text: String,
     onClick: () -> Unit,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
+        enabled = isEnabled,
         modifier = modifier
             .fillMaxWidth()
             .padding(buttonDefaultPadding.dp),

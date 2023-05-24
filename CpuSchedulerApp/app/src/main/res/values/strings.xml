@@ -1,15 +1,13 @@
 <resources>
-<!--    Nombres de las paginas -->
+    <!--    Nombres de las paginas -->
     <string name="app_name">UCO - CpuScheduler</string>
-    <string name="home_name">Estamos en la pantalla de HOME</string>
-    <string name="tutorial_name">Estamos en la pantalla de TUTORIAL</string>
     <string name="results_name">Estamos en la pantalla de RESULTADOS</string>
     <string name="graphs_name">Estamos en la pantalla de GRÁFICOS</string>
 
-<!--    Strings para los elementos comunes -> Common -->
+    <!--    Strings para los elementos comunes -> Common -->
     <string name="common_buttonNext">Siguiente</string>
 
-<!--    Mensajes de formulario -->
+    <!--    Mensajes de formulario -->
     <string name="nuevo_proceso">Nuevo proceso</string>
 
     <string name="formulario_nombre">Nombre</string>
@@ -23,13 +21,10 @@
     <string name="error_duracion_blank">Ingrese una duración</string>
     <string name="error_duracion_digit">Ingrese un número entero para la duración</string>
 
-    <string name="tabla_vacia">Agregue nuevos procesos</string>
+    <string name="tabla_vacia">Agregue nuevos procesos para continuar</string>
 
-<!--    Mensaje de confirmacion de salida -->
+    <!--    Mensaje de confirmacion de salida -->
     <string name="back_press_confirmacion">Pulsa de nuevo para salir</string>
 
-<!--    Nombre de los tabs -->
-    <string name="tab_inicio">Inicio</string>
-    <string name="tab_resultados">Resultados</string>
-    <string name="tab_graficas">Gráficos</string>
+    <!--    Nombre de los tabs -->
 </resources>
