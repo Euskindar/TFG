@@ -22,7 +22,7 @@ const val buttonDefaultPadding = 16
 // ==============================================================
 
 // Iconos comunes
-val appIcon = R.drawable.logos_version_uco
+val appIconColor = R.drawable.logos_version_uco
 
 // ==============================================================
 
@@ -46,6 +46,6 @@ val appIcon = R.drawable.logos_version_uco
 // ==============================================================
 
 // Variable para almacenar el indice del algoritmo seleccionado de la lista de algoritmos en el formulario de Home
-var algoritmo = 0
+var selectorAlgoritmo = 0
 
 // ==============================================================

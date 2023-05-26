@@ -12,7 +12,8 @@ package com.i72pehej.cpuschedulerapp.navigation
 sealed class AppScreens(val route: String) {
     object SplashScreen : AppScreens("splash_screen")
     object HomeScreen : AppScreens("home_screen")
-    object ResultsScreen : AppScreens("results_screen")
-    object GraphsScreen : AppScreens("graphs_screen")
+
+//    object ResultsScreen : AppScreens("results_screen")
+//    object GraphsScreen : AppScreens("graphs_screen")
     object TutorialScreen : AppScreens("tutorial_screen")
 }

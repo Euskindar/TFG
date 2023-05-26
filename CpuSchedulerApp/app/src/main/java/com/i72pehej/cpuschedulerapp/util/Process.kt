@@ -29,7 +29,12 @@ class Proceso(
 ) {
     // Listado de estados asociados a los procesos
     enum class EstadoDeProceso {
-        NUEVO, LISTO, CORRIENDO, ESPERANDO, COMPLETADO, BLOQUEADO
+        NUEVO,      // Cuando el proceso acaba de ser creado
+        LISTO,      // Cuando el proceso se encuentra a la espera de entrar en ejecucion
+        CORRIENDO,  // Cuando el proceso se encuentra en ejecucion
+        COMPLETADO, // Cuando el proceso se ha completado
+        ESPERANDO,  // Cuando el proceso se encuentra a la espera de continuar su ejecucion
+        BLOQUEADO   // Cuando el proceso queda bloqueado por otras tareas
     }
 }
 

@@ -1,6 +1,5 @@
 package com.i72pehej.cpuschedulerapp.usecases.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenuItem
@@ -42,13 +39,10 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
@@ -58,7 +52,9 @@ import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
-import com.i72pehej.cpuschedulerapp.util.algoritmo
+import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
+import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
+import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
 
 /**
  * @author Julen Perez Hernandez
@@ -79,6 +75,9 @@ fun HomeScreen(
     temaOscuro: Boolean,
     onActualizarTema: () -> Unit
 ) {
+    // Inicializacion del control de salida por error al pulsar back
+    ConfirmacionBackPress()
+
     // Variable para guardar el estado del menu lateral
     val scaffoldState = rememberScaffoldState()
 
@@ -136,7 +135,7 @@ fun ContenidoHome() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Agregamos el botón "Siguiente"
+            // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
             Row(
                 modifier = Modifier.weight(1f, false),
                 verticalAlignment = Alignment.Bottom,
@@ -162,7 +161,7 @@ fun ContenidoHome() {
  * @param procesos Listado de procesos con los que operar
  */
 fun llamarAlgoritmo(procesos: SnapshotStateList<Proceso>) {
-    when (algoritmo) {
+    when (selectorAlgoritmo) {
         // FIFO
         0 -> {
             algoritmoFifo(procesos)
@@ -275,7 +274,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                             expandir = false
 
                             // Guardado de la opcion seleccionada
-                            algoritmo = posicion
+                            selectorAlgoritmo = posicion
                         }
                     ) { Text(text = opcionSeleccionada) }
                 }
@@ -379,89 +378,3 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         }
     }
 }
-
-/**
- * ===========================================================================================
- */
-
-/**
- * Creacion de la tabla de procesos agregados
- *
- * @param procesos Lista de los procesos agregados
- */
-@Composable
-fun TablaProcesos(procesos: List<Proceso>) {
-    // Si la lista de procesos no está vacía
-    if (procesos.isNotEmpty()) {
-        // Creamos una tabla utilizando LazyColumn
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray)
-                .padding(8.dp)
-        ) {
-            // Agregamos una fila para el encabezado de la tabla
-            item {
-                Row(
-                    modifier = Modifier
-                        .background(Color.Gray)
-                        .padding(4.dp)
-                ) {
-                    // Agregamos cada columna a la fila de encabezado con un peso de 1f para que tengan el mismo ancho
-                    Text(
-                        stringResource(id = R.string.formulario_nombre),
-                        modifier = Modifier.weight(1f), // Le damos un peso de 1f para que tenga el mismo ancho que las otras columnas.
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        stringResource(id = R.string.formulario_llegada),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        stringResource(id = R.string.formulario_duracion),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-
-            // Agregamos una fila para cada proceso en la lista de procesos
-            items(procesos) { proceso ->
-                Row(modifier = Modifier.padding(4.dp)) {
-                    Text(
-                        proceso.nombre,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        proceso.tiempoLlegada.toString(),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        proceso.duracion.toString(),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-        }
-    } else {
-        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Text(
-            stringResource(id = R.string.tabla_vacia),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-        )
-    }
-}
-
-/**
- * ===========================================================================================
- */

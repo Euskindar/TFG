@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
-import com.i72pehej.cpuschedulerapp.util.appIcon
+import com.i72pehej.cpuschedulerapp.util.appIconColor
 import com.i72pehej.cpuschedulerapp.util.extensions.ThemeSwitcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -79,7 +79,7 @@ fun CommonScaffold(
         },
         content = content,
         // Menu de navegacion lateral
-        drawerContent = { MenuLateral() }
+        drawerContent = { MenuLateral(navController, scope, scaffoldState) }
     )
 }
 
@@ -88,16 +88,20 @@ fun CommonScaffold(
  */
 
 /**
- * Menu lateral para agregar distintos apartados
+ * Menu lateral en el que agregar distintos apartados
  */
 @Composable
-fun MenuLateral() {
-    val menuList = listOf("Basura 1", "Basura 2", "Basura 3", "Basura 4")
+fun MenuLateral(
+    navController: NavHostController,
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
+    val menuList = listOf("Tutorial", "FAQ")
 
     // Contenido del menu
     Column {
         Image(
-            painter = painterResource(id = appIcon),
+            painter = painterResource(id = appIconColor),
             contentDescription = "Icono principal de la app",
             modifier = Modifier.fillMaxWidth(),
         )
@@ -106,16 +110,39 @@ fun MenuLateral() {
         Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.padding(15.dp))
 
         // Listado de elementos del menu
-        menuList.forEach { item ->
-            // TODO ->  Cambiar TextButton por IconButton al cual se le agrega el texto para hacer la navegacion mas amigable
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(
-                    text = item,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp),
-                    fontSize = 16.sp
-                )
+        menuList.forEachIndexed { position, item ->
+            when (position) {
+                // Seleccionado el primer elemento de la lista
+                0 -> TextButton(onClick = {
+                        navController.navigate(AppScreens.TutorialScreen.route) {
+                            launchSingleTop = true
+                        }
+                        scope.launch { scaffoldState.drawerState.close() }
+                    }) {
+                        Text(
+                            text = item,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp),
+                            fontSize = 16.sp
+                        )
+                    }
+
+                // Seleccionado el segundo elemento de la lista
+                1 -> TextButton(onClick = {
+                    navController.navigate(AppScreens.TutorialScreen.route) {
+                        launchSingleTop = true
+                    }
+                    scope.launch { scaffoldState.drawerState.close() }
+                }) {
+                    Text(
+                        text = item,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        fontSize = 16.sp
+                    )
+                }
             }
         }
     }
@@ -165,7 +192,7 @@ fun CommonTopAppBar(
                     onClick = { topIconButtonHome() },
                 ) {
                     Icon(
-                        painter = painterResource(id = appIcon),
+                        painter = painterResource(id = appIconColor),
                         contentDescription = "Icono principal de la App",
                         modifier = Modifier
                             .align(alignment = Alignment.CenterVertically)
@@ -214,7 +241,3 @@ fun CommonTopAppBar(
         }
     )
 }
-
-/**
- * ===================================================================
- */

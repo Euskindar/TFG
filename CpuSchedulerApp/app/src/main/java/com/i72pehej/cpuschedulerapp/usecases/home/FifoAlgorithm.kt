@@ -21,15 +21,14 @@ import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
     // Comprobacion inicial para que la lista de procesos no este vacia
     if (listaDeProcesos.isNotEmpty()) {
-        println("Algoritmo FIFO seleccionado")
-        println("LISTA DE PROCESOS SIN ORDENAR")
+        println("\nAlgoritmo FIFO seleccionado\n")
+
+        println("\nLISTA DE PROCESOS SIN ORDENAR\n")
         imprimirListaProcesos(listaDeProcesos)
 
-        val listaProcesosOrdenada = (listaDeProcesos).also {
-            ordenarListaProcesos(it)
-        }
+        val listaProcesosOrdenada = (listaDeProcesos).also { ordenarListaProcesos(it) }
 
-        println("LISTA DE PROCESOS ORDENADA")
+        println("\nLISTA DE PROCESOS ORDENADA\n")
         imprimirListaProcesos(listaProcesosOrdenada)
 
         for (proceso in listaProcesosOrdenada) {
