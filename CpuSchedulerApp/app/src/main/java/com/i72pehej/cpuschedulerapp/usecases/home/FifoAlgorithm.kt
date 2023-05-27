@@ -49,9 +49,6 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
                     // Aqui puedes realizar las operaciones necesarias durante la ejecucion del proceso
 
 
-                    // Actualizar el progreso del proceso
-                    proceso.progreso = time
-
                     // Actualizar el estado del proceso a "Esperando"
                     proceso.estado = Proceso.EstadoDeProceso.ESPERANDO
                 }
@@ -66,7 +63,3 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
 
     }
 }
-
-/**
- * ===================================================================
- */

@@ -52,9 +52,10 @@ import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
+import com.i72pehej.cpuschedulerapp.util.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
-import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
+import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
 
 /**
  * @author Julen Perez Hernandez
@@ -224,12 +225,19 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
-                val proceso = Proceso(
-                    nombre = nombre,
-                    tiempoLlegada = tiempoLlegada.toInt(),
-                    duracion = duracion.toInt()
+//                val proceso = Proceso(
+//                    nombre = nombre,
+//                    tiempoLlegada = tiempoLlegada.toInt(),
+//                    duracion = duracion.toInt()
+//                )
+//                onSubmit(proceso)
+                onSubmit(
+                    crearProceso(
+                        nombre = nombre,
+                        tiempoLlegada = tiempoLlegada.toInt(),
+                        duracion = duracion.toInt(),
+                    )
                 )
-                onSubmit(proceso)
 
                 // Limpiamos los campos del formulario
                 nombre = ""
