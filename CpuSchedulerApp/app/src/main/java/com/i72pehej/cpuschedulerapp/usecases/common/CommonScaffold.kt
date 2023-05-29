@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,11 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.util.appIconColor
 import com.i72pehej.cpuschedulerapp.util.extensions.ThemeSwitcher
@@ -114,19 +111,19 @@ fun MenuLateral(
             when (position) {
                 // Seleccionado el primer elemento de la lista
                 0 -> TextButton(onClick = {
-                        navController.navigate(AppScreens.TutorialScreen.route) {
-                            launchSingleTop = true
-                        }
-                        scope.launch { scaffoldState.drawerState.close() }
-                    }) {
-                        Text(
-                            text = item,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp),
-                            fontSize = 16.sp
-                        )
+                    navController.navigate(AppScreens.TutorialScreen.route) {
+                        launchSingleTop = true
                     }
+                    scope.launch { scaffoldState.drawerState.close() }
+                }) {
+                    Text(
+                        text = item,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        fontSize = 16.sp
+                    )
+                }
 
                 // Seleccionado el segundo elemento de la lista
                 1 -> TextButton(onClick = {
@@ -199,11 +196,14 @@ fun CommonTopAppBar(
                             .size(90.dp),
                     )
                 }
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                )
+
+//                Spacer(modifier = Modifier.width(10.dp))
+
+                // Nombre de la app
+//                Text(
+//                    text = stringResource(id = R.string.app_name),
+//                    modifier = Modifier.align(Alignment.CenterVertically),
+//                )
             }
         },
         // Menu lateral de navegacion

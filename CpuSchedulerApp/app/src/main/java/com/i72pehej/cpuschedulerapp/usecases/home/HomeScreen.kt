@@ -28,12 +28,10 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
@@ -42,7 +40,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
@@ -55,6 +55,7 @@ import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
+import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
 
 /**
@@ -116,7 +117,7 @@ fun ContenidoHome() {
 //                Text(text = stringResource(id = R.string.home_name))
 
         // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
-        val procesos = remember { mutableStateListOf<Proceso>() }
+        val procesos = remember { listaDeProcesosGlobal }
 
         // Contenedor de los elementos principales
         Column(
@@ -161,7 +162,7 @@ fun ContenidoHome() {
  *
  * @param procesos Listado de procesos con los que operar
  */
-fun llamarAlgoritmo(procesos: SnapshotStateList<Proceso>) {
+fun llamarAlgoritmo(procesos: MutableList<Proceso>) {
     when (selectorAlgoritmo) {
         // FIFO
         0 -> {
@@ -216,6 +217,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             else -> false
         }
 
+        // Comprobacion de formulario completo correctamente
         errorFormulario = when {
             nombre.isBlank() -> stringResource(R.string.error_nombre)
             tiempoLlegada.isBlank() -> stringResource(R.string.error_llegada_blank)
@@ -225,12 +227,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
-//                val proceso = Proceso(
-//                    nombre = nombre,
-//                    tiempoLlegada = tiempoLlegada.toInt(),
-//                    duracion = duracion.toInt()
-//                )
-//                onSubmit(proceso)
                 onSubmit(
                     crearProceso(
                         nombre = nombre,
@@ -297,8 +293,11 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         // Creamos tres campos de texto para ingresar los datos del proceso
         OutlinedTextField(
             value = nombre,
-            onValueChange = { nombre = it },
+            onValueChange = {
+                if (it.length <= 3) nombre = it
+            },    // Control de cantidad de caracteres
             label = { Text(stringResource(id = R.string.formulario_nombre)) },
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),   // Primera letra en mayuscula
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = {
                 Icon(
@@ -308,6 +307,15 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             },
             singleLine = true,
             isError = errorNombre
+        )
+        // Mensaje visual para que el usuario conozca la cantidad de caracteres permitidos
+        Text(
+            text = "${nombre.length} / 3",
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp)
         )
 
         Row(Modifier.fillMaxWidth()) {

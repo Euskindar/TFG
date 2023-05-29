@@ -1,8 +1,10 @@
 package com.i72pehej.cpuschedulerapp.usecases.home
 
+import com.i72pehej.cpuschedulerapp.usecases.common.calcularTiempos
 import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.imprimirListaProcesos
 import com.i72pehej.cpuschedulerapp.util.imprimirProceso
+import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
 /**
@@ -39,18 +41,18 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
 
             // Comprobar que el proceso esta listo para su ejecucion
             if (proceso.estado != Proceso.EstadoDeProceso.LISTO) {
-                println("PROCESO NO LISTO")
+                println("PROCESO NO LISTO -> ${proceso.estado}")
             } else {
                 // Actualizar el estado del proceso a "Corriendo"
-                proceso.estado = Proceso.EstadoDeProceso.CORRIENDO
+                proceso.estado = Proceso.EstadoDeProceso.EJECUCION
 
                 // Simular la ejecucion del proceso
                 for (time in 1..proceso.duracion) {
-                    // Aqui puedes realizar las operaciones necesarias durante la ejecucion del proceso
-
+                    // Calculo de los tiempos necesarios para la simulacion
+                    calcularTiempos(listaDeProcesosGlobal)
 
                     // Actualizar el estado del proceso a "Esperando"
-                    proceso.estado = Proceso.EstadoDeProceso.ESPERANDO
+//                    proceso.estado = Proceso.EstadoDeProceso.ESPERANDO
                 }
 
                 // Actualizar el estado del proceso a "Completado"
@@ -58,8 +60,5 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>) {
                 imprimirProceso(proceso)
             }
         }
-    } else {
-        // Creacion del mensaje
-
     }
 }

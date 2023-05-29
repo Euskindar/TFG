@@ -26,9 +26,12 @@ val appIconColor = R.drawable.logos_version_uco
 
 // ==============================================================
 
-// Lista de procesos de prueba
-//val listaDeProcesosPrueba = mutableListOf<Proceso>()
-//
+// Lista de procesos global con la que trabajar entre pantallas
+var listaDeProcesosGlobal = mutableListOf<Proceso>()
+
+
+// ==============================================================
+
 //fun crearProcesosDePrueba(): MutableList<Proceso> {
 //    for (i in 1..5) {
 //        val nombre = "Proceso $i"
@@ -36,10 +39,10 @@ val appIconColor = R.drawable.logos_version_uco
 //        val duracion = Random.nextInt(1, 11)
 //        val estado = Proceso.EstadoDeProceso.NUEVO
 //        val progreso = 0
-//
+
 //        listaDeProcesosPrueba.add(Proceso(i, nombre, tiempoLlegada, duracion, estado, progreso))
 //    }
-//
+
 //    return listaDeProcesosPrueba
 //}
 
