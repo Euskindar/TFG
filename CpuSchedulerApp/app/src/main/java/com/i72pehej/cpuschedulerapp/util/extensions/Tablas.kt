@@ -74,17 +74,17 @@ fun TablaProcesos(procesos: List<Proceso>) {
             items(procesos) { proceso ->
                 Row(modifier = Modifier.padding(4.dp)) {
                     Text(
-                        proceso.nombre,
+                        proceso.getNombre(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoLlegada.toString(),
+                        proceso.getLlegada().toString(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.duracion.toString(),
+                        proceso.getDuracion().toString(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
@@ -149,6 +149,30 @@ fun TablaResultados(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
+                    Text(
+                        stringResource(id = R.string.nombre_tiempo_inicio),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(id = R.string.nombre_tiempo_fin),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(id = R.string.nombre_tiempo_estancia),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(id = R.string.nombre_tiempo_espera),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
 
@@ -156,17 +180,37 @@ fun TablaResultados(procesos: List<Proceso>) {
             items(procesos) { proceso ->
                 Row(modifier = Modifier.padding(4.dp)) {
                     Text(
-                        proceso.nombre,
+                        proceso.getNombre(),    // Nombre
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoLlegada.toString(),
+                        proceso.getLlegada().toString(),    // Llegada
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.duracion.toString(),
+                        proceso.getDuracion().toString(),   // Duracion
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "-",   // TODO -> Calcular INICIO
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "-",   // TODO -> FIN
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        proceso.getTiempoEstancia().toString(),    // Estancia
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        proceso.getTiempoEspera().toString(),    // Espera
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )

@@ -26,5 +26,9 @@
     <!--    Mensaje de confirmacion de salida -->
     <string name="back_press_confirmacion">Pulsa de nuevo para salir</string>
 
-    <!--    Nombre de los tabs -->
+    <!--    Titulo de las columnas de la tabla de resultados -->
+    <string name="nombre_tiempo_inicio">T. Inicio</string>
+    <string name="nombre_tiempo_fin">T. Fin</string>
+    <string name="nombre_tiempo_estancia">T. Estancia</string>
+    <string name="nombre_tiempo_espera">T. Espera</string>
 </resources>

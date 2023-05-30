@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -117,7 +118,10 @@ fun ContenidoHome() {
 //                Text(text = stringResource(id = R.string.home_name))
 
         // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
-        val procesos = remember { listaDeProcesosGlobal }
+        val procesos = remember { mutableStateListOf<Proceso>() }
+
+        // Asigno los procesos creados a la lista compartida
+        listaDeProcesosGlobal = procesos
 
         // Contenedor de los elementos principales
         Column(
@@ -231,7 +235,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                     crearProceso(
                         nombre = nombre,
                         tiempoLlegada = tiempoLlegada.toInt(),
-                        duracion = duracion.toInt(),
+                        duracion = duracion.toInt()
                     )
                 )
 
@@ -255,6 +259,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         var expandir by remember { mutableStateOf(value = false) }
         var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
 
+        // Menu desplegable para seleccion de algoritmo
         ExposedDropdownMenuBox(
             expanded = expandir,
             onExpandedChange = { expandir = !expandir }
@@ -308,6 +313,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorNombre
         )
+
         // Mensaje visual para que el usuario conozca la cantidad de caracteres permitidos
         Text(
             text = "${nombre.length} / 3",
@@ -318,6 +324,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 .padding(end = 16.dp)
         )
 
+        // Contenedor de los campos de los tiempos
         Row(Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = tiempoLlegada,
