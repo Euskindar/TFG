@@ -166,20 +166,3 @@ fun imprimirProceso(proceso: Proceso) {
     println("IMPRIMIENDO PROCESO . . .")
     println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
 }
-
-/**
- * ===========================================================================================
- */
-
-/**
- * Informacion de los tiempos que tiene cada proceso para el procesamiento del diagrama de Gantt
- *
- * @property pid Nombre o ID del proceso
- * @property tiempoEjecucion El momento en el que el proceso deja de ejecutarse
- * @property tiempoEjecutado El tiempo que lleva ejecutado
- */
-data class InfoGraficoGantt(
-    val pid: String,
-    val tiempoEjecucion: Int,
-    val tiempoEjecutado: Int,
-)

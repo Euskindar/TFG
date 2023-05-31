@@ -1,7 +1,9 @@
 package com.i72pehej.cpuschedulerapp.usecases.home
 
-import com.i72pehej.cpuschedulerapp.util.InfoGraficoGantt
 import com.i72pehej.cpuschedulerapp.util.Proceso
+import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoGantt
+import com.i72pehej.cpuschedulerapp.util.extensions.InfoResultsFinalData
 import com.i72pehej.cpuschedulerapp.util.imprimirListaProcesos
 import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 import kotlin.system.exitProcess
@@ -19,7 +21,7 @@ import kotlin.system.exitProcess
  *
  * @param listaDeProcesos Recibe una lista con los procesos creados para aplicar el algoritmo
  */
-fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): List<InfoGraficoGantt> {
+fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): InfoResultsFinalData {
     // Comprobacion inicial para que la lista de procesos no este vacia
     if (listaDeProcesos.isEmpty()) {
         exitProcess(-1)
@@ -36,6 +38,16 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): List<InfoGraficoGantt>
         imprimirListaProcesos(listaProcesosOrdenada)
 
         // Comienzo de la ejecucion
+
+        // Variable para almacenar el progreso de los ESTADOS de cada proceso durante el algoritmo
+        val infoEstados = mutableListOf(
+            InfoGraficoEstados(
+                pid = (-1).toString(),
+                momento = 0,
+                estado = Proceso.EstadoDeProceso.LISTO
+            )
+        )
+
         // Comprobar que el proceso no se encuentra bloqueado
         if (listaProcesosOrdenada[0].getEstado() == Proceso.EstadoDeProceso.BLOQUEADO) {
             println("Proceso bloqueado")
@@ -44,7 +56,7 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): List<InfoGraficoGantt>
             listaProcesosOrdenada[0].setEstado(Proceso.EstadoDeProceso.LISTO)
         }
 
-        // Variable para almacenar el progreso de los tiempos de cada proceso del algoritmo
+        // Variable para almacenar el progreso de los TIEMPOS de cada proceso durante el algoritmo
         val infoTiempos = mutableListOf(
             InfoGraficoGantt(
                 pid = (-1).toString(),
@@ -108,6 +120,6 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): List<InfoGraficoGantt>
         }
 
         // Devolver la variable de informacion de los tiempos
-        return infoTiempos
+        return InfoResultsFinalData(infoTiempos, infoEstados)
     }
 }
