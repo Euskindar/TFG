@@ -1,5 +1,6 @@
 package com.i72pehej.cpuschedulerapp.util
 
+import androidx.compose.runtime.mutableStateListOf
 import com.i72pehej.cpuschedulerapp.R
 
 /**
@@ -27,7 +28,7 @@ val appIconColor = R.drawable.logos_version_uco
 // ==============================================================
 
 // Lista de procesos global con la que trabajar entre pantallas
-var listaDeProcesosGlobal = mutableListOf<Proceso>()
+var listaDeProcesosGlobal = mutableStateListOf<Proceso>()
 
 
 // ==============================================================

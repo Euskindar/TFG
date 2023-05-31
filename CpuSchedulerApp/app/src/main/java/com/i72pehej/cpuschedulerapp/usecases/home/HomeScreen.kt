@@ -28,7 +28,6 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -115,14 +114,6 @@ fun ContenidoHome() {
             .padding(5.dp),
         horizontalAlignment = CenterHorizontally
     ) {
-//                Text(text = stringResource(id = R.string.home_name))
-
-        // Creamos una lista mutable de procesos, que utilizaremos para almacenar los procesos ingresados por el usuario
-        val procesos = remember { mutableStateListOf<Proceso>() }
-
-        // Asigno los procesos creados a la lista compartida
-        listaDeProcesosGlobal = procesos
-
         // Contenedor de los elementos principales
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -131,13 +122,13 @@ fun ContenidoHome() {
                 .padding(16.dp)
         ) {
             // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
-            FormularioProceso { proceso -> procesos.add(proceso) }
+            FormularioProceso { proceso -> listaDeProcesosGlobal.add(proceso) }
 
             // Agregamos un espacio en blanco para separar el formulario de la tabla de procesos
             Spacer(modifier = Modifier.height(16.dp))
 
             // Creamos la tabla de procesos, y le pasamos la lista de procesos
-            TablaProcesos(procesos = procesos)
+            TablaProcesos(procesos = listaDeProcesosGlobal)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -149,8 +140,8 @@ fun ContenidoHome() {
             ) {
                 CommonRoundedButton(
                     text = stringResource(id = R.string.common_buttonNext),
-                    isEnabled = procesos.isNotEmpty(),
-                    onClick = { llamarAlgoritmo(procesos) }
+                    isEnabled = listaDeProcesosGlobal.isNotEmpty(),
+                    onClick = { llamarAlgoritmo(listaDeProcesosGlobal) }
                 )
             }
         }
