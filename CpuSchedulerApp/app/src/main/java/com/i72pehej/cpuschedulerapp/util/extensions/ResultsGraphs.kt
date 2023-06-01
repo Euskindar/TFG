@@ -14,12 +14,12 @@ import com.i72pehej.cpuschedulerapp.util.Proceso.EstadoDeProceso
  * Informacion de los tiempos que tiene cada proceso para el procesamiento del diagrama de Gantt
  *
  * @property pid Nombre o ID del proceso
- * @property tiempoEjecucion El momento en el que el proceso deja de ejecutarse
+ * @property tiempoFinEjecucion El momento en el que el proceso deja de ejecutarse
  * @property tiempoEjecutado El tiempo que lleva ejecutado
  */
 data class InfoGraficoGantt(
     val pid: String,
-    val tiempoEjecucion: Int,
+    val tiempoFinEjecucion: Int,
     val tiempoEjecutado: Int,
 )
 
@@ -32,11 +32,13 @@ data class InfoGraficoGantt(
  *
  * @property pid Nombre o ID del proceso
  * @property momento Tiempo en el que el proceso adquiere un estado distinto al anterior
+ * @property espera Tiempo de espera del proceso desde que llega hasta que comienza su ejecucion
  * @property estado Nuevo estado que adquiere el proceso
  */
 data class InfoGraficoEstados(
     val pid: String,
     val momento: Int,
+    val espera: Int,
     val estado: EstadoDeProceso
 )
 

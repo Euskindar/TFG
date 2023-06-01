@@ -66,7 +66,7 @@ data class Proceso(
     }
 
     // Control de los tiempos del proceso
-    private var tiempoRespuesta: Int = -1
+    private var tiempoRespuesta: Int = 0
     fun getTiempoRespuesta(): Int {
         return this.tiempoRespuesta
     }
@@ -84,7 +84,7 @@ data class Proceso(
         this.tiempoRestante = tiempo
     }
 
-    private var tiempoEstancia: Int = -1
+    private var tiempoEstancia: Int = 0
     fun getTiempoEstancia(): Int {
         return this.tiempoEstancia
     }
@@ -93,7 +93,7 @@ data class Proceso(
         this.tiempoEstancia = tiempo
     }
 
-    private var tiempoEspera: Int = -1
+    private var tiempoEspera: Int = 0
     fun getTiempoEspera(): Int {
         return this.tiempoEspera
     }
@@ -141,8 +141,10 @@ fun crearProceso(
 /**
  * Funcion que ordena la lista de procesos por orden de llegada de forma ascendente
  */
-fun ordenarListaProcesos(listaDeProcesos: MutableList<Proceso>) {
-    listaDeProcesos.sortBy { it.getLlegada() }
+fun ordenarListaProcesos(listaDeProcesos: MutableList<Proceso>): List<Proceso> {
+    listaDeProcesos.sortBy { proceso: Proceso -> proceso.getLlegada() }
+
+    return listaDeProcesos
 }
 
 /**
