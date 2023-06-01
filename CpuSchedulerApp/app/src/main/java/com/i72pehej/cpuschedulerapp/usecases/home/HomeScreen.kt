@@ -55,6 +55,7 @@ import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
 
@@ -161,7 +162,7 @@ fun llamarAlgoritmo(procesos: MutableList<Proceso>) {
     when (selectorAlgoritmo) {
         // FIFO
         0 -> {
-            algoritmoFifo(procesos)
+            infoResultadosGlobal = algoritmoFifo(procesos)
         }
         // RoundRobin
         // 1 -> algoritmoRoundRobin(procesos)

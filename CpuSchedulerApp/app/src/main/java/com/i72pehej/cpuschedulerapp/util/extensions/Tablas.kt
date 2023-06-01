@@ -111,9 +111,10 @@ fun TablaProcesos(procesos: List<Proceso>) {
  * Creacion de la tabla de resultados
  *
  * @param procesos Lista de los procesos agregados
+ * @param infoRes Contenedor de los resultados obtenidos
  */
 @Composable
-fun TablaResultados(procesos: List<Proceso>) {
+fun TablaResultados(procesos: List<Proceso>, infoRes: InfoResultsFinalData) {
     // Si la lista de procesos no está vacía
     if (procesos.isNotEmpty()) {
         // Creamos una tabla utilizando LazyColumn
