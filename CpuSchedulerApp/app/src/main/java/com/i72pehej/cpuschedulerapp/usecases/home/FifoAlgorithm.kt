@@ -16,17 +16,17 @@ import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
 /**
  * Funcion para implementar el algoritmo FIFO considerando estados
- *
- * @param listaDeProcesos Recibe una lista con los procesos creados para aplicar el algoritmo
  */
-fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGraficoEstados> {
+//fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGraficoEstados> {
+fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
     // Ordenar la lista de procesos por tiempo de llegada
-    val listaProcesosOrdenada = ordenarListaProcesos(listaDeProcesos)
+    ordenarListaProcesos(listaDeProcesosGlobal)
+
 
     // Comienzo de la ejecucion
 
     // Variable para almacenar el avance del tiempo con cada proceso
-    var tiempoActual = listaProcesosOrdenada[0].getDuracion()
+    var tiempoActual = listaDeProcesosGlobal[0].getDuracion()
 
     // Variable para almacenar el progreso de los ESTADOS de cada proceso durante el algoritmo
     val infoEstados = mutableListOf(
@@ -64,15 +64,15 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
 //    )
 
     // Iniciamos los tiempos de control
-    listaProcesosOrdenada[0].setTiempoEspera(0)
+    listaDeProcesosGlobal[0].setTiempoEspera(0)
 
     // Actualizamos su estado a proceso COMPLETADO
-    listaProcesosOrdenada[0].setEstado(Proceso.EstadoDeProceso.COMPLETADO)
+    listaDeProcesosGlobal[0].setEstado(Proceso.EstadoDeProceso.COMPLETADO)
 
     // Guardado del cambio de estado
     infoEstados.add(
         InfoGraficoEstados(
-            proceso = listaProcesosOrdenada[0],
+            proceso = listaDeProcesosGlobal[0],
             momento = tiempoActual,
 //            espera = listaProcesosOrdenada[0].getTiempoEspera(),
 //            estado = listaProcesosOrdenada[0].getEstado()
@@ -80,7 +80,7 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
     )
 
     // Continuacion de la ejecucion agregando los tiempos del primer proceso en CPU
-    listaProcesosOrdenada[0].setTiempoRestante(0) // En FIFO, al no tener interrupciones, siempre sera 0
+    listaDeProcesosGlobal[0].setTiempoRestante(0) // En FIFO, al no tener interrupciones, siempre sera 0
 
 //    infoTiempos.add(
 //        InfoGraficoGantt(
@@ -91,7 +91,7 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
 //    )
 
     // Iteraciones para recorrer todos los procesos restantes despues del primero
-    for (proceso in 1 until listaProcesosOrdenada.size) {
+    for (proceso in 1 until listaDeProcesosGlobal.size) {
 //        // Comprobar que el proceso no se encuentra bloqueado
 //        if (listaProcesosOrdenada[proceso].getEstado() == Proceso.EstadoDeProceso.BLOQUEADO) {
 //            // Cambio de estado para continuar su ejecucion
@@ -109,16 +109,16 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
 //        }
 
         // Actualizar el estado del proceso a en EJECUCION
-        listaProcesosOrdenada[proceso].setEstado(Proceso.EstadoDeProceso.EJECUCION)
+        listaDeProcesosGlobal[proceso].setEstado(Proceso.EstadoDeProceso.EJECUCION)
 
         // Calculo de la diferencia entre el momento actual y la llegada del proceso para el tiempo de espera
-        val diffTiempos = tiempoActual - listaProcesosOrdenada[proceso].getLlegada()
-        listaProcesosOrdenada[proceso].setTiempoEspera(if (diffTiempos > 0) diffTiempos else 0)
+        val diffTiempos = tiempoActual - listaDeProcesosGlobal[proceso].getLlegada()
+        listaDeProcesosGlobal[proceso].setTiempoEspera(if (diffTiempos > 0) diffTiempos else 0)
 
         // Guardado del cambio de estado
         infoEstados.add(
             InfoGraficoEstados(
-                proceso = listaProcesosOrdenada[proceso],
+                proceso = listaDeProcesosGlobal[proceso],
                 momento = tiempoActual,
 //                espera = listaProcesosOrdenada[proceso].getTiempoEspera(),
 //                estado = listaProcesosOrdenada[proceso].getEstado()
@@ -126,7 +126,7 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
         )
 
         // Avanzamos el momento actual hasta finalizar el proceso
-        tiempoActual += listaProcesosOrdenada[proceso].getDuracion()
+        tiempoActual += listaDeProcesosGlobal[proceso].getDuracion()
 
 //        // Agregar los tiempos del proceso ejecutado a la lista de informacion
 //        infoTiempos.add(
@@ -138,12 +138,12 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
 //        )
 
         // Actualizamos el estado a proceso COMPLETADO
-        listaProcesosOrdenada[proceso].setEstado(Proceso.EstadoDeProceso.COMPLETADO)
+        listaDeProcesosGlobal[proceso].setEstado(Proceso.EstadoDeProceso.COMPLETADO)
 
         // Guardado del cambio de estado
         infoEstados.add(
             InfoGraficoEstados(
-                proceso = listaProcesosOrdenada[proceso],
+                proceso = listaDeProcesosGlobal[proceso],
                 momento = tiempoActual,
 //                espera = listaProcesosOrdenada[proceso].getTiempoEspera(),
 //                estado = listaProcesosOrdenada[proceso].getEstado()
@@ -159,7 +159,7 @@ fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGrafic
 //    listaDeProcesosGlobal = listaProcesosOrdenada
 
     println("\n--------------------------\n")
-    listaProcesosOrdenada.forEach {
+    listaDeProcesosGlobal.forEach {
         println("$it, ${it.getEstado()}")
     }
     println("\n--------------------------\n")

@@ -142,7 +142,10 @@ fun ContenidoHome() {
                 CommonRoundedButton(
                     text = stringResource(id = R.string.common_buttonNext),
                     isEnabled = listaDeProcesosGlobal.isNotEmpty(),
-                    onClick = { llamarAlgoritmo(listaDeProcesosGlobal) }
+                    onClick = {
+                        // TODO -> Navegar a la pagina de resultados
+                        llamarAlgoritmo()
+                    }
                 )
             }
         }
@@ -155,14 +158,12 @@ fun ContenidoHome() {
 
 /**
  * Llamada a la ejecucion de cada algoritmo dependiendo de la opcion seleccionada en el formulario
- *
- * @param procesos Listado de procesos con los que operar
  */
-fun llamarAlgoritmo(procesos: MutableList<Proceso>) {
+fun llamarAlgoritmo() {
     when (selectorAlgoritmo) {
         // FIFO
         0 -> {
-            infoResultadosGlobal = algoritmoFifo(procesos)
+            infoResultadosGlobal = algoritmoFifo()
         }
         // RoundRobin
         // 1 -> algoritmoRoundRobin(procesos)
