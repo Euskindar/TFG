@@ -2,10 +2,13 @@ package com.i72pehej.cpuschedulerapp.usecases.results
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaResultadosGraficos
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaTiemposResultados
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
@@ -29,7 +32,9 @@ fun ResultsScreen() {
     ) {
         // Generar tabla de resultados
         TablaTiemposResultados(procesos = listaDeProcesosGlobal)
-        
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         TablaResultadosGraficos(infoRes = infoResultadosGlobal)
     }
 }
