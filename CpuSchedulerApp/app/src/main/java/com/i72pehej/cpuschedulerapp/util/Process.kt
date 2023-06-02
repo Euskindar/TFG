@@ -85,14 +85,7 @@ data class Proceso(
         this.tiempoRestante = tiempo
     }
 
-    private var tiempoEstancia: Int = 0
-    fun getTiempoEstancia(): Int {
-        return this.tiempoEstancia
-    }
-
-    fun setTiempoEstancia(tiempo: Int) {
-        this.tiempoEstancia = tiempo
-    }
+    fun tiempoEstancia() = this.tiempoFin() - this.getLlegada()
 
     private var tiempoEspera: Int = 0
     fun getTiempoEspera(): Int {
@@ -105,6 +98,9 @@ data class Proceso(
 
     fun tiempoFin() =
         this.getLlegada() + this.getDuracion() + this.getTiempoEspera() // Tiempo que ha tardado el proceso en completarse desde su llegada
+
+    fun tiempoInicioFIFO() =
+        this.tiempoFin() - this.getDuracion()  // Tiempo en el que el proceso inicia su ejecucion en el algoritmo FIFO
 
     fun tiempoDeCompletado() =
         this.getDuracion() + this.getTiempoEspera() // Tiempo que ha tardado en completarse tras entrar a la CPU

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.i72pehej.cpuschedulerapp.util.extensions.TablaResultadosGraficos
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaTiemposResultados
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
@@ -26,9 +27,9 @@ fun ResultsScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-//        Text(text = stringResource(id = R.string.results_name))
-
         // Generar tabla de resultados
-        TablaTiemposResultados(procesos = listaDeProcesosGlobal, infoRes = infoResultadosGlobal)
+        TablaTiemposResultados(procesos = listaDeProcesosGlobal)
+        
+        TablaResultadosGraficos(infoRes = infoResultadosGlobal)
     }
 }
