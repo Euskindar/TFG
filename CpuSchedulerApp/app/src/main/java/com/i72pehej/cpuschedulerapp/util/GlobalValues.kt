@@ -2,7 +2,7 @@ package com.i72pehej.cpuschedulerapp.util
 
 import androidx.compose.runtime.mutableStateListOf
 import com.i72pehej.cpuschedulerapp.R
-import com.i72pehej.cpuschedulerapp.util.extensions.InfoResultsFinalData
+import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
 
 /**
  * @author Julen Perez Hernandez
@@ -32,26 +32,7 @@ val appIconColor = R.drawable.logos_version_uco
 var listaDeProcesosGlobal = mutableStateListOf<Proceso>()
 
 // Contenedor de informacion de resultados
-var infoResultadosGlobal: InfoResultsFinalData = InfoResultsFinalData(
-    listaTiemposFinal = listOf(),
-    listaEstadosFinal = listOf()
-)
-
-// ==============================================================
-
-//fun crearProcesosDePrueba(): MutableList<Proceso> {
-//    for (i in 1..5) {
-//        val nombre = "Proceso $i"
-//        val tiempoLlegada = Random.nextInt(1, 11)
-//        val duracion = Random.nextInt(1, 11)
-//        val estado = Proceso.EstadoDeProceso.NUEVO
-//        val progreso = 0
-
-//        listaDeProcesosPrueba.add(Proceso(i, nombre, tiempoLlegada, duracion, estado, progreso))
-//    }
-
-//    return listaDeProcesosPrueba
-//}
+var infoResultadosGlobal = mutableListOf<InfoGraficoEstados>()
 
 // ==============================================================
 

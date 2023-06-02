@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.i72pehej.cpuschedulerapp.util.extensions.TablaResultados
+import com.i72pehej.cpuschedulerapp.util.extensions.TablaTiemposResultados
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
@@ -28,6 +29,6 @@ fun ResultsScreen() {
 //        Text(text = stringResource(id = R.string.results_name))
 
         // Generar tabla de resultados
-        TablaResultados(procesos = listaDeProcesosGlobal)
+        TablaTiemposResultados(procesos = listaDeProcesosGlobal, infoRes = infoResultadosGlobal)
     }
 }

@@ -66,6 +66,7 @@ data class Proceso(
     }
 
     // Control de los tiempos del proceso
+
     private var tiempoRespuesta: Int = 0
     fun getTiempoRespuesta(): Int {
         return this.tiempoRespuesta
@@ -103,12 +104,13 @@ data class Proceso(
     }
 
     fun tiempoFin() =
-        tiempoLlegada + duracion + tiempoEspera // Tiempo que ha tardado el proceso en completarse desde su llegada
+        this.getLlegada() + this.getDuracion() + this.getTiempoEspera() // Tiempo que ha tardado el proceso en completarse desde su llegada
 
     fun tiempoDeCompletado() =
-        duracion + tiempoEspera // Tiempo que ha tardado en completarse tras entrar a la CPU
+        this.getDuracion() + this.getTiempoEspera() // Tiempo que ha tardado en completarse tras entrar a la CPU
 
-    fun isFinished() = this.tiempoRestante == 0 // Comprobador de proceso finalizado
+    fun isFinished() = this.getTiempoRestante() == 0 // Comprobador de proceso finalizado
+
     fun reset() {   // Limpieza de tiempos de control
         setTiempoRestante(this.getDuracion())
         setTiempoEspera(0)
