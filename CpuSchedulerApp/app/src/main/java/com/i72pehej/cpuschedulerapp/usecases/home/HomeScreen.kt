@@ -30,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -46,7 +45,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
-import androidx.navigation.NavHostController
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
@@ -70,11 +68,13 @@ import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
 /**
  * Pantalla inicial en la que comenzar la navegacion por la app
  *
- * @param navController Control de navegacion
+// * @param navController Control de navegacion
+ * @param temaOscuro Control para el switch del tema de la app
+ * @param onActualizarTema Funcion para actualizar el tema
  */
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
+//    navController: NavHostController,
     temaOscuro: Boolean,
     onActualizarTema: () -> Unit
 ) {
@@ -85,14 +85,14 @@ fun HomeScreen(
     val scaffoldState = rememberScaffoldState()
 
     // Control para abrir o cerrar el menu lateral
-    val scope = rememberCoroutineScope()
+//    val scope = rememberCoroutineScope()
 
     // Disposicion principal de la pantalla
     CommonScaffold(
         temaOscuro = temaOscuro,
         onActualizarTema = onActualizarTema,
-        navController = navController,
-        scope = scope,
+//        navController = navController,
+//        scope = scope,
         scaffoldState = scaffoldState,
 //        content = { ContenidoHome(scaffoldPadding = it) }
         content = { CrearTabs() }

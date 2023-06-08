@@ -7,7 +7,6 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.i72pehej.cpuschedulerapp.usecases.home.HomeScreen
 import com.i72pehej.cpuschedulerapp.usecases.launch.SplashScreen
-import com.i72pehej.cpuschedulerapp.usecases.onboarding.TutorialScreen
 
 /**
  * @author Julen Perez Hernandez
@@ -42,43 +41,11 @@ fun AppNavigation(temaOscuro: Boolean, onActualizarTema: () -> Unit) {
             popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
         ) {
             // Llamada a la funcion que maneja el contenido de la pagina
-            HomeScreen(navController, temaOscuro, onActualizarTema)
-        }
-
-        // Elemento composable para la Results Screen
-//        composable(
-//            AppScreens.ResultsScreen.route,
-//            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
-//            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
-//            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
-//            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
-//        ) {
-//            // Llamada a la funcion que maneja el contenido de la pagina
-//            ResultsScreen(navController)
-//        }
-
-        // Elemento composable para la Graphs Screen
-//        composable(
-//            AppScreens.GraphsScreen.route,
-//            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
-//            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
-//            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
-//            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
-//        ) {
-//            // Llamada a la funcion que maneja el contenido de la pagina
-//            GraphsScreen(navController)
-//        }
-
-        // Elemento composable para la Tutorial Screen
-        composable(
-            AppScreens.TutorialScreen.route,
-            enterTransition = AppNavigationAnimations.BasicNavigateAnimation.enter,
-            exitTransition = AppNavigationAnimations.BasicNavigateAnimation.exit,
-            popEnterTransition = AppNavigationAnimations.BasicNavigateAnimation.popEnter,
-            popExitTransition = AppNavigationAnimations.BasicNavigateAnimation.popExit
-        ) {
-            // Llamada a la funcion que maneja el contenido de la pagina
-            TutorialScreen(navController)
+            HomeScreen(
+//                navController,
+                temaOscuro,
+                onActualizarTema
+            )
         }
     }
 }

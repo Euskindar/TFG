@@ -1,27 +1,20 @@
 package com.i72pehej.cpuschedulerapp.usecases.common
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,16 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import com.i72pehej.cpuschedulerapp.navigation.AppScreens
 import com.i72pehej.cpuschedulerapp.util.appIconColor
 import com.i72pehej.cpuschedulerapp.util.extensions.ThemeSwitcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 /**
  * @author Julen Perez Hernandez
@@ -58,8 +45,8 @@ import kotlinx.coroutines.launch
 fun CommonScaffold(
     temaOscuro: Boolean,
     onActualizarTema: () -> Unit,
-    navController: NavHostController,
-    scope: CoroutineScope,
+//    navController: NavHostController,
+//    scope: CoroutineScope,
     scaffoldState: ScaffoldState,
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -67,23 +54,23 @@ fun CommonScaffold(
         scaffoldState = scaffoldState,
         topBar = {
             CommonTopAppBar(
-                navController,
-                scope,
-                scaffoldState,
+//                navController,
+//                scope,            // Control del ambito para el menu lateral
+//                scaffoldState,    // Estado para el control del menu lateral
                 temaOscuro,
                 onActualizarTema
             )
         },
         content = content,
-        // Menu de navegacion lateral
-        drawerContent = { MenuLateral(navController, scope, scaffoldState) }
+//        // Menu de navegacion lateral
+//        drawerContent = { MenuLateral(navController, scope, scaffoldState) }
     )
 }
 
 /**
  * ===================================================================
  */
-
+/*
 /**
  * Menu lateral en el que agregar distintos apartados
  */
@@ -144,7 +131,7 @@ fun MenuLateral(
         }
     }
 }
-
+*/
 /**
  * ===================================================================
  */
@@ -152,31 +139,24 @@ fun MenuLateral(
 /**
  * Funcion que crea la top bar comun de la app
  *
- * @param navController Control de navegacion
- * @param scope Control de apertura del menu lateral
- * @param scaffoldState Control de estado del menu
+// * @param navController Control de navegacion
+// * @param scope Control de apertura del menu lateral
+// * @param scaffoldState Control de estado del menu
+ * @param temaOscuro Control para el switch del tema de la app
+ * @param onActualizarTema Funcion para actualizar el tema
  */
 @Composable
 fun CommonTopAppBar(
-    navController: NavHostController,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
+//    navController: NavHostController,
+//    scope: CoroutineScope,
+//    scaffoldState: ScaffoldState,
     temaOscuro: Boolean,
     onActualizarTema: () -> Unit
 ) {
-    // Funcion para volver a la pantalla de Home
-    fun topIconButtonHome() {
-        // Eliminar la pagina anterior de la navegacion
-        navController.popBackStack()
-
-        // Navegar a la pantalla de inicio
-        navController.navigate(AppScreens.HomeScreen.route)
-    }
-
-    // Control del boton de back para cerrar menu lateral
-    BackHandler(scaffoldState.drawerState.isOpen) {
-        scope.launch { scaffoldState.drawerState.close() }
-    }
+//    // Control del boton de back para cerrar menu lateral
+//    BackHandler(scaffoldState.drawerState.isOpen) {
+//        scope.launch { scaffoldState.drawerState.close() }
+//    }
 
     // Control del menu de ajustes desplegable
     var verMenuAjustes by remember { mutableStateOf(false) }
@@ -185,17 +165,13 @@ fun CommonTopAppBar(
     TopAppBar(
         title = {
             Row {
-                IconButton(
-                    onClick = { topIconButtonHome() },
-                ) {
-                    Icon(
-                        painter = painterResource(id = appIconColor),
-                        contentDescription = "Icono principal de la App",
-                        modifier = Modifier
-                            .align(alignment = Alignment.CenterVertically)
-                            .size(90.dp),
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = appIconColor),
+                    contentDescription = "Icono principal de la App",
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterVertically)
+                        .size(90.dp),
+                )
 
 //                Spacer(modifier = Modifier.width(10.dp))
 
@@ -206,12 +182,12 @@ fun CommonTopAppBar(
 //                )
             }
         },
-        // Menu lateral de navegacion
-        navigationIcon = {
-            IconButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
-                Icon(imageVector = Icons.Filled.Menu, contentDescription = "Icono de Menu")
-            }
-        },
+//        // Menu lateral de navegacion
+//        navigationIcon = {
+//            IconButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
+//                Icon(imageVector = Icons.Filled.Menu, contentDescription = "Icono de Menu")
+//            }
+//        },
         elevation = 10.dp,
         // Menu desplegable para ajustes basicos
         actions = {
