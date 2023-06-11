@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -46,10 +48,10 @@ sealed class HomeTabs(
         HomeTabs(icono = Icons.Default.Home, titulo = "Inicio", { ContenidoHome() })
 
     object TabResultados :
-        HomeTabs(icono = Icons.Default.Toc, titulo = "Resultados", { ResultsScreen() })
+        HomeTabs(icono = Icons.Default.Toc, titulo = "Resultado", { ResultsScreen() })
 
     object TabGraficos :
-        HomeTabs(icono = Icons.Filled.Equalizer, titulo = "Gáficos", { GraphsScreen() })
+        HomeTabs(icono = Icons.Filled.Equalizer, titulo = "Gráficos", { GraphsScreen() })
 }
 
 /**
@@ -58,7 +60,7 @@ sealed class HomeTabs(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CrearTabs() {// Lista para almacenar los elementos de los tabs
+fun CrearTabs() {   // Lista para almacenar los elementos de los tabs
     val tabs = listOf(TabInicio, TabResultados, TabGraficos)
 
     // Control del paginador que contiene los tabs
@@ -127,7 +129,13 @@ fun Tabs(tabs: List<HomeTabs>, pagerState: PagerState) {
                         contentDescription = "Icono del tab asociado"
                     )
                 },
-                text = { Text(text = homeTabs.titulo) }
+                text = {
+                    Text(
+                        text = homeTabs.titulo,
+                        fontSize = 12.5.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             )
         }
     }
