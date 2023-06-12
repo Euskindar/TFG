@@ -11,7 +11,7 @@ import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
 // ==============================================================
 
 // Valores constantes para las animaciones
-const val slideAnimationSpeed = 300
+const val slideAnimationSpeed = 400
 const val fadeAnimationSpeed = 300
 
 // ==============================================================

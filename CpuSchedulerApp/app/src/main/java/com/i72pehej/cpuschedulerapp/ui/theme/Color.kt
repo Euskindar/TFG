@@ -18,7 +18,7 @@ val Rojo_base = Color(0xFFA41E34)
 val Amarillo_com_1 = Color(0xFFD6A305)
 val Amarillo_com_2 = Color(0xFFA37C13)
 
-val Azul_com_1 = Color(0xFF614C9A)
+val Azul_com_1 = Color(0xFF7a63b8)
 val Azul_com_2 = Color(0xFF352663)
 
 val Rojo_com_1 = Color(0xFFE73057)

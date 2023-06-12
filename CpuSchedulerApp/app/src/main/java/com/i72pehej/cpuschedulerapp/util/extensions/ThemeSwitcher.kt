@@ -71,7 +71,7 @@ fun ThemeSwitcher(
             .height(size)
             .clip(shape = parentShape)
             .clickable { onClick() }
-            .background(MaterialTheme.colors.secondary)
+            .background(MaterialTheme.colors.primaryVariant)
     ) {
         // Contenedor hijo que da forma al boton circular que cambia entre temas
         Box(
@@ -103,7 +103,7 @@ fun ThemeSwitcher(
                     imageVector = Icons.Default.Nightlight,
                     contentDescription = "Icono de tema oscuro",
                     // Cambio de tonos dependiendo del tema
-                    tint = if (darkTheme) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
+                    tint = if (darkTheme) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primary
                 )
             }
 
@@ -116,7 +116,7 @@ fun ThemeSwitcher(
                     modifier = Modifier.size(iconSize),
                     imageVector = Icons.Default.LightMode,
                     contentDescription = "Icono de tema claro",
-                    tint = if (darkTheme) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
+                    tint = if (darkTheme) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant
                 )
             }
         }

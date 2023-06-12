@@ -11,8 +11,8 @@ private val DarkColorPalette = darkColors(
 //    primaryVariant = Purple700,
 //    secondary = Teal200
 
-    primary = Azul_base,
-    primaryVariant = Azul_com_1,
+    primary = Azul_com_1,
+    primaryVariant = Azul_base,
     secondary = Azul_com_2,
     secondaryVariant = Verde_deriv_1
 )
