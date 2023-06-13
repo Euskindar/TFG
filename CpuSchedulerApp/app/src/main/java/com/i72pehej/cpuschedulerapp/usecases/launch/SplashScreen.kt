@@ -20,8 +20,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
-import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.AppScreens
+import com.i72pehej.cpuschedulerapp.util.appIconCPU1
 import kotlinx.coroutines.delay
 
 /**
@@ -115,7 +115,7 @@ fun AppIconAnimationEnter(
     // Efecto para icono que entra
     LaunchedEffect(key1 = true) {
         scaleUcoIcon.animateTo(
-            targetValue = 0.8f,
+            targetValue = 1.1f,
             animationSpec = tween(1000, easing = {
                 OvershootInterpolator(6f).getInterpolation(it)
             })
@@ -151,7 +151,7 @@ fun Splash(
     ) {
         // Imagen de Icono de la App
         Image(
-            painter = painterResource(id = R.drawable.logos_version_uco),
+            painter = painterResource(id = appIconCPU1),
             contentDescription = "Logo de la app",
             modifier = Modifier
                 .fillMaxWidth()

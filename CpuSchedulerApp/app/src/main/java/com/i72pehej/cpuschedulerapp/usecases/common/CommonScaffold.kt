@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.i72pehej.cpuschedulerapp.util.appIconColor
+import com.i72pehej.cpuschedulerapp.util.appIconUCOSolo
 import com.i72pehej.cpuschedulerapp.util.extensions.ThemeSwitcher
 
 /**
@@ -166,11 +166,11 @@ fun CommonTopAppBar(
         title = {
             Row {
                 Icon(
-                    painter = painterResource(id = appIconColor),
+                    painter = painterResource(id = appIconUCOSolo),
                     contentDescription = "Icono principal de la App",
                     modifier = Modifier
                         .align(alignment = Alignment.CenterVertically)
-                        .size(90.dp),
+                        .size(60.dp),
                 )
 
 //                Spacer(modifier = Modifier.width(10.dp))
