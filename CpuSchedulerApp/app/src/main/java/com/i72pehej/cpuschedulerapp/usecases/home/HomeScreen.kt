@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
+import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -81,20 +82,14 @@ fun HomeScreen(
     // Inicializacion del control de salida por error al pulsar back
     ConfirmacionBackPress()
 
-    // Variable para guardar el estado del menu lateral
+    // Variable para guardar el estado del contenido
     val scaffoldState = rememberScaffoldState()
-
-    // Control para abrir o cerrar el menu lateral
-//    val scope = rememberCoroutineScope()
 
     // Disposicion principal de la pantalla
     CommonScaffold(
         temaOscuro = temaOscuro,
         onActualizarTema = onActualizarTema,
-//        navController = navController,
-//        scope = scope,
         scaffoldState = scaffoldState,
-//        content = { ContenidoHome(scaffoldPadding = it) }
         content = { CrearTabs() }
     )
 }
@@ -143,8 +138,9 @@ fun ContenidoHome() {
                     text = stringResource(id = R.string.common_buttonNext),
                     isEnabled = listaDeProcesosGlobal.isNotEmpty(),
                     onClick = {
-                        // TODO -> Navegar a la pagina de resultados
                         llamarAlgoritmo()
+
+                        // TODO -> Navegar a la pagina de resultados
                     }
                 )
             }

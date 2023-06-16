@@ -11,8 +11,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.i72pehej.cpuschedulerapp.navigation.AppNavigation
 import com.i72pehej.cpuschedulerapp.ui.theme.CpuSchedulerAppTheme
+import com.i72pehej.cpuschedulerapp.util.extensions.ScreenOrientation
 
 /**
  * @author Julen Perez Hernandez
@@ -25,6 +27,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            // Cambio de orientacion de la app a Horizontal
+            ScreenOrientation(context = LocalContext.current, orientacionVertical = true)
+
             // Varibale para almacenar el tema
             var temaOscuro by remember { mutableStateOf(false) }
 

@@ -1,4 +1,4 @@
-package com.i72pehej.cpuschedulerapp.usecases.home
+package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
 import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.crearProceso

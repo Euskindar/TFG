@@ -1,6 +1,7 @@
 package com.i72pehej.cpuschedulerapp.util
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
 
@@ -44,3 +45,6 @@ var infoResultadosGlobal = mutableListOf<InfoGraficoEstados>()
 var selectorAlgoritmo = 0
 
 // ==============================================================
+
+// Variable para controlar el cambio de pagina a "Resultados"
+var siguienteButtonHome = mutableStateOf(false)

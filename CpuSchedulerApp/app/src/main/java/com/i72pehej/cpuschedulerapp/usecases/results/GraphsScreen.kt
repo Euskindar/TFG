@@ -12,31 +12,21 @@ import com.i72pehej.cpuschedulerapp.R
 
 /**
  * @author Julen Perez Hernandez
- * Pantalla inicial en la que comenzar la navegacion por la app
+ */
+
+/**
+ * Pantalla de graficos en la que poder visualizar los resultados obtenidos de manera grafica
  */
 @Composable
 //fun GraphsScreen(navController: NavHostController) {
 fun GraphsScreen() {
     // Disposicion principal de la pantalla
-//    CommonScaffold(
-//        navController = navController,
-//        scope = scope,
-//        scaffoldState = scaffoldState,
-//        content = { scaffoldPadding ->
     Column(
         modifier = Modifier
             .fillMaxSize(),
-//                    .padding(scaffoldPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(text = stringResource(id = R.string.graphs_name))
-//
-//                CommonRoundedButton(
-//                    text = stringResource(id = R.string.common_buttonNext),
-//                    onClick = { navController.navigate(AppScreens.HomeScreen.route) }
-//                )
     }
-//        }
-//    )
 }
