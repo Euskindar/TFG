@@ -23,6 +23,10 @@ const val buttonBorderWith = 1
 const val buttonDefaultPadding = 16
 
 // ==============================================================
+// Valores para la anchura de los campos del formulario
+const val anchuraCampoFormulario = 180
+
+// ==============================================================
 
 // Iconos comunes
 //val appIconUCOColor = R.drawable.logos_version_uco

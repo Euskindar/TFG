@@ -33,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -51,6 +50,7 @@ import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
+import com.i72pehej.cpuschedulerapp.util.anchuraCampoFormulario
 import com.i72pehej.cpuschedulerapp.util.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
@@ -104,35 +104,30 @@ fun HomeScreen(
 @Composable
 fun ContenidoHome() {
     // Contenedor padre de los elementos a mostrar en la pagina
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(5.dp),
-        horizontalAlignment = CenterHorizontally
+        verticalAlignment = Alignment.CenterVertically
     ) {
         // Contenedor de los elementos principales
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween,
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
             // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
             FormularioProceso { proceso -> listaDeProcesosGlobal.add(proceso) }
 
-            // Agregamos un espacio en blanco para separar el formulario de la tabla de procesos
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Creamos la tabla de procesos, y le pasamos la lista de procesos
             TablaProcesos(procesos = listaDeProcesosGlobal)
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
-            Row(
+            Column(
                 modifier = Modifier.weight(1f, false),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.End
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Bottom
             ) {
                 CommonRoundedButton(
                     text = stringResource(id = R.string.common_buttonNext),
@@ -250,6 +245,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
         // Menu desplegable para seleccion de algoritmo
         ExposedDropdownMenuBox(
+            modifier = Modifier.width(anchuraCampoFormulario.dp),
             expanded = expandir,
             onExpandedChange = { expandir = !expandir }
         ) {
@@ -257,7 +253,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 readOnly = true,
                 value = algoritmoSeleccionado,
                 onValueChange = { },
-                label = { Text("Método") },
+                label = { Text("Método", fontSize = 12.sp) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandir) },
                 colors = ExposedDropdownMenuDefaults.textFieldColors()
             )
@@ -279,20 +275,24 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Agregamos un titulo al formulario
-        Text(stringResource(id = R.string.nuevo_proceso), fontSize = 20.sp)
-
         // Creamos tres campos de texto para ingresar los datos del proceso
         OutlinedTextField(
             value = nombre,
             onValueChange = {
+                // Control de cantidad de caracteres
                 if (it.length <= 3) nombre = it
-            },    // Control de cantidad de caracteres
-            label = { Text(stringResource(id = R.string.formulario_nombre)) },
+            },
+            label = {
+                Text(text = stringResource(id = R.string.formulario_nombre))
+                // Mensaje visual para que el usuario conozca la cantidad de caracteres permitidos
+                Text(
+                    text = "${nombre.length} / 3",
+                    textAlign = TextAlign.Right,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),   // Primera letra en mayuscula
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.width(anchuraCampoFormulario.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Memory,
@@ -303,52 +303,40 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             isError = errorNombre
         )
 
-        // Mensaje visual para que el usuario conozca la cantidad de caracteres permitidos
-        Text(
-            text = "${nombre.length} / 3",
-            textAlign = TextAlign.End,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp)
+        // Contenedor de los campos de los tiempos
+        OutlinedTextField(
+            value = tiempoLlegada,
+            onValueChange = { tiempoLlegada = it },
+            label = { Text(stringResource(id = R.string.formulario_llegada)) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier.width(anchuraCampoFormulario.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Schedule,
+                    contentDescription = "Icono tiempo de llegada"
+                )
+            },
+            singleLine = true,
+            isError = errorLlegada
         )
 
-        // Contenedor de los campos de los tiempos
-        Row(Modifier.fillMaxWidth()) {
-            OutlinedTextField(
-                value = tiempoLlegada,
-                onValueChange = { tiempoLlegada = it },
-                label = { Text(stringResource(id = R.string.formulario_llegada)) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(fraction = 0.5f),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Schedule,
-                        contentDescription = "Icono tiempo de llegada"
-                    )
-                },
-                singleLine = true,
-                isError = errorLlegada
-            )
+        Spacer(modifier = Modifier.width(10.dp))
 
-            Spacer(modifier = Modifier.width(10.dp))
-
-            OutlinedTextField(
-                value = duracion,
-                onValueChange = { duracion = it },
-                label = { Text(stringResource(id = R.string.formulario_duracion)) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.HourglassBottom,
-                        contentDescription = "Icono duracion de proceso"
-                    )
-                },
-                singleLine = true,
-                isError = errorDuracion
-            )
-        }
+        OutlinedTextField(
+            value = duracion,
+            onValueChange = { duracion = it },
+            label = { Text(stringResource(id = R.string.formulario_duracion)) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier.width(anchuraCampoFormulario.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.HourglassBottom,
+                    contentDescription = "Icono duracion de proceso"
+                )
+            },
+            singleLine = true,
+            isError = errorDuracion
+        )
 
         // Mensaje de error
         if (errorFormulario.isNotBlank()) {
@@ -362,31 +350,31 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Control de estado de ejecucion de funcion agregarProceso()
-        var procesoAgregado by remember {
-            mutableStateOf(false)
-        }
+    }
+    // Control de estado de ejecucion de funcion agregarProceso()
+    var procesoAgregado by remember {
+        mutableStateOf(false)
+    }
 
-        // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val focusManager = LocalFocusManager.current
+    // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
-        // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
-        Button(
-            onClick =
-            {
-                procesoAgregado = true
-                // Limpiar el foco para ocultar teclado y deseleccionar el campo del formulario
-                keyboardController?.hide()
-                focusManager.clearFocus()
-            },
-            modifier = Modifier.align(End)
-        ) { Text("+") }
+    // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
+    Button(
+        onClick =
+        {
+            procesoAgregado = true
+            // Limpiar el foco para ocultar teclado y deseleccionar el campo del formulario
+            keyboardController?.hide()
+            focusManager.clearFocus()
+        },
+//            modifier = Modifier.align(End)
+    ) { Text("+") }
 
-        // Si es correcto se agrega el proceso y reinicia estado
-        if (procesoAgregado) {
-            agregarProceso()
-            procesoAgregado = false
-        }
+    // Si es correcto se agrega el proceso y reinicia estado
+    if (procesoAgregado) {
+        agregarProceso()
+        procesoAgregado = false
     }
 }

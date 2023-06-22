@@ -45,8 +45,6 @@ import com.i72pehej.cpuschedulerapp.util.extensions.ThemeSwitcher
 fun CommonScaffold(
     temaOscuro: Boolean,
     onActualizarTema: () -> Unit,
-//    navController: NavHostController,
-//    scope: CoroutineScope,
     scaffoldState: ScaffoldState,
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -54,84 +52,14 @@ fun CommonScaffold(
         scaffoldState = scaffoldState,
         topBar = {
             CommonTopAppBar(
-//                navController,
-//                scope,            // Control del ambito para el menu lateral
-//                scaffoldState,    // Estado para el control del menu lateral
                 temaOscuro,
                 onActualizarTema
             )
         },
         content = content,
-//        // Menu de navegacion lateral
-//        drawerContent = { MenuLateral(navController, scope, scaffoldState) }
     )
 }
 
-/**
- * ===================================================================
- */
-/*
-/**
- * Menu lateral en el que agregar distintos apartados
- */
-@Composable
-fun MenuLateral(
-    navController: NavHostController,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState
-) {
-    val menuList = listOf("Tutorial", "FAQ")
-
-    // Contenido del menu
-    Column {
-        Image(
-            painter = painterResource(id = appIconColor),
-            contentDescription = "Icono principal de la app",
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        // Separador para estetica
-        Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.padding(15.dp))
-
-        // Listado de elementos del menu
-        menuList.forEachIndexed { position, item ->
-            when (position) {
-                // Seleccionado el primer elemento de la lista
-                0 -> TextButton(onClick = {
-                    navController.navigate(AppScreens.TutorialScreen.route) {
-                        launchSingleTop = true
-                    }
-                    scope.launch { scaffoldState.drawerState.close() }
-                }) {
-                    Text(
-                        text = item,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        fontSize = 16.sp
-                    )
-                }
-
-                // Seleccionado el segundo elemento de la lista
-                1 -> TextButton(onClick = {
-                    navController.navigate(AppScreens.TutorialScreen.route) {
-                        launchSingleTop = true
-                    }
-                    scope.launch { scaffoldState.drawerState.close() }
-                }) {
-                    Text(
-                        text = item,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        fontSize = 16.sp
-                    )
-                }
-            }
-        }
-    }
-}
-*/
 /**
  * ===================================================================
  */
@@ -139,30 +67,20 @@ fun MenuLateral(
 /**
  * Funcion que crea la top bar comun de la app
  *
-// * @param navController Control de navegacion
-// * @param scope Control de apertura del menu lateral
-// * @param scaffoldState Control de estado del menu
  * @param temaOscuro Control para el switch del tema de la app
  * @param onActualizarTema Funcion para actualizar el tema
  */
 @Composable
 fun CommonTopAppBar(
-//    navController: NavHostController,
-//    scope: CoroutineScope,
-//    scaffoldState: ScaffoldState,
     temaOscuro: Boolean,
     onActualizarTema: () -> Unit
 ) {
-//    // Control del boton de back para cerrar menu lateral
-//    BackHandler(scaffoldState.drawerState.isOpen) {
-//        scope.launch { scaffoldState.drawerState.close() }
-//    }
-
     // Control del menu de ajustes desplegable
     var verMenuAjustes by remember { mutableStateOf(false) }
 
     // Barra superior de la pantalla
     TopAppBar(
+        modifier = Modifier.height(30.dp),
         title = {
             Row {
                 Icon(
@@ -170,25 +88,11 @@ fun CommonTopAppBar(
                     contentDescription = "Icono principal de la App",
                     modifier = Modifier
                         .align(alignment = Alignment.CenterVertically)
-                        .size(60.dp),
+                        .size(50.dp),
                 )
-
-//                Spacer(modifier = Modifier.width(10.dp))
-
-                // Nombre de la app
-//                Text(
-//                    text = stringResource(id = R.string.app_name),
-//                    modifier = Modifier.align(Alignment.CenterVertically),
-//                )
             }
         },
-//        // Menu lateral de navegacion
-//        navigationIcon = {
-//            IconButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
-//                Icon(imageVector = Icons.Filled.Menu, contentDescription = "Icono de Menu")
-//            }
-//        },
-        elevation = 10.dp,
+        elevation = 20.dp,
         // Menu desplegable para ajustes basicos
         actions = {
             // Icono de ajustes que cambia el estado del menu
