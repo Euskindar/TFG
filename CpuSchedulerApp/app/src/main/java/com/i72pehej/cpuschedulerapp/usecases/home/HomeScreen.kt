@@ -31,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -104,11 +103,11 @@ fun HomeScreen(
 @Composable
 fun ContenidoHome() {
     // Contenedor padre de los elementos a mostrar en la pagina
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(5.dp),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = CenterHorizontally
     ) {
         // Contenedor de los elementos principales
         Row(
@@ -122,23 +121,6 @@ fun ContenidoHome() {
 
             // Creamos la tabla de procesos, y le pasamos la lista de procesos
             TablaProcesos(procesos = listaDeProcesosGlobal)
-
-            // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
-            Column(
-                modifier = Modifier.weight(1f, false),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                CommonRoundedButton(
-                    text = stringResource(id = R.string.common_buttonNext),
-                    isEnabled = listaDeProcesosGlobal.isNotEmpty(),
-                    onClick = {
-                        llamarAlgoritmo()
-
-                        // TODO -> Navegar a la pagina de resultados
-                    }
-                )
-            }
         }
     }
 }
@@ -234,15 +216,15 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         }
     }
 
-    // Contenido de la pagina
+    // Variables para el menu para seleccionar el metodo a utilizar
+    val algoritmosImplementados = listOf("FIFO", "RoundRobin", "etc...")
+    val defAlgorithm = 0
+
+    var expandir by remember { mutableStateOf(value = false) }
+    var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
+
+    // Contenedor para la primera columna de campos del formulario
     Column {
-        // Menu para seleccionar el metodo a utilizar
-        val algoritmosImplementados = listOf("FIFO", "RoundRobin", "etc...")
-        val defAlgorithm = 0
-
-        var expandir by remember { mutableStateOf(value = false) }
-        var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
-
         // Menu desplegable para seleccion de algoritmo
         ExposedDropdownMenuBox(
             modifier = Modifier.width(anchuraCampoFormulario.dp),
@@ -275,7 +257,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             }
         }
 
-        // Creamos tres campos de texto para ingresar los datos del proceso
+        // Creamos el campo de texto para ingresar el nombre del proceso
         OutlinedTextField(
             value = nombre,
             onValueChange = {
@@ -302,8 +284,11 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorNombre
         )
+    }
 
-        // Contenedor de los campos de los tiempos
+    // Contenedor para la segunda columna de campos del formulario
+    Column {
+        // Campo para introducir el tiempo de llegada
         OutlinedTextField(
             value = tiempoLlegada,
             onValueChange = { tiempoLlegada = it },
@@ -322,6 +307,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
         Spacer(modifier = Modifier.width(10.dp))
 
+        // Campo para introducir la duracion del proceso
         OutlinedTextField(
             value = duracion,
             onValueChange = { duracion = it },
@@ -337,20 +323,20 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorDuracion
         )
-
-        // Mensaje de error
-        if (errorFormulario.isNotBlank()) {
-            Text(
-                text = errorFormulario,
-                color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption,
-                modifier = Modifier.align(CenterHorizontally)
-            )
-        } else {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
     }
+
+    // Mensaje de error
+    if (errorFormulario.isNotBlank()) {
+        Text(
+            text = errorFormulario,
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption,
+//            modifier = Modifier.align(CenterHorizontally)
+        )
+    } else {
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+
     // Control de estado de ejecucion de funcion agregarProceso()
     var procesoAgregado by remember {
         mutableStateOf(false)
@@ -369,7 +355,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             keyboardController?.hide()
             focusManager.clearFocus()
         },
-//            modifier = Modifier.align(End)
     ) { Text("+") }
 
     // Si es correcto se agrega el proceso y reinicia estado
@@ -377,4 +362,15 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         agregarProceso()
         procesoAgregado = false
     }
+
+    // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
+    CommonRoundedButton(
+        text = stringResource(id = R.string.common_buttonNext),
+        isEnabled = listaDeProcesosGlobal.isNotEmpty(),
+        onClick = {
+            llamarAlgoritmo()
+
+            // TODO -> Navegar a la pagina de resultados
+        }
+    )
 }
