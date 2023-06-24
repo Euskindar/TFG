@@ -21,6 +21,10 @@
     <string name="error_duracion_blank">Ingrese una duración</string>
     <string name="error_duracion_digit">Ingrese un número entero para la duración</string>
 
+    <string name="formulario_quantum">Quantum</string>
+    <string name="error_quantum_blank">Ingrese una tiempo</string>
+    <string name="error_quantum_digit">Ingrese un número entero para el quantum</string>
+
     <string name="tabla_vacia">Agregue nuevos procesos para continuar</string>
 
     <!--    Mensaje de confirmacion de salida -->

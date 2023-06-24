@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenuItem
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,9 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -105,14 +109,10 @@ fun HomeScreen(
 fun ContenidoHome() {
     // Contenedor padre de los elementos a mostrar en la pagina
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(5.dp),
-        horizontalAlignment = CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
         // Contenedor de los elementos principales
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
@@ -163,12 +163,14 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     var nombre by remember { mutableStateOf("") }
     var tiempoLlegada by remember { mutableStateOf("") }
     var duracion by remember { mutableStateOf("") }
+    var quantum by remember { mutableStateOf("") }
 
     // Estado para almacenar los errores del formulario
     var errorFormulario by remember { mutableStateOf("") }
     var errorNombre by remember { mutableStateOf(false) }
     var errorLlegada by remember { mutableStateOf(false) }
     var errorDuracion by remember { mutableStateOf(false) }
+    var errorQuantum by remember { mutableStateOf(false) }
 
     // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
     @Composable
@@ -191,6 +193,12 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             else -> false
         }
 
+        errorQuantum = when {
+            quantum.isBlank() -> true
+            !quantum.isDigitsOnly() -> true
+            else -> false
+        }
+
         // Comprobacion de formulario completo correctamente
         errorFormulario = when {
             nombre.isBlank() -> stringResource(R.string.error_nombre)
@@ -198,6 +206,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             !tiempoLlegada.isDigitsOnly() -> stringResource(R.string.error_llegada_digit)
             duracion.isBlank() -> stringResource(R.string.error_duracion_blank)
             !duracion.isDigitsOnly() -> stringResource(R.string.error_duracion_digit)
+            quantum.isBlank() -> stringResource(R.string.error_quantum_blank)
+            !quantum.isDigitsOnly() -> stringResource(R.string.error_quantum_digit)
 
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
@@ -206,6 +216,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         nombre = nombre,
                         tiempoLlegada = tiempoLlegada.toInt(),
                         duracion = duracion.toInt()
+                        // TODO -> AGREGAR QUANTUM como posible null
                     )
                 )
 
@@ -213,6 +224,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 nombre = ""
                 tiempoLlegada = ""
                 duracion = ""
+                quantum = ""
 
                 // Reseteamos el estado del error del formulario
                 ""
@@ -290,6 +302,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 )
             },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),   // Primera letra en mayuscula
+            keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Next) }),
             modifier = Modifier.width(anchuraFormularioNombres.dp),
             leadingIcon = {
                 Icon(
@@ -311,7 +324,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 keyboardController?.hide()
                 focusManager.clearFocus()
             },
-        ) { Text("+") }
+        ) { Text(text = "+", fontWeight = FontWeight.Bold, fontSize = 15.sp) }
 
         // Mensaje de error
         if (errorFormulario.isNotBlank()) {
@@ -327,18 +340,23 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         }
 
         // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
-        CommonRoundedButton(
-            text = stringResource(id = R.string.common_buttonNext),
-            isEnabled = listaDeProcesosGlobal.isNotEmpty(),
-            onClick = {
-                llamarAlgoritmo()
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            CommonRoundedButton(
+                text = stringResource(id = R.string.common_buttonNext),
+                isEnabled = listaDeProcesosGlobal.isNotEmpty(),
+                onClick = {
+                    llamarAlgoritmo()
 
-                // TODO -> Navegar a la pagina de resultados
-            },
-            modifier = Modifier
-                .width(anchuraFormularioNombres.dp)
-                .align(CenterHorizontally)
-        )
+                    // TODO -> Navegar a la pagina de resultados
+                },
+                modifier = Modifier
+                    .width(anchuraFormularioNombres.dp)
+                    .align(CenterHorizontally)
+            )
+        }
     }
 
     // Separador para los campos de la segunda columna
@@ -349,9 +367,13 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         // Campo para introducir el tiempo de llegada
         OutlinedTextField(
             value = tiempoLlegada,
-            onValueChange = { tiempoLlegada = it },
+            onValueChange = {
+                // Control de cantidad de caracteres
+                if (it.length <= 2) tiempoLlegada = it
+            },
             label = { Text(stringResource(id = R.string.formulario_llegada)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Next) }),
             modifier = Modifier.width(anchuraFormularioTiempos.dp),
             leadingIcon = {
                 Icon(
@@ -369,6 +391,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             onValueChange = { duracion = it },
             label = { Text(stringResource(id = R.string.formulario_duracion)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Next) }),
             modifier = Modifier.width(anchuraFormularioTiempos.dp),
             leadingIcon = {
                 Icon(
@@ -381,21 +404,24 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         )
 
         // Campo para introducir el quantum para Round Robin
-        OutlinedTextField(
-            value = duracion,
-            onValueChange = { duracion = it },
-            label = { Text(stringResource(id = R.string.formulario_duracion)) },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(anchuraFormularioTiempos.dp),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.HourglassBottom,
-                    contentDescription = "Icono duracion de proceso"
-                )
-            },
-            singleLine = true,
-            isError = errorDuracion
-        )
+        if (selectorAlgoritmo == 1) {   // Si el algoritmo seleccionado es 1 == RR
+            OutlinedTextField(
+                value = quantum,
+                onValueChange = { quantum = it },
+                label = { Text(stringResource(id = R.string.formulario_quantum)) },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                modifier = Modifier.width(anchuraFormularioTiempos.dp),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Update,
+                        contentDescription = "Icono quantum de proceso en RR"
+                    )
+                },
+                singleLine = true,
+                isError = errorDuracion
+            )
+        }
     }
 
     // Si es correcto se agrega el proceso y reinicia estado
