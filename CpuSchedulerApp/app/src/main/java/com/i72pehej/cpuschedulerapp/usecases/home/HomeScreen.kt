@@ -49,7 +49,8 @@ import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
-import com.i72pehej.cpuschedulerapp.util.anchuraCampoFormulario
+import com.i72pehej.cpuschedulerapp.util.anchuraFormularioNombres
+import com.i72pehej.cpuschedulerapp.util.anchuraFormularioTiempos
 import com.i72pehej.cpuschedulerapp.util.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
@@ -114,10 +115,13 @@ fun ContenidoHome() {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(8.dp)
+                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
         ) {
             // Creamos el formulario de ingreso de procesos, y le pasamos una función que se llamará cuando se agregue un proceso
             FormularioProceso { proceso -> listaDeProcesosGlobal.add(proceso) }
+
+            // Separador horizontal para la tabla
+            Spacer(modifier = Modifier.width(8.dp))
 
             // Creamos la tabla de procesos, y le pasamos la lista de procesos
             TablaProcesos(procesos = listaDeProcesosGlobal)
@@ -223,11 +227,23 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     var expandir by remember { mutableStateOf(value = false) }
     var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
 
+    // Control de estado de ejecucion de funcion agregarProceso()
+    var procesoAgregado by remember {
+        mutableStateOf(false)
+    }
+
+    // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
     // Contenedor para la primera columna de campos del formulario
     Column {
+        // Separador para alinear los campos
+        Spacer(modifier = Modifier.height(8.dp))
+
         // Menu desplegable para seleccion de algoritmo
         ExposedDropdownMenuBox(
-            modifier = Modifier.width(anchuraCampoFormulario.dp),
+            modifier = Modifier.width(anchuraFormularioNombres.dp),
             expanded = expandir,
             onExpandedChange = { expandir = !expandir }
         ) {
@@ -274,7 +290,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 )
             },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),   // Primera letra en mayuscula
-            modifier = Modifier.width(anchuraCampoFormulario.dp),
+            modifier = Modifier.width(anchuraFormularioNombres.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Memory,
@@ -284,7 +300,49 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorNombre
         )
+
+        // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
+        Button(
+            modifier = Modifier.padding(start = 15.dp, top = 10.dp),
+            onClick =
+            {
+                procesoAgregado = true
+                // Limpiar el foco para ocultar teclado y deseleccionar el campo del formulario
+                keyboardController?.hide()
+                focusManager.clearFocus()
+            },
+        ) { Text("+") }
+
+        // Mensaje de error
+        if (errorFormulario.isNotBlank()) {
+            Text(
+                text = errorFormulario,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.width(anchuraFormularioNombres.dp)
+            )
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
+        CommonRoundedButton(
+            text = stringResource(id = R.string.common_buttonNext),
+            isEnabled = listaDeProcesosGlobal.isNotEmpty(),
+            onClick = {
+                llamarAlgoritmo()
+
+                // TODO -> Navegar a la pagina de resultados
+            },
+            modifier = Modifier
+                .width(anchuraFormularioNombres.dp)
+                .align(CenterHorizontally)
+        )
     }
+
+    // Separador para los campos de la segunda columna
+    Spacer(modifier = Modifier.width(8.dp))
 
     // Contenedor para la segunda columna de campos del formulario
     Column {
@@ -294,7 +352,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             onValueChange = { tiempoLlegada = it },
             label = { Text(stringResource(id = R.string.formulario_llegada)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(anchuraCampoFormulario.dp),
+            modifier = Modifier.width(anchuraFormularioTiempos.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Schedule,
@@ -305,15 +363,30 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             isError = errorLlegada
         )
 
-        Spacer(modifier = Modifier.width(10.dp))
-
         // Campo para introducir la duracion del proceso
         OutlinedTextField(
             value = duracion,
             onValueChange = { duracion = it },
             label = { Text(stringResource(id = R.string.formulario_duracion)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(anchuraCampoFormulario.dp),
+            modifier = Modifier.width(anchuraFormularioTiempos.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.HourglassBottom,
+                    contentDescription = "Icono duracion de proceso"
+                )
+            },
+            singleLine = true,
+            isError = errorDuracion
+        )
+
+        // Campo para introducir el quantum para Round Robin
+        OutlinedTextField(
+            value = duracion,
+            onValueChange = { duracion = it },
+            label = { Text(stringResource(id = R.string.formulario_duracion)) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier.width(anchuraFormularioTiempos.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.HourglassBottom,
@@ -325,52 +398,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         )
     }
 
-    // Mensaje de error
-    if (errorFormulario.isNotBlank()) {
-        Text(
-            text = errorFormulario,
-            color = MaterialTheme.colors.error,
-            style = MaterialTheme.typography.caption,
-//            modifier = Modifier.align(CenterHorizontally)
-        )
-    } else {
-        Spacer(modifier = Modifier.height(16.dp))
-    }
-
-    // Control de estado de ejecucion de funcion agregarProceso()
-    var procesoAgregado by remember {
-        mutableStateOf(false)
-    }
-
-    // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-
-    // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
-    Button(
-        onClick =
-        {
-            procesoAgregado = true
-            // Limpiar el foco para ocultar teclado y deseleccionar el campo del formulario
-            keyboardController?.hide()
-            focusManager.clearFocus()
-        },
-    ) { Text("+") }
-
     // Si es correcto se agrega el proceso y reinicia estado
     if (procesoAgregado) {
         agregarProceso()
         procesoAgregado = false
     }
-
-    // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
-    CommonRoundedButton(
-        text = stringResource(id = R.string.common_buttonNext),
-        isEnabled = listaDeProcesosGlobal.isNotEmpty(),
-        onClick = {
-            llamarAlgoritmo()
-
-            // TODO -> Navegar a la pagina de resultados
-        }
-    )
 }

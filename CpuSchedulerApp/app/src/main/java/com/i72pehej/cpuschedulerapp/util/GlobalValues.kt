@@ -24,7 +24,8 @@ const val buttonDefaultPadding = 16
 
 // ==============================================================
 // Valores para la anchura de los campos del formulario
-const val anchuraCampoFormulario = 180
+const val anchuraFormularioNombres = 180
+const val anchuraFormularioTiempos = 150
 
 // ==============================================================
 
