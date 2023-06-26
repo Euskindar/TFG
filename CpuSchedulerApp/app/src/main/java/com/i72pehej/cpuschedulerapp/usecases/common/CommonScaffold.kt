@@ -105,7 +105,7 @@ fun CommonTopAppBar(
                 onDismissRequest = { verMenuAjustes = false }
             ) {
                 DropdownMenuItem(
-                    onClick = { /*TODO*/ },
+                    onClick = {},
                     modifier = Modifier
                         .height(25.dp)
                         .width(90.dp)

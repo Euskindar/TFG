@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -61,6 +62,7 @@ import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
+import com.i72pehej.cpuschedulerapp.util.tiempoQuantum
 
 /**
  * @author Julen Perez Hernandez
@@ -143,7 +145,9 @@ fun llamarAlgoritmo() {
             infoResultadosGlobal = algoritmoFifo()
         }
         // RoundRobin
-        // 1 -> algoritmoRoundRobin(procesos)
+//        1 -> {
+//            infoResultadosGlobal = algoritmoFifo()
+//        }
     }
 }
 
@@ -159,18 +163,47 @@ fun llamarAlgoritmo() {
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
+    // Variables para el menu para seleccionar el metodo a utilizar
+    val algoritmosImplementados = listOf("FIFO", "RoundRobin", "etc...")
+
+    var expandir by remember { mutableStateOf(value = false) }
+    var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[selectorAlgoritmo]) }
+
+    // Control de estado para agregar los procesos en agregarProceso()
+    var procesoAgregado by remember { mutableStateOf(false) }
+
+    // Control de estado de ejecucion de funcion agregarProceso()
+    var quantumSeleccionado by remember { mutableStateOf(false) }
+
+    // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
     // Definimos tres variables para almacenar los datos del proceso que esta siendo ingresado
     var nombre by remember { mutableStateOf("") }
     var tiempoLlegada by remember { mutableStateOf("") }
     var duracion by remember { mutableStateOf("") }
-    var quantum by remember { mutableStateOf("") }
+    var quantum by remember { mutableStateOf(tiempoQuantum) }
 
     // Estado para almacenar los errores del formulario
     var errorFormulario by remember { mutableStateOf("") }
     var errorNombre by remember { mutableStateOf(false) }
     var errorLlegada by remember { mutableStateOf(false) }
     var errorDuracion by remember { mutableStateOf(false) }
+
+    var errorFormularioQuantum by remember { mutableStateOf("") }
     var errorQuantum by remember { mutableStateOf(false) }
+
+    // Control de visibilidad de campo de quantum
+    val quantumEnabled: Boolean
+    val quantumVisibilityAlpha: Float
+    if (selectorAlgoritmo == 1) {
+        quantumEnabled = true
+        quantumVisibilityAlpha = 1f
+    } else {
+        quantumEnabled = false
+        quantumVisibilityAlpha = 0f
+    }
 
     // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
     @Composable
@@ -193,12 +226,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             else -> false
         }
 
-        errorQuantum = when {
-            quantum.isBlank() -> true
-            !quantum.isDigitsOnly() -> true
-            else -> false
-        }
-
         // Comprobacion de formulario completo correctamente
         errorFormulario = when {
             nombre.isBlank() -> stringResource(R.string.error_nombre)
@@ -206,8 +233,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             !tiempoLlegada.isDigitsOnly() -> stringResource(R.string.error_llegada_digit)
             duracion.isBlank() -> stringResource(R.string.error_duracion_blank)
             !duracion.isDigitsOnly() -> stringResource(R.string.error_duracion_digit)
-            quantum.isBlank() -> stringResource(R.string.error_quantum_blank)
-            !quantum.isDigitsOnly() -> stringResource(R.string.error_quantum_digit)
 
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
@@ -216,7 +241,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         nombre = nombre,
                         tiempoLlegada = tiempoLlegada.toInt(),
                         duracion = duracion.toInt()
-                        // TODO -> AGREGAR QUANTUM como posible null
                     )
                 )
 
@@ -224,7 +248,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 nombre = ""
                 tiempoLlegada = ""
                 duracion = ""
-                quantum = ""
 
                 // Reseteamos el estado del error del formulario
                 ""
@@ -232,21 +255,27 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         }
     }
 
-    // Variables para el menu para seleccionar el metodo a utilizar
-    val algoritmosImplementados = listOf("FIFO", "RoundRobin", "etc...")
-    val defAlgorithm = 0
+    // Funcion interna para controlar que se haya seleccionado un quantum
+    @Composable
+    fun comprobarQuantum() {
+        // Control de errores solo para RR
+        if (selectorAlgoritmo == 1) {
+            errorQuantum = when {
+                quantum.isBlank() -> true
+                !quantum.isDigitsOnly() -> true
+                else -> false
+            }
 
-    var expandir by remember { mutableStateOf(value = false) }
-    var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[defAlgorithm]) }
-
-    // Control de estado de ejecucion de funcion agregarProceso()
-    var procesoAgregado by remember {
-        mutableStateOf(false)
+            // Creacion de mensaje de error en el campo del quantum para RR
+            errorFormularioQuantum = when {
+                quantum.isBlank() -> stringResource(R.string.error_quantum_blank)
+                !quantum.isDigitsOnly() -> stringResource(R.string.error_quantum_digit)
+                else -> {
+                    ""
+                }
+            }
+        }
     }
-
-    // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
 
     // Contenedor para la primera columna de campos del formulario
     Column {
@@ -302,7 +331,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 )
             },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),   // Primera letra en mayuscula
-            keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Next) }),
+            keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Right) }),
             modifier = Modifier.width(anchuraFormularioNombres.dp),
             leadingIcon = {
                 Icon(
@@ -335,6 +364,14 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.width(anchuraFormularioNombres.dp)
             )
+        } else if (errorFormularioQuantum.isNotBlank()) {
+            Text(
+                text = errorFormularioQuantum,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.width(anchuraFormularioNombres.dp)
+            )
         } else {
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -348,9 +385,11 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 text = stringResource(id = R.string.common_buttonNext),
                 isEnabled = listaDeProcesosGlobal.isNotEmpty(),
                 onClick = {
+                    // Llama a la funcion que controla el algoritmo a ejecutar
                     llamarAlgoritmo()
 
-                    // TODO -> Navegar a la pagina de resultados
+                    // Control de estado para indicar la comprobacion de errores en el campo de quantum
+                    quantumSeleccionado = true
                 },
                 modifier = Modifier
                     .width(anchuraFormularioNombres.dp)
@@ -364,6 +403,33 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     // Contenedor para la segunda columna de campos del formulario
     Column {
+        // Campo para introducir el quantum para Round Robin
+        OutlinedTextField(
+            enabled = quantumEnabled,
+            value = quantum,
+            onValueChange = {
+                // Control de cantidad de caracteres
+                if (it.length <= 2) {
+                    quantum = it
+                    tiempoQuantum = it
+                }
+            },
+            label = { Text(stringResource(id = R.string.formulario_quantum)) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            modifier = Modifier
+                .width(anchuraFormularioTiempos.dp)
+                .alpha(quantumVisibilityAlpha),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Update,
+                    contentDescription = "Icono quantum de proceso en RR"
+                )
+            },
+            singleLine = true,
+            isError = errorQuantum
+        )
+
         // Campo para introducir el tiempo de llegada
         OutlinedTextField(
             value = tiempoLlegada,
@@ -391,7 +457,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             onValueChange = { duracion = it },
             label = { Text(stringResource(id = R.string.formulario_duracion)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Next) }),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             modifier = Modifier.width(anchuraFormularioTiempos.dp),
             leadingIcon = {
                 Icon(
@@ -402,31 +468,20 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorDuracion
         )
-
-        // Campo para introducir el quantum para Round Robin
-        if (selectorAlgoritmo == 1) {   // Si el algoritmo seleccionado es 1 == RR
-            OutlinedTextField(
-                value = quantum,
-                onValueChange = { quantum = it },
-                label = { Text(stringResource(id = R.string.formulario_quantum)) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                modifier = Modifier.width(anchuraFormularioTiempos.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Update,
-                        contentDescription = "Icono quantum de proceso en RR"
-                    )
-                },
-                singleLine = true,
-                isError = errorDuracion
-            )
-        }
     }
 
     // Si es correcto se agrega el proceso y reinicia estado
     if (procesoAgregado) {
         agregarProceso()
         procesoAgregado = false
+    }
+
+    // Si es correcto se pasa a la siguiente pagina y se reinicia el estado
+    if (quantumSeleccionado) {
+        comprobarQuantum()
+
+        // TODO -> Pasar a la pagina de resultados
+
+        quantumSeleccionado = false
     }
 }

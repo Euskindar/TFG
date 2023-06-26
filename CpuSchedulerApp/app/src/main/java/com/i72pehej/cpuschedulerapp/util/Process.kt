@@ -14,7 +14,6 @@ package com.i72pehej.cpuschedulerapp.util
  * @property nombre Nombre asignado al proceso
  * @property tiempoLlegada Momento en el que el proceso entra en la cola de procesos listos
  * @property duracion Duracion estimada del proceso
- * @property estado Estado actual del proceso, representado por la clase enumerada
  * @constructor Crea la representacion de un Proceso de CPU
  */
 data class Proceso(
@@ -22,6 +21,7 @@ data class Proceso(
     private var tiempoLlegada: Int,
     private var duracion: Int,
 ) {
+    // Estado actual del proceso, representado por la clase enumerada
     private var estado: EstadoDeProceso = EstadoDeProceso.LISTO
 
     // Listado de estados asociados a los procesos
