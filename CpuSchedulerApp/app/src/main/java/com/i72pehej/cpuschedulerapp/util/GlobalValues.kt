@@ -1,6 +1,7 @@
 package com.i72pehej.cpuschedulerapp.util
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
 
@@ -51,3 +52,5 @@ var listaDeProcesosGlobal = mutableStateListOf<Proceso>()
 var infoResultadosGlobal = mutableListOf<InfoGraficoEstados>()
 
 // ==============================================================
+
+var siguienteSeleccionado = mutableStateOf(false)

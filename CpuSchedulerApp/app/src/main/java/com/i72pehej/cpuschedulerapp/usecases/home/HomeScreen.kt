@@ -62,6 +62,7 @@ import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 import com.i72pehej.cpuschedulerapp.util.selectorAlgoritmo
+import com.i72pehej.cpuschedulerapp.util.siguienteSeleccionado
 import com.i72pehej.cpuschedulerapp.util.tiempoQuantum
 
 /**
@@ -390,6 +391,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
                     // Control de estado para indicar la comprobacion de errores en el campo de quantum
                     quantumSeleccionado = true
+
+                    // Cambio de estado para indicar la pulsacion del boton y cambiar a la pagina siguiente
+                    siguienteSeleccionado.value = true
                 },
                 modifier = Modifier
                     .width(anchuraFormularioNombres.dp)

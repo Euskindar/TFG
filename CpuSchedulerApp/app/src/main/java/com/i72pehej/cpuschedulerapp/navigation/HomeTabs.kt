@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Equalizer
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LowPriority
 import androidx.compose.material.icons.filled.Toc
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,7 +25,10 @@ import com.google.accompanist.pager.rememberPagerState
 import com.i72pehej.cpuschedulerapp.navigation.HomeTabs.*
 import com.i72pehej.cpuschedulerapp.usecases.home.ContenidoHome
 import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen
+import com.i72pehej.cpuschedulerapp.usecases.results.QueuesScreen
 import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
+import com.i72pehej.cpuschedulerapp.util.siguienteSeleccionado
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -52,6 +56,9 @@ sealed class HomeTabs(
 
     object TabGraficos :
         HomeTabs(icono = Icons.Filled.Equalizer, titulo = "Gráficos", { GraphsScreen() })
+
+    object TabColas :
+        HomeTabs(icono = Icons.Filled.LowPriority, titulo = "Colas", { QueuesScreen() })
 }
 
 /**
@@ -60,8 +67,9 @@ sealed class HomeTabs(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CrearTabs() {   // Lista para almacenar los elementos de los tabs
-    val tabs = listOf(TabInicio, TabResultados, TabGraficos)
+fun CrearTabs() {
+    // Lista para almacenar los elementos de los tabs
+    val tabs = listOf(TabInicio, TabResultados, TabGraficos, TabColas)
 
     // Control del paginador que contiene los tabs
     val pagerState = rememberPagerState()
@@ -138,5 +146,17 @@ fun Tabs(tabs: List<HomeTabs>, pagerState: PagerState) {
                 }
             )
         }
+    }
+
+    // Gestion del cambio de pagina de Home a Results
+    val coroutineScope = rememberCoroutineScope()
+
+    fun cambioPagina(coroutineScope: CoroutineScope, pagerState: PagerState) {
+        coroutineScope.launch { pagerState.animateScrollToPage(1) }
+    }
+
+    if (siguienteSeleccionado.value) {
+        cambioPagina(coroutineScope, pagerState)
+        siguienteSeleccionado.value = false
     }
 }
