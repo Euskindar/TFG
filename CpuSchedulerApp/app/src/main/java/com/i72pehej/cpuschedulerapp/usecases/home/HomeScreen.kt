@@ -51,6 +51,7 @@ import androidx.core.text.isDigitsOnly
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
+import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoRoundRobin
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -146,9 +147,9 @@ fun llamarAlgoritmo() {
             infoResultadosGlobal = algoritmoFifo()
         }
         // RoundRobin
-//        1 -> {
-//            infoResultadosGlobal = algoritmoFifo()
-//        }
+        1 -> {
+            infoResultadosGlobal = algoritmoRoundRobin()
+        }
     }
 }
 

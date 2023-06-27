@@ -17,7 +17,6 @@ import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 /**
  * Funcion para implementar el algoritmo FIFO considerando estados
  */
-//fun algoritmoFifo(listaDeProcesos: MutableList<Proceso>): MutableList<InfoGraficoEstados> {
 fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
     // Ordenar la lista de procesos por tiempo de llegada
     ordenarListaProcesos(listaDeProcesosGlobal)
