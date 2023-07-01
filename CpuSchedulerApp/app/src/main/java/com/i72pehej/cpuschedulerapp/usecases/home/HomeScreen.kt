@@ -148,7 +148,7 @@ fun llamarAlgoritmo() {
         }
         // RoundRobin
         1 -> {
-            infoResultadosGlobal = algoritmoRoundRobin()
+            infoResultadosGlobal = algoritmoRoundRobin(tiempoQuantum.toInt())
         }
     }
 }
@@ -196,13 +196,22 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     var errorFormularioQuantum by remember { mutableStateOf("") }
     var errorQuantum by remember { mutableStateOf(false) }
 
+    // Variable para controlar visibilidad del boton Siguiente
+    var siguienteEnabled by remember { mutableStateOf(false) }
+
     // Control de visibilidad de campo de quantum
     val quantumEnabled: Boolean
     val quantumVisibilityAlpha: Float
+
     if (selectorAlgoritmo == 1) {
         quantumEnabled = true
         quantumVisibilityAlpha = 1f
+
+        // Comprobar si se cumplen las condiciones para habilitar el boton
+        siguienteEnabled = quantum.isNotBlank() && listaDeProcesosGlobal.isNotEmpty()
     } else {
+        siguienteEnabled = false
+        quantum = ""
         quantumEnabled = false
         quantumVisibilityAlpha = 0f
     }
@@ -245,6 +254,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         duracion = duracion.toInt()
                     )
                 )
+
+                // Habilitar el boton siguiente
+                siguienteEnabled = true
 
                 // Limpiamos los campos del formulario
                 nombre = ""
@@ -305,11 +317,15 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 algoritmosImplementados.forEachIndexed { posicion, opcionSeleccionada ->
                     DropdownMenuItem(
                         onClick = {
+                            // Se selecciona el algoritmo
                             algoritmoSeleccionado = opcionSeleccionada
                             expandir = false
 
                             // Guardado de la opcion seleccionada
                             selectorAlgoritmo = posicion
+
+                            // En caso de no ser necesario, se limpia el control de errores del quantum
+                            if (posicion != 1 /*RR*/) errorFormularioQuantum = ""
                         }
                     ) { Text(text = opcionSeleccionada) }
                 }
@@ -385,7 +401,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         ) {
             CommonRoundedButton(
                 text = stringResource(id = R.string.common_buttonNext),
-                isEnabled = listaDeProcesosGlobal.isNotEmpty(),
+                isEnabled = siguienteEnabled,
                 onClick = {
                     // Llama a la funcion que controla el algoritmo a ejecutar
                     llamarAlgoritmo()
@@ -440,7 +456,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             value = tiempoLlegada,
             onValueChange = {
                 // Control de cantidad de caracteres
-                if (it.length <= 2) tiempoLlegada = it
+                if (it.matches("^([1-9][0-9]?|)$".toRegex())) tiempoLlegada = it
             },
             label = { Text(stringResource(id = R.string.formulario_llegada)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -459,7 +475,10 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         // Campo para introducir la duracion del proceso
         OutlinedTextField(
             value = duracion,
-            onValueChange = { duracion = it },
+            onValueChange = {
+                // Control de cantidad de caracteres
+                if (it.matches("^([1-9][0-9]?|)$".toRegex())) duracion = it
+            },
             label = { Text(stringResource(id = R.string.formulario_duracion)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -484,9 +503,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Si es correcto se pasa a la siguiente pagina y se reinicia el estado
     if (quantumSeleccionado) {
         comprobarQuantum()
-
-        // TODO -> Pasar a la pagina de resultados
-
         quantumSeleccionado = false
     }
 }

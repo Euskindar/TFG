@@ -17,8 +17,11 @@ import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
 /**
  * Funcion para implementar el algoritmo RoundRobin considerando estados
+ *
+ * @param tiempoQuantum Quantum seleccionado para ejecutar el algoritmo de RR
+ * @return Devuelve un listado con el historico de cambios de estados de los procesos
  */
-fun algoritmoRoundRobin(): MutableList<InfoGraficoEstados> {
+fun algoritmoRoundRobin(tiempoQuantum: Int): MutableList<InfoGraficoEstados> {
     // Ordenar la lista de procesos por tiempo de llegada
     ordenarListaProcesos(listaDeProcesosGlobal)
 
@@ -38,7 +41,7 @@ fun algoritmoRoundRobin(): MutableList<InfoGraficoEstados> {
     //////////////////////////////////////////////////////////////////////////
 
 
-//        val info: MutableList<ChartInfo> = mutableListOf(ChartInfo(-1, processes[0].arrivalTime, 0)) // muestra 0 primero
+//        val info: MutableList<ChartInfo> = mutableListOf(ChartInfo(-1, processes[0].getLlegada(, 0)) // muestra 0 primero
 
     // Variable para almacenar el avance del tiempo con cada proceso
     var tiempoActual = listaDeProcesosGlobal[0].getLlegada()
@@ -50,41 +53,45 @@ fun algoritmoRoundRobin(): MutableList<InfoGraficoEstados> {
     // Empezamos el tiempo de respuesta en 0 para el primer proceso
     listaDeProcesosGlobal[0].setTiempoRespuesta(0)
 
-    // Variable par indicar el siguiente proceso ????????????
+    // TODO Variable par indicar el siguiente proceso ????????????
     var nextIdx = 1
 
     // Bucle de procesado para la cola de listos
     while (colaDeListos.isNotEmpty()) {
-        val newRunProcess: Proceso = colaDeListos.votacion()
-        val performedTime =
-            if (newRunProcess.remainedTime >= quantum) quantum else newRunProcess.remainedTime % quantum
-        if (newRunProcess.responseTime == -1) newRunProcess.responseTime = currentRunTime
+        // Inicio de la votacion para seleccionar los indices de la cola
+        val procesoEnEjecucion: Proceso = colaDeListos.votacion()
 
-        currentRunTime += performedTime
-        newRunProcess.remainedTime -= performedTime
+        // Variable para almacenar el tiempo que lleva la ejecucion
+        val tiempoEjecutado =
+            if (procesoEnEjecucion.getTiempoRestante() >= tiempoQuantum) tiempoQuantum else procesoEnEjecucion.getTiempoRestante() % tiempoQuantum
+        if (procesoEnEjecucion.getTiempoRespuesta() == -1) procesoEnEjecucion.setTiempoRespuesta(tiempoActual)
 
-        info += ChartInfo(
-            newRunProcess.pid,
-            currentRunTime,
-            performedTime
-        ) // ran at $currentRunTime
+        tiempoActual += tiempoEjecutado
+        procesoEnEjecucion.setTiempoRestante(procesoEnEjecucion.getTiempoRestante() - tiempoEjecutado)
 
-        while (nextIdx < listaDeProcesosGlobal.size && currentRunTime >= listaDeProcesosGlobal[nextIdx].arrivalTime) {
+        // TODO ->  Guardar el cambio de estados ????
+//        infoEstados += ChartInfo(
+//            newRunProcess.pid,
+//            tiempoActual,
+//            tiempoEjecutado
+//        ) // ran at $currentRunTime
+
+        while ((nextIdx < listaDeProcesosGlobal.size) && (tiempoActual >= listaDeProcesosGlobal[nextIdx].getLlegada())) {
             colaDeListos.add(listaDeProcesosGlobal[nextIdx])
             ++nextIdx
         }
 
-        if (newRunProcess.remainedTime == 0) { // Job finished
-            newRunProcess.waitedTime =
-                currentRunTime - newRunProcess.arrivalTime - newRunProcess.executionTime
+            // Job finished
+        if (procesoEnEjecucion.getTiempoRestante() == 0) {
+            procesoEnEjecucion.setTiempoEspera(tiempoActual - procesoEnEjecucion.getLlegada() - procesoEnEjecucion.getDuracion())
             //println("${performed.pid}: finished,, at $currentRunTime")
         } else {
-            colaDeListos.add(newRunProcess)
+            colaDeListos.add(procesoEnEjecucion)
         }
     }
 //    println("Total Executed time : $currentRunTime")
-//    println("Context Switched : ${info.size - 2}")
-    return ProgramData(listaDeProcesosGlobal, info)
+//    println("Context Switched : ${infoEstados.size - 2}")
+//    return ProgramData(listaDeProcesosGlobal, infoEstados)
 
 
     //////////////////////////////////////////////////////////////////////////
