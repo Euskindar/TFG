@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -29,6 +31,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +54,7 @@ import androidx.core.text.isDigitsOnly
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
-import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoRoundRobin
+import com.i72pehej.cpuschedulerapp.usecases.algorithms.roundRobin
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -148,7 +151,8 @@ fun llamarAlgoritmo() {
         }
         // RoundRobin
         1 -> {
-            infoResultadosGlobal = algoritmoRoundRobin(tiempoQuantum.toInt())
+//            infoResultadosGlobal = algoritmoRoundRobin(tiempoQuantum.toInt())
+            infoResultadosGlobal = roundRobin(tiempoQuantum.toInt())
         }
     }
 }
@@ -187,7 +191,10 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     var duracion by remember { mutableStateOf("") }
     var quantum by remember { mutableStateOf(tiempoQuantum) }
 
-    // Estado para almacenar los errores del formulario
+    var entradaSalidaInicio by remember { mutableStateOf("") }
+    var entradaSalidaFin by remember { mutableStateOf("") }
+
+    // Estados para almacenar los errores del formulario
     var errorFormulario by remember { mutableStateOf("") }
     var errorNombre by remember { mutableStateOf(false) }
     var errorLlegada by remember { mutableStateOf(false) }
@@ -195,6 +202,10 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     var errorFormularioQuantum by remember { mutableStateOf("") }
     var errorQuantum by remember { mutableStateOf(false) }
+
+    var errorFormularioES by remember { mutableStateOf("") }
+    var errorESinicio by remember { mutableStateOf(false) }
+    var errorESfin by remember { mutableStateOf(false) }
 
     // Variable para controlar visibilidad del boton Siguiente
     var siguienteEnabled by remember { mutableStateOf(false) }
@@ -210,18 +221,23 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         // Comprobar si se cumplen las condiciones para habilitar el boton
         siguienteEnabled = quantum.isNotBlank() && listaDeProcesosGlobal.isNotEmpty()
     } else {
-        siguienteEnabled = false
+        siguienteEnabled = listaDeProcesosGlobal.isNotEmpty()
         quantum = ""
         quantumEnabled = false
         quantumVisibilityAlpha = 0f
     }
 
+    // Variables de E/S
+    var checkboxMarcado by remember { mutableStateOf(false) }
+    var visibleES by remember { mutableStateOf(0f) }
+
     // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
     @Composable
     fun agregarProceso() {
-        // Validar los campos del formulario
+        // Validar los campos del formulario (Pone en rojo el campo visualmente)
         errorNombre = when {
             nombre.isBlank() -> true
+            listaDeProcesosGlobal.any { it.getNombre() == nombre } -> true
             else -> false
         }
 
@@ -237,11 +253,15 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             else -> false
         }
 
-        // Comprobacion de formulario completo correctamente
+        // Comprobacion de formulario completo correctamente (Agrega el texto de error)
         errorFormulario = when {
+            listaDeProcesosGlobal.any { it.getNombre() == nombre } -> stringResource(id = R.string.error_nombre_repetido)
+
             nombre.isBlank() -> stringResource(R.string.error_nombre)
+
             tiempoLlegada.isBlank() -> stringResource(R.string.error_llegada_blank)
             !tiempoLlegada.isDigitsOnly() -> stringResource(R.string.error_llegada_digit)
+
             duracion.isBlank() -> stringResource(R.string.error_duracion_blank)
             !duracion.isDigitsOnly() -> stringResource(R.string.error_duracion_digit)
 
@@ -290,6 +310,39 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             }
         }
     }
+
+    // Funcion interna para controlar que se hayan seleccionado los tiempos de E/S
+    @Composable
+    fun comprobarEntradaSalida() {
+        // Control de errores solo cuando se selecciona E/S
+        if (checkboxMarcado) {
+            errorESinicio = when {
+                entradaSalidaInicio.isBlank() -> true
+                !entradaSalidaInicio.isDigitsOnly() -> true
+                else -> false
+            }
+
+            errorESfin = when {
+                entradaSalidaFin.isBlank() -> true
+                !entradaSalidaFin.isDigitsOnly() -> true
+                else -> false
+            }
+
+            // Creacion de mensaje de error para los campos de E/S
+            errorFormularioES = when {
+                entradaSalidaInicio.isBlank() -> stringResource(R.string.error_E_S)
+                !entradaSalidaInicio.isDigitsOnly() -> stringResource(R.string.error_E_S)
+
+                entradaSalidaInicio.isBlank() -> stringResource(R.string.error_E_S)
+                !entradaSalidaInicio.isDigitsOnly() -> stringResource(R.string.error_E_S)
+                else -> {
+                    ""
+                }
+            }
+        }
+    }
+
+    // INICIO DEL CONTENIDO VISUAL DEL FORMULARIO
 
     // Contenedor para la primera columna de campos del formulario
     Column {
@@ -360,6 +413,63 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorNombre
         )
+        // Row para agregar un evento de E/S al proceso que se va a agregar a la lista
+        Row(modifier = Modifier.width(anchuraFormularioNombres.dp)) {
+            // Checkbox para cargar los campos de E/S
+            // Se ha eliminado el padding por defecto para poder personalizarlo
+            CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+                Checkbox(
+                    checked = checkboxMarcado,
+                    onCheckedChange = {
+                        checkboxMarcado = !checkboxMarcado
+                        visibleES = if (checkboxMarcado) 1f else 0f
+                        errorFormularioES = ""
+                    },
+                    modifier = Modifier.padding(top = 8.dp, end = 8.dp)
+                )
+            }
+
+            // Campo para INICIO de bloqueo de proceso por E/S
+            OutlinedTextField(
+                value = entradaSalidaInicio,
+                onValueChange = {
+                    // Control de cantidad de caracteres a 2
+                    if (it.matches("^([0-9][0-9]?|)$".toRegex())) entradaSalidaInicio = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Right) }),
+                modifier = Modifier
+                    .fillMaxWidth(0.46f)
+                    .alpha(visibleES),
+                label = { Text(text = "In", fontSize = 16.sp) },
+//                leadingIcon = { Icon(imageVector = Icons.Default.Login, contentDescription = "Icono tiempo de ENTRADA") },
+                singleLine = true,
+                isError = errorESinicio,
+                enabled = checkboxMarcado
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // Campo para FIN de bloqueo de proceso por E/S
+            OutlinedTextField(
+                value = entradaSalidaFin,
+                onValueChange = {
+                    // Control de cantidad de caracteres a 2
+                    if (it.matches("^([0-9][0-9]?|)$".toRegex())) entradaSalidaFin = it
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .alpha(visibleES),
+                label = { Text(text = "Out", fontSize = 16.sp) },
+//                leadingIcon = { Icon(imageVector = Icons.Default.Logout, contentDescription = "Icono tiempo de SALIDA") },
+                singleLine = true,
+                isError = errorESfin,
+                enabled = checkboxMarcado
+            )
+        }
+
 
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
         Button(
@@ -455,8 +565,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         OutlinedTextField(
             value = tiempoLlegada,
             onValueChange = {
-                // Control de cantidad de caracteres
-                if (it.matches("^([1-9][0-9]?|)$".toRegex())) tiempoLlegada = it
+                // Control de cantidad de caracteres a 2
+                if (it.matches("^([0-9][0-9]?|)$".toRegex())) tiempoLlegada = it
             },
             label = { Text(stringResource(id = R.string.formulario_llegada)) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -476,7 +586,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         OutlinedTextField(
             value = duracion,
             onValueChange = {
-                // Control de cantidad de caracteres
+                // Control de cantidad de caracteres y no 0 inicial
                 if (it.matches("^([1-9][0-9]?|)$".toRegex())) duracion = it
             },
             label = { Text(stringResource(id = R.string.formulario_duracion)) },
@@ -504,5 +614,10 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     if (quantumSeleccionado) {
         comprobarQuantum()
         quantumSeleccionado = false
+    }
+
+    // Si los campos se rellenan correctamente se agrega la interrupcion
+    if (checkboxMarcado) {
+        comprobarEntradaSalida()
     }
 }

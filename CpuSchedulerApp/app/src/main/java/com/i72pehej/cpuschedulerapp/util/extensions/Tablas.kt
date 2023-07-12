@@ -2,6 +2,7 @@ package com.i72pehej.cpuschedulerapp.util.extensions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -180,27 +181,27 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
             items(procesos) { proceso ->
                 Row(modifier = Modifier.padding(4.dp)) {
                     Text(
-                        proceso.getNombre(),    // Nombre
+                        proceso.getNombre(),                    // Nombre
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.getLlegada().toString(),    // Llegada
+                        proceso.getLlegada().toString(),        // Llegada
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.getDuracion().toString(),   // Duracion
+                        proceso.getDuracion().toString(),       // Duracion
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoInicioFIFO().toString(),   // Inicio
+                        proceso.tiempoInicioFIFO().toString(),  // Inicio
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoFin().toString(),   // Fin
+                        proceso.tiempoFin().toString(),         // Fin
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
@@ -210,7 +211,7 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.getTiempoEspera().toString(),    // Espera
+                        proceso.getTiempoEspera().toString(),   // Espera
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
@@ -223,8 +224,8 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
             stringResource(id = R.string.tabla_vacia),
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+                .fillMaxSize()
+                .padding(8.dp)
         )
     }
 }

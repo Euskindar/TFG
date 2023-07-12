@@ -13,6 +13,7 @@
 
     <string name="formulario_nombre">Nombre</string>
     <string name="error_nombre">Ingrese un nombre válido</string>
+    <string name="error_nombre_repetido">Nombre repetido</string>
 
     <string name="formulario_llegada">LLegada</string>
     <string name="error_llegada_blank">Ingrese un tiempo de llegada</string>
@@ -25,6 +26,8 @@
     <string name="formulario_quantum">Quantum</string>
     <string name="error_quantum_blank">Ingrese un quantum</string>
     <string name="error_quantum_digit">Ingrese un número entero para el quantum</string>
+
+    <string name="error_E_S">Ingrese un tiempo</string>
 
     <string name="tabla_vacia">Agregue nuevos procesos para continuar</string>
 
