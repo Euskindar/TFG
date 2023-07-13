@@ -272,6 +272,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             errorESfin = when {
                 entradaSalidaFin.isBlank() -> true
                 !entradaSalidaFin.isDigitsOnly() -> true
+                entradaSalidaFin > entradaSalidaInicio -> true
                 else -> false
             }
 
@@ -282,6 +283,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
                 entradaSalidaFin.isBlank() -> stringResource(R.string.error_E_S)
                 !entradaSalidaFin.isDigitsOnly() -> stringResource(R.string.error_E_S)
+                entradaSalidaFin > entradaSalidaInicio -> stringResource(R.string.error_EmayorS)
 
                 else -> {
                     ""

@@ -28,6 +28,7 @@
     <string name="error_quantum_digit">Ingrese un número entero para el quantum</string>
 
     <string name="error_E_S">Ingrese un tiempo</string>
+    <string name="error_EmayorS">E debe ser menor que S</string>
 
     <string name="tabla_vacia">Agregue nuevos procesos para continuar</string>
 
