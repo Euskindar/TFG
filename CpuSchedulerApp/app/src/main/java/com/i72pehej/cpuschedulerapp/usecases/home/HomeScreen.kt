@@ -181,6 +181,9 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Control de estado de ejecucion de funcion agregarProceso()
     var quantumSeleccionado by remember { mutableStateOf(false) }
 
+    // Control de seleccion del checkbox para E/S
+    var checkboxSeleccionado by remember { mutableStateOf(false) }
+
     // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -219,7 +222,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         quantumVisibilityAlpha = 1f
 
         // Comprobar si se cumplen las condiciones para habilitar el boton
-        siguienteEnabled = quantum.isNotBlank() && listaDeProcesosGlobal.isNotEmpty()
+        siguienteEnabled = quantum.isNotBlank() && listaDeProcesosGlobal.isNotEmpty() && errorFormularioES.isBlank()
     } else {
         siguienteEnabled = listaDeProcesosGlobal.isNotEmpty()
         quantum = ""
@@ -230,6 +233,64 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Variables de E/S
     var checkboxMarcado by remember { mutableStateOf(false) }
     var visibleES by remember { mutableStateOf(0f) }
+
+    // Funcion interna para controlar que se haya seleccionado un quantum
+    @Composable
+    fun comprobarQuantum() {
+        // Control de errores solo para RR
+        if (selectorAlgoritmo == 1) {
+            errorQuantum = when {
+                quantum.isBlank() -> true
+                !quantum.isDigitsOnly() -> true
+                else -> false
+            }
+
+            // Creacion de mensaje de error en el campo del quantum para RR
+            errorFormularioQuantum = when {
+                quantum.isBlank() -> stringResource(R.string.error_quantum_blank)
+                !quantum.isDigitsOnly() -> stringResource(R.string.error_quantum_digit)
+                else -> {
+                    ""
+                }
+            }
+        }
+
+//        return errorFormularioQuantum
+    }
+
+    // Funcion interna para controlar que se hayan seleccionado los tiempos de E/S
+    @Composable
+    fun comprobarEntradaSalida(): String {
+        // Control de errores solo cuando se selecciona E/S
+        if (checkboxSeleccionado) {
+            errorESinicio = when {
+                entradaSalidaInicio.isBlank() -> true
+                !entradaSalidaInicio.isDigitsOnly() -> true
+                else -> false
+            }
+
+            errorESfin = when {
+                entradaSalidaFin.isBlank() -> true
+                !entradaSalidaFin.isDigitsOnly() -> true
+                else -> false
+            }
+
+            // Creacion de mensaje de error para los campos de E/S
+            errorFormularioES = when {
+                entradaSalidaInicio.isBlank() -> stringResource(R.string.error_E_S)
+                !entradaSalidaInicio.isDigitsOnly() -> stringResource(R.string.error_E_S)
+
+                entradaSalidaFin.isBlank() -> stringResource(R.string.error_E_S)
+                !entradaSalidaFin.isDigitsOnly() -> stringResource(R.string.error_E_S)
+
+                else -> {
+                    ""
+                }
+            }
+        }
+
+        return errorFormularioES
+    }
 
     // Función para validar los campos del formulario y agregar un proceso a la lista de procesos ingresados
     @Composable
@@ -265,6 +326,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             duracion.isBlank() -> stringResource(R.string.error_duracion_blank)
             !duracion.isDigitsOnly() -> stringResource(R.string.error_duracion_digit)
 
+            comprobarEntradaSalida() != "" -> errorFormularioES
+
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
                 onSubmit(
@@ -275,69 +338,18 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                     )
                 )
 
-                // Habilitar el boton siguiente
-                siguienteEnabled = true
-
                 // Limpiamos los campos del formulario
                 nombre = ""
                 tiempoLlegada = ""
                 duracion = ""
+                entradaSalidaInicio = ""
+                entradaSalidaFin = ""
 
-                // Reseteamos el estado del error del formulario
+                errorESinicio = false
+                errorESfin = false
+
+                // Limpiamos el valor de la variable del error
                 ""
-            }
-        }
-    }
-
-    // Funcion interna para controlar que se haya seleccionado un quantum
-    @Composable
-    fun comprobarQuantum() {
-        // Control de errores solo para RR
-        if (selectorAlgoritmo == 1) {
-            errorQuantum = when {
-                quantum.isBlank() -> true
-                !quantum.isDigitsOnly() -> true
-                else -> false
-            }
-
-            // Creacion de mensaje de error en el campo del quantum para RR
-            errorFormularioQuantum = when {
-                quantum.isBlank() -> stringResource(R.string.error_quantum_blank)
-                !quantum.isDigitsOnly() -> stringResource(R.string.error_quantum_digit)
-                else -> {
-                    ""
-                }
-            }
-        }
-    }
-
-    // Funcion interna para controlar que se hayan seleccionado los tiempos de E/S
-    @Composable
-    fun comprobarEntradaSalida() {
-        // Control de errores solo cuando se selecciona E/S
-        if (checkboxMarcado) {
-            errorESinicio = when {
-                entradaSalidaInicio.isBlank() -> true
-                !entradaSalidaInicio.isDigitsOnly() -> true
-                else -> false
-            }
-
-            errorESfin = when {
-                entradaSalidaFin.isBlank() -> true
-                !entradaSalidaFin.isDigitsOnly() -> true
-                else -> false
-            }
-
-            // Creacion de mensaje de error para los campos de E/S
-            errorFormularioES = when {
-                entradaSalidaInicio.isBlank() -> stringResource(R.string.error_E_S)
-                !entradaSalidaInicio.isDigitsOnly() -> stringResource(R.string.error_E_S)
-
-                entradaSalidaInicio.isBlank() -> stringResource(R.string.error_E_S)
-                !entradaSalidaInicio.isDigitsOnly() -> stringResource(R.string.error_E_S)
-                else -> {
-                    ""
-                }
             }
         }
     }
@@ -424,6 +436,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         checkboxMarcado = !checkboxMarcado
                         visibleES = if (checkboxMarcado) 1f else 0f
                         errorFormularioES = ""
+                        checkboxSeleccionado = !checkboxSeleccionado
                     },
                     modifier = Modifier.padding(top = 8.dp, end = 8.dp)
                 )
@@ -442,7 +455,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                     .fillMaxWidth(0.46f)
                     .alpha(visibleES),
                 label = { Text(text = "In", fontSize = 16.sp) },
-//                leadingIcon = { Icon(imageVector = Icons.Default.Login, contentDescription = "Icono tiempo de ENTRADA") },
                 singleLine = true,
                 isError = errorESinicio,
                 enabled = checkboxMarcado
@@ -463,7 +475,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                     .fillMaxWidth()
                     .alpha(visibleES),
                 label = { Text(text = "Out", fontSize = 16.sp) },
-//                leadingIcon = { Icon(imageVector = Icons.Default.Logout, contentDescription = "Icono tiempo de SALIDA") },
                 singleLine = true,
                 isError = errorESfin,
                 enabled = checkboxMarcado
@@ -483,7 +494,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             },
         ) { Text(text = "+", fontWeight = FontWeight.Bold, fontSize = 15.sp) }
 
-        // Mensaje de error
+        // Mensaje de error para el usuario
         if (errorFormulario.isNotBlank()) {
             Text(
                 text = errorFormulario,
@@ -500,32 +511,16 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.width(anchuraFormularioNombres.dp)
             )
+        } else if (errorFormularioES.isNotBlank()) {
+            Text(
+                text = errorFormularioES,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.width(anchuraFormularioNombres.dp)
+            )
         } else {
             Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            CommonRoundedButton(
-                text = stringResource(id = R.string.common_buttonNext),
-                isEnabled = siguienteEnabled,
-                onClick = {
-                    // Llama a la funcion que controla el algoritmo a ejecutar
-                    llamarAlgoritmo()
-
-                    // Control de estado para indicar la comprobacion de errores en el campo de quantum
-                    quantumSeleccionado = true
-
-                    // Cambio de estado para indicar la pulsacion del boton y cambiar a la pagina siguiente
-                    siguienteSeleccionado.value = true
-                },
-                modifier = Modifier
-                    .width(anchuraFormularioNombres.dp)
-                    .align(CenterHorizontally)
-            )
         }
     }
 
@@ -602,6 +597,30 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             singleLine = true,
             isError = errorDuracion
         )
+
+        // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            CommonRoundedButton(
+                text = stringResource(id = R.string.common_buttonNext),
+                isEnabled = siguienteEnabled,
+                onClick = {
+                    // Llama a la funcion que controla el algoritmo a ejecutar
+                    llamarAlgoritmo()
+
+                    // Control de estado para indicar la comprobacion de errores en el campo de quantum
+                    quantumSeleccionado = true
+
+                    // Cambio de estado para indicar la pulsacion del boton y cambiar a la pagina siguiente
+                    siguienteSeleccionado.value = true
+                },
+                modifier = Modifier
+                    .width(anchuraFormularioNombres.dp)
+                    .align(CenterHorizontally)
+            )
+        }
     }
 
     // Si es correcto se agrega el proceso y reinicia estado
@@ -614,10 +633,5 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     if (quantumSeleccionado) {
         comprobarQuantum()
         quantumSeleccionado = false
-    }
-
-    // Si los campos se rellenan correctamente se agrega la interrupcion
-    if (checkboxMarcado) {
-        comprobarEntradaSalida()
     }
 }
