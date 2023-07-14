@@ -232,7 +232,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     // Variables de E/S
     var checkboxMarcado by remember { mutableStateOf(false) }
-    var visibleES by remember { mutableStateOf(0f) }
+    var visibleES by remember { mutableStateOf(if (checkboxMarcado) 1f else 0f) }
 
     // Funcion interna para controlar que se haya seleccionado un quantum
     @Composable
@@ -272,7 +272,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             errorESfin = when {
                 entradaSalidaFin.isBlank() -> true
                 !entradaSalidaFin.isDigitsOnly() -> true
-                entradaSalidaFin > entradaSalidaInicio -> true
+                entradaSalidaInicio.toInt() > entradaSalidaFin.toInt() -> true
                 else -> false
             }
 
@@ -283,7 +283,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
                 entradaSalidaFin.isBlank() -> stringResource(R.string.error_E_S)
                 !entradaSalidaFin.isDigitsOnly() -> stringResource(R.string.error_E_S)
-                entradaSalidaFin > entradaSalidaInicio -> stringResource(R.string.error_EmayorS)
+                entradaSalidaInicio.toInt() > entradaSalidaFin.toInt() -> stringResource(R.string.error_EmayorS)
 
                 else -> {
                     ""
@@ -349,6 +349,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
                 errorESinicio = false
                 errorESfin = false
+                checkboxMarcado = false
+                visibleES = 0f
 
                 // Limpiamos el valor de la variable del error
                 ""
