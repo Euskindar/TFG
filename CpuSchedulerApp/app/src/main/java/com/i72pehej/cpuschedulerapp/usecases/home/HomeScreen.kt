@@ -254,8 +254,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 }
             }
         }
-
-//        return errorFormularioQuantum
     }
 
     // Funcion interna para controlar que se hayan seleccionado los tiempos de E/S
@@ -333,11 +331,22 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             // Si los campos son válidos, agregamos un nuevo proceso
             else -> {
                 onSubmit(
-                    crearProceso(
-                        nombre = nombre,
-                        tiempoLlegada = tiempoLlegada.toInt(),
-                        duracion = duracion.toInt()
-                    )
+                    // Crea un nuevo proceso
+                    if (checkboxMarcado) {
+                        crearProceso(
+                            nombre = nombre,
+                            tiempoLlegada = tiempoLlegada.toInt(),
+                            duracion = duracion.toInt(),
+                            tiempoEntrada = entradaSalidaInicio.toInt(),
+                            tiempoSalida = entradaSalidaFin.toInt()
+                        )
+                    } else {
+                        crearProceso(
+                            nombre = nombre,
+                            tiempoLlegada = tiempoLlegada.toInt(),
+                            duracion = duracion.toInt()
+                        )
+                    }
                 )
 
                 // Limpiamos los campos del formulario
@@ -347,9 +356,11 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 entradaSalidaInicio = ""
                 entradaSalidaFin = ""
 
+                // Reseteamos las variables de control de E/S
                 errorESinicio = false
                 errorESfin = false
                 checkboxMarcado = false
+                checkboxSeleccionado = false
                 visibleES = 0f
 
                 // Limpiamos el valor de la variable del error

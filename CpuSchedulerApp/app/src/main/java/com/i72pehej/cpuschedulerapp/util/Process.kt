@@ -32,37 +32,57 @@ data class Proceso(
         COMPLETADO  // Cuando el proceso ha terminado su ejecucion
     }
 
+    // Variables para considerar tiempos de Inicio y Fin de un evento de E/S del proceso
+    private var tiempoEntrada = -1
+    private var tiempoSalida = -1
+
     // Setters y getters de los parametros
     fun getNombre(): String {
         return this.nombre
-    }
-
-    fun getLlegada(): Int {
-        return this.tiempoLlegada
-    }
-
-    fun getDuracion(): Int {
-        return this.duracion
-    }
-
-    fun getEstado(): EstadoDeProceso {
-        return this.estado
     }
 
     fun setNombre(nombre: String) {
         this.nombre = nombre
     }
 
+    fun getLlegada(): Int {
+        return this.tiempoLlegada
+    }
+
     fun setLlegada(tiempo: Int) {
         this.tiempoLlegada = tiempo
+    }
+
+    fun getEstado(): EstadoDeProceso {
+        return this.estado
+    }
+
+    fun setEstado(estado: EstadoDeProceso) {
+        this.estado = estado
+    }
+
+    fun getDuracion(): Int {
+        return this.duracion
     }
 
     fun setDuracion(tiempo: Int) {
         this.duracion = tiempo
     }
 
-    fun setEstado(estado: EstadoDeProceso) {
-        this.estado = estado
+    fun getTiempoEntrada(): Int {
+        return this.tiempoEntrada
+    }
+
+    fun setTiempoEntrada(tiempo: Int) {
+        this.tiempoEntrada = tiempo
+    }
+
+    fun getTiempoSalida(): Int {
+        return this.tiempoSalida
+    }
+
+    fun setTiempoSalida(tiempo: Int) {
+        this.tiempoSalida = tiempo
     }
 
     // Control de los tiempos del proceso
@@ -117,11 +137,13 @@ data class Proceso(
  */
 
 /**
- * Funcion para crear y agregar un proceso nuevo a la lista de procesos
+ * Funcion para crear un proceso nuevo a la lista de procesos
  *
- * @property nombre Nombre asignado al proceso
- * @property tiempoLlegada Momento en el que el proceso entra en la cola de procesos listos
- * @property duracion Duracion estimada del proceso
+ * @param nombre Nombre asignado al proceso
+ * @param tiempoLlegada Momento en el que el proceso entra en la cola de procesos listos
+ * @param duracion Duracion estimada del proceso
+ *
+ * @return Devuelve un proceso con los valores correspondientes
  */
 fun crearProceso(
     nombre: String,
@@ -130,6 +152,34 @@ fun crearProceso(
 ): Proceso {
     // Se crea un proceso y se devuelve
     return Proceso(nombre, tiempoLlegada, duracion)
+}
+
+/**
+ * Sobrecarga de la funcion para crear un proceso junto a los tiempos de bloqueo por E/S
+ *
+ * @param nombre Nombre asignado al proceso
+ * @param tiempoLlegada Momento en el que el proceso entra en la cola de procesos listos
+ * @param duracion Duracion estimada del proceso
+ * @param tiempoEntrada Momento en el que el proceso se bloquea por una accion de E/S
+ * @param tiempoSalida Momento en el que el proceso sale del estado de bloqueo por E/S
+ *
+ * @return Devuelve un proceso con los valores correspondientes y tiempos de E/S
+ */
+fun crearProceso(
+    nombre: String,
+    tiempoLlegada: Int,
+    duracion: Int,
+    tiempoEntrada: Int,
+    tiempoSalida: Int
+): Proceso {
+    // Crea un proceso
+    val proceso = Proceso(nombre, tiempoLlegada, duracion)
+
+    // Agrega los tiempos de E/S al proceso creado
+    proceso.setTiempoEntrada(tiempoEntrada)
+    proceso.setTiempoSalida(tiempoSalida)
+
+    return proceso
 }
 
 /**
