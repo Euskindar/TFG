@@ -85,6 +85,10 @@ data class Proceso(
         this.tiempoSalida = tiempo
     }
 
+    fun getTiempoDeEsperaES(): Int {
+        return this.getTiempoSalida() - this.getTiempoEntrada()
+    }
+
     // Control de los tiempos del proceso
 
     private var tiempoRespuesta: Int = 0
