@@ -69,27 +69,33 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
             // sino, el proceso se ejecutara hasta llegar al evento E/S y despues continuara
             else {
-                // Se considera que se ejecuta el proceso hasta llegar al momento de entrada del evento E/S, por lo que
-                // actualizamos el tiempo restante de la duracion del proceso
+                // Se ejecuta el proceso hasta llegar al momento de entrada del evento E/S
                 val tiempoAvanzadoHastaEntrada = cabezaDeCola.getTiempoEntrada() - tiempoActual
-                cabezaDeCola.setTiempoRestante(cabezaDeCola.getDuracion() - tiempoAvanzadoHastaEntrada)
+                val tRestante = if ((cabezaDeCola.getDuracion() - tiempoAvanzadoHastaEntrada) > 0) cabezaDeCola.getDuracion() - tiempoAvanzadoHastaEntrada else 0
+                cabezaDeCola.setTiempoRestante(tRestante)
 
-                // Avanza el tiempo hasta entrar en el evento de E/S
-                tiempoActual = cabezaDeCola.getTiempoEntrada()
+                // En caso de terminar su tiempo de CPU antes de llegar al evento de E/S, FIFO considera que no se puede ejecutar el evento
+                if (tRestante == 0) {
+                    // Se agrega la duracion completa del proceso al tiempo actual
+                    tiempoActual += cabezaDeCola.getDuracion()
+                } else {
+                    // Avanza el tiempo hasta entrar en el evento de E/S
+                    tiempoActual = cabezaDeCola.getTiempoEntrada()
 
-                // Actualizamos su estado a proceso BLOQUEADO y lo guardamos
-                cabezaDeCola.setEstado(Proceso.EstadoDeProceso.BLOQUEADO)
-                infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                    // Actualizamos su estado a proceso BLOQUEADO y lo guardamos
+                    cabezaDeCola.setEstado(Proceso.EstadoDeProceso.BLOQUEADO)
+                    infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
 
-                // Se guarda el tiempo de espera
-                cabezaDeCola.setTiempoEspera(cabezaDeCola.getTiempoEspera() + cabezaDeCola.getTiempoDeEsperaES())
+                    // Se guarda el tiempo de espera
+                    cabezaDeCola.setTiempoEspera(cabezaDeCola.getTiempoEspera() + cabezaDeCola.getTiempoDeEsperaES())
 
-                // Avanzamos el momento actual hasta el final del evento de E/S ()
-                tiempoActual += cabezaDeCola.getTiempoDeEsperaES()
+                    // Avanzamos el momento actual hasta el final del evento de E/S
+                    tiempoActual += cabezaDeCola.getTiempoDeEsperaES()
 
-                // Actualizamos su estado a proceso LISTO y lo guardamos
-                cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-                infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                    // Actualizamos su estado a proceso LISTO y lo guardamos
+                    cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
+                    infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                }
             }
         }
 
@@ -102,32 +108,10 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
         // Actualizamos el proceso en la lista global
         listaDeProcesosGlobal[indexProcesoActual] = cabezaDeCola
-//    listaDeProcesosGlobal[listaDeProcesosGlobal.indexOf(cabezaDeCola)] = cabezaDeCola
 
         // Eliminamos de la cola el proceso terminado
         colaDeListos.removeAt(0)
     }
-//    // Iteraciones para recorrer todos los procesos restantes
-//    for (procesoActual in 1 until listaDeProcesosGlobal.size) {
-//        // Actualizar el estado del proceso a en EJECUCION
-//        listaDeProcesosGlobal[procesoActual].setEstado(Proceso.EstadoDeProceso.EJECUCION)
-//
-//        // Calculo de la diferencia entre el momento actual y la llegada del proceso para el tiempo de espera
-//        val diffTiempos = tiempoActual - listaDeProcesosGlobal[procesoActual].getLlegada()
-//        listaDeProcesosGlobal[procesoActual].setTiempoEspera(if (diffTiempos > 0) diffTiempos else 0)
-//
-//        // Guardado del cambio de estado
-//        infoEstados.add(InfoGraficoEstados(proceso = listaDeProcesosGlobal[procesoActual], momento = tiempoActual))
-//
-//        // Avanzamos el momento actual hasta finalizar el proceso
-//        tiempoActual += listaDeProcesosGlobal[procesoActual].getDuracion()
-//
-//        // Actualizamos el estado a proceso COMPLETADO
-//        listaDeProcesosGlobal[procesoActual].setEstado(Proceso.EstadoDeProceso.COMPLETADO)
-//
-//        // Guardado del cambio de estado
-//        infoEstados.add(InfoGraficoEstados(proceso = listaDeProcesosGlobal[procesoActual], momento = tiempoActual))
-//    }
 
     // Limpiamos el primer elemento utilizado de base para poder operar
     infoEstados.removeAt(0)
