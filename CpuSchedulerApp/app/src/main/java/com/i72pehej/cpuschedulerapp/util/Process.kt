@@ -41,21 +41,21 @@ data class Proceso(
         return this.nombre
     }
 
-    fun setNombre(nombre: String) {
-        this.nombre = nombre
-    }
+//    fun setNombre(nombre: String) {
+//        this.nombre = nombre
+//    }
 
     fun getLlegada(): Int {
         return this.tiempoLlegada
     }
 
-    fun setLlegada(tiempo: Int) {
-        this.tiempoLlegada = tiempo
-    }
+//    fun setLlegada(tiempo: Int) {
+//        this.tiempoLlegada = tiempo
+//    }
 
-    fun getEstado(): EstadoDeProceso {
-        return this.estado
-    }
+//    fun getEstado(): EstadoDeProceso {
+//        return this.estado
+//    }
 
     fun setEstado(estado: EstadoDeProceso) {
         this.estado = estado
@@ -65,9 +65,9 @@ data class Proceso(
         return this.duracion
     }
 
-    fun setDuracion(tiempo: Int) {
-        this.duracion = tiempo
-    }
+//    fun setDuracion(tiempo: Int) {
+//        this.duracion = tiempo
+//    }
 
     fun getTiempoEntrada(): Int {
         return this.tiempoEntrada
@@ -77,7 +77,7 @@ data class Proceso(
         this.tiempoEntrada = tiempo
     }
 
-    fun getTiempoSalida(): Int {
+    private fun getTiempoSalida(): Int {
         return this.tiempoSalida
     }
 
@@ -91,14 +91,14 @@ data class Proceso(
 
     // Control de los tiempos del proceso
 
-    private var tiempoRespuesta: Int = 0
-    fun getTiempoRespuesta(): Int {
-        return this.tiempoRespuesta
-    }
-
-    fun setTiempoRespuesta(tiempo: Int) {
-        this.tiempoRespuesta = tiempo
-    }
+//    private var tiempoRespuesta: Int = 0
+//    fun getTiempoRespuesta(): Int {
+//        return this.tiempoRespuesta
+//    }
+//
+//    fun setTiempoRespuesta(tiempo: Int) {
+//        this.tiempoRespuesta = tiempo
+//    }
 
     private var tiempoRestante: Int = this.getDuracion()
     fun getTiempoRestante(): Int {
@@ -120,21 +120,26 @@ data class Proceso(
         this.tiempoEspera = tiempo
     }
 
-    fun tiempoFin() =
-        this.getLlegada() + this.getDuracion() + this.getTiempoEspera() // Tiempo que ha tardado el proceso en completarse desde su llegada
+    // Tiempo que ha tardado el proceso en completarse desde su llegada
+    fun tiempoFin() = this.getLlegada() + this.getDuracion() + this.getTiempoEspera()
 
-    fun tiempoInicioFIFO() =
-        this.tiempoFin() - this.getDuracion()  // Tiempo en el que el proceso inicia su ejecucion en el algoritmo FIFO
-
-    fun tiempoDeCompletado() =
-        this.getDuracion() + this.getTiempoEspera() // Tiempo que ha tardado en completarse tras entrar a la CPU
-
-    fun isFinished() = this.getTiempoRestante() == 0 // Comprobador de proceso finalizado
-
-    fun reset() {   // Limpieza de tiempos de control
-        setTiempoRestante(this.getDuracion())
-        setTiempoEspera(0)
+    // Tiempo en el que el proceso inicia su ejecucion
+    fun tiempoInicio(): Int {
+        // Se busca en la lista de estados la primera aparicion de EJECUCION, sino devuelve -1 como "error"
+        return infoResultadosGlobal.find { it.proceso == this }?.momento ?: -1
     }
+
+//    // Tiempo que ha tardado en completarse tras entrar a la CPU
+//    fun tiempoDeCompletado() = this.getDuracion() + this.getTiempoEspera()
+//
+//    // Comprobador de proceso finalizado
+//    fun isFinished() = this.getTiempoRestante() == 0
+//
+//    // Limpieza de tiempos de control
+//    fun reset() {
+//        setTiempoRestante(this.getDuracion())
+//        setTiempoEspera(0)
+//    }
 }
 /**
  * ===================================================================
@@ -206,17 +211,17 @@ fun ordenarListaProcesos(listaDeProcesos: MutableList<Proceso>): List<Proceso> {
 /**
  * Imprimir lista de procesos por terminal
  */
-fun imprimirListaProcesos(listaDeProcesos: MutableList<Proceso>) {
-    println("IMPRIMIENDO LISTADO DE PROCESOS . . .")
-    listaDeProcesos.forEach { proceso ->
-        println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
-    }
-}
-
-/**
- * Imprimir proceso por terminal
- */
-fun imprimirProceso(proceso: Proceso) {
-    println("IMPRIMIENDO PROCESO . . .")
-    println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
-}
+//fun imprimirListaProcesos(listaDeProcesos: MutableList<Proceso>) {
+//    println("IMPRIMIENDO LISTADO DE PROCESOS . . .")
+//    listaDeProcesos.forEach { proceso ->
+//        println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
+//    }
+//}
+//
+///**
+// * Imprimir proceso por terminal
+// */
+//fun imprimirProceso(proceso: Proceso) {
+//    println("IMPRIMIENDO PROCESO . . .")
+//    println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
+//}

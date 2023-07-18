@@ -196,7 +196,7 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoInicioFIFO().toString(),  // Inicio
+                        proceso.tiempoInicio().toString(),  // Inicio
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
