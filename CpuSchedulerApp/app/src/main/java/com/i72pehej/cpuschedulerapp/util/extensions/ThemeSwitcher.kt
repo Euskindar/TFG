@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
  */
 
 /**
- * Boton que cambia el tema de la app
+ * Boton que visualiza el cambio de tema de la app
  *
  * @param darkTheme Booleano para controlar el cambio de tema
  * @param size Tamaño del boton que cambia el tema (el contenedor padre tiene el doble = size*2)

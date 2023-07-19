@@ -15,6 +15,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.i72pehej.cpuschedulerapp.util.appIconUCOSolo
 import com.i72pehej.cpuschedulerapp.util.extensions.ThemeSwitcher
+import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
  * @author Julen Perez Hernandez
@@ -95,10 +97,10 @@ fun CommonTopAppBar(
         elevation = 20.dp,
         // Menu desplegable para ajustes basicos
         actions = {
+            // Icono para limpiar la tabla de procesos
+            IconButton(onClick = { limpiarProcesos() }) { Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = "Boton de Limpiar Tabla") }
             // Icono de ajustes que cambia el estado del menu
-            IconButton(onClick = { verMenuAjustes = !verMenuAjustes }) {
-                Icon(imageVector = Icons.Filled.Settings, contentDescription = "Boton de Ajustes")
-            }
+            IconButton(onClick = { verMenuAjustes = !verMenuAjustes }) { Icon(imageVector = Icons.Filled.Settings, contentDescription = "Boton de Ajustes") }
             // Menu desplegable
             DropdownMenu(
                 expanded = verMenuAjustes,
@@ -120,4 +122,16 @@ fun CommonTopAppBar(
             }
         }
     )
+}
+
+/**
+ * ===================================================================
+ */
+
+/**
+ * Limpiar procesos
+ *
+ */
+fun limpiarProcesos() {
+    listaDeProcesosGlobal.clear()
 }

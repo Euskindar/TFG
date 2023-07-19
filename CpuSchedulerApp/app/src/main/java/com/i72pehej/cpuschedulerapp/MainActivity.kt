@@ -1,5 +1,6 @@
 package com.i72pehej.cpuschedulerapp
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.i72pehej.cpuschedulerapp.navigation.AppNavigation
 import com.i72pehej.cpuschedulerapp.ui.theme.CpuSchedulerAppTheme
-import com.i72pehej.cpuschedulerapp.util.extensions.ScreenOrientation
 
 /**
  * @author Julen Perez Hernandez
@@ -27,11 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            // Cambio de orientacion de la app a Horizontal
-            ScreenOrientation(context = LocalContext.current, orientacionVertical = true)
-
-            // Varibale para almacenar el tema
-            var temaOscuro by remember { mutableStateOf(false) }
+            val systemTheme = LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            var temaOscuro by remember { mutableStateOf(systemTheme == Configuration.UI_MODE_NIGHT_YES) }
 
             CpuSchedulerAppTheme(darkTheme = temaOscuro) {
                 // A surface container using the 'background' color from the theme

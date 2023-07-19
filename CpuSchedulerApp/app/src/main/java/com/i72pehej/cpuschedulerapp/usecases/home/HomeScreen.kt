@@ -54,7 +54,6 @@ import androidx.core.text.isDigitsOnly
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
-import com.i72pehej.cpuschedulerapp.usecases.algorithms.roundRobin
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
 import com.i72pehej.cpuschedulerapp.util.Proceso
@@ -151,8 +150,8 @@ fun llamarAlgoritmo() {
         }
         // RoundRobin
         1 -> {
-//            infoResultadosGlobal = algoritmoRoundRobin(tiempoQuantum.toInt())
-            infoResultadosGlobal = roundRobin(tiempoQuantum.toInt())
+            // TODO -> IMPLEMENTAR CORRECTAMENTE EL ALGORITMO
+//            infoResultadosGlobal = roundRobin(tiempoQuantum.toInt())
         }
     }
 }
@@ -170,8 +169,7 @@ fun llamarAlgoritmo() {
 @Composable
 fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Variables para el menu para seleccionar el metodo a utilizar
-    val algoritmosImplementados = listOf("FIFO", "RoundRobin", "etc...")
-
+    val algoritmosImplementados = listOf("FIFO", "RoundRobin")
     var expandir by remember { mutableStateOf(value = false) }
     var algoritmoSeleccionado by remember { mutableStateOf(value = algoritmosImplementados[selectorAlgoritmo]) }
 
