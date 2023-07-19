@@ -77,13 +77,13 @@ fun TablaProcesos(procesos: List<Proceso>) {
                     // En caso de tener E/S se coloca tambien en la tabla
                     if (entradaSalida) {
                         Text(
-                            text = "Entrada",
+                            text = "E",
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "Salida",
+                            text = "S",
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
@@ -153,6 +153,9 @@ fun TablaProcesos(procesos: List<Proceso>) {
 fun TablaTiemposResultados(procesos: List<Proceso>) {
     // Si la lista de procesos no está vacía
     if (procesos.isNotEmpty()) {
+        // Comprobar si tiene E/S
+        val entradaSalida = procesos.any { it.getTiempoEntrada() > 0 }
+
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
             modifier = Modifier
@@ -186,6 +189,23 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
+
+                    // En caso de tener E/S se coloca tambien en la tabla
+                    if (entradaSalida) {
+                        Text(
+                            text = "E",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "S",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
                     Text(
                         stringResource(id = R.string.nombre_tiempo_inicio),
                         modifier = Modifier.weight(1f),
@@ -231,6 +251,21 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
+
+                    // Si tiene E/S
+                    if (entradaSalida) {
+                        Text(
+                            if (proceso.getTiempoEntrada() > 0) proceso.getTiempoEntrada().toString() else "-",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            if (proceso.getTiempoSalida() > 0) proceso.getTiempoSalida().toString() else "-",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
                     Text(
                         proceso.tiempoInicio().toString(),  // Inicio
                         modifier = Modifier.weight(1f),
