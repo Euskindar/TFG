@@ -21,7 +21,7 @@ const val fadeAnimationSpeed = 300
 // Valores para los botones basicos comunes de la app
 const val buttonCornerRadius = 50
 const val buttonBorderWith = 1
-const val buttonDefaultPadding = 16
+const val buttonDefaultPadding = 10
 
 // ==============================================================
 

@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
@@ -111,11 +112,14 @@ fun HomeScreen(
 /**
  * Contenido de la pagina para introducir en el scaffold
  */
+@Preview
 @Composable
 fun ContenidoHome() {
     // Contenedor padre de los elementos a mostrar en la pagina
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
     ) {
         // Contenedor de los elementos principales
         Row(
@@ -371,9 +375,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     // Contenedor para la primera columna de campos del formulario
     Column {
-        // Separador para alinear los campos
         Spacer(modifier = Modifier.height(8.dp))
-
         // Menu desplegable para seleccion de algoritmo
         ExposedDropdownMenuBox(
             modifier = Modifier.width(anchuraFormularioNombres.dp),
@@ -494,7 +496,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
             )
         }
 
-
         // Creamos un boton para agregar el proceso ingresado a la lista de procesos, y llamamos a la funcion onSubmit cuando se hace clic en el boton
         Button(
             modifier = Modifier.padding(start = 15.dp, top = 10.dp),
@@ -542,6 +543,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
     // Contenedor para la segunda columna de campos del formulario
     Column {
+        Spacer(modifier = Modifier.height((-3).dp))
         // Campo para introducir el quantum para Round Robin
         OutlinedTextField(
             enabled = quantumEnabled,
@@ -612,10 +614,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         )
 
         // Agregamos el botón "Siguiente" que llame a la funcion correspondiente al metodo seleccionado
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
+        Column(verticalArrangement = Arrangement.Bottom, horizontalAlignment = CenterHorizontally) {
             CommonRoundedButton(
                 text = stringResource(id = R.string.common_buttonNext),
                 isEnabled = siguienteEnabled,
@@ -629,9 +628,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                     // Cambio de estado para indicar la pulsacion del boton y cambiar a la pagina siguiente
                     siguienteSeleccionado.value = true
                 },
-                modifier = Modifier
-                    .width(anchuraFormularioNombres.dp)
-                    .align(CenterHorizontally)
+                modifier = Modifier.width(anchuraFormularioTiempos.dp)
             )
         }
     }

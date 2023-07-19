@@ -1,5 +1,6 @@
 package com.i72pehej.cpuschedulerapp.util.extensions
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,10 +32,14 @@ import com.i72pehej.cpuschedulerapp.util.Proceso
  *
  * @param procesos Lista de los procesos agregados
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TablaProcesos(procesos: List<Proceso>) {
     // Si la lista de procesos no está vacía
     if (procesos.isNotEmpty()) {
+        // Comprobar si tiene E/S
+        val entradaSalida = procesos.any { it.getTiempoEntrada() > 0 }
+
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
             modifier = Modifier
@@ -43,7 +48,7 @@ fun TablaProcesos(procesos: List<Proceso>) {
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
-            item {
+            stickyHeader {
                 Row(
                     modifier = Modifier
                         .background(Color.Gray)
@@ -68,6 +73,22 @@ fun TablaProcesos(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
+
+                    // En caso de tener E/S se coloca tambien en la tabla
+                    if (entradaSalida) {
+                        Text(
+                            text = "Entrada",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Salida",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
 
@@ -89,6 +110,20 @@ fun TablaProcesos(procesos: List<Proceso>) {
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
+
+                    // Si tiene E/S
+                    if (entradaSalida) {
+                        Text(
+                            if (proceso.getTiempoEntrada() > 0) proceso.getTiempoEntrada().toString() else "-",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            if (proceso.getTiempoSalida() > 0) proceso.getTiempoSalida().toString() else "-",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
@@ -113,6 +148,7 @@ fun TablaProcesos(procesos: List<Proceso>) {
  *
  * @param procesos Lista de los procesos
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TablaTiemposResultados(procesos: List<Proceso>) {
     // Si la lista de procesos no está vacía
@@ -125,7 +161,7 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
-            item {
+            stickyHeader {
                 Row(
                     modifier = Modifier
                         .background(Color.Gray)
@@ -239,6 +275,7 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
  *
  * @param infoRes Lista de los estados adquiridos por los procesos
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
@@ -251,7 +288,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
-            item {
+            stickyHeader {
                 Row(
                     modifier = Modifier
                         .background(Color.Gray)

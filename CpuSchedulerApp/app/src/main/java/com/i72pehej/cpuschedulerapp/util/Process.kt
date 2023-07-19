@@ -77,7 +77,7 @@ data class Proceso(
         this.tiempoEntrada = tiempo
     }
 
-    private fun getTiempoSalida(): Int {
+    fun getTiempoSalida(): Int {
         return this.tiempoSalida
     }
 
