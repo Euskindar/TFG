@@ -38,9 +38,9 @@ var tiempoQuantum = ""
 // ==============================================================
 
 // Iconos comunes
-//val appIconUCOColor = R.drawable.logos_version_uco
 val appIconUCOSolo = R.drawable.uco_solo
 val appIconCPU1 = R.drawable.cpu_icon_1
+//val appIconUCOColor = R.drawable.logos_version_uco
 //val appIconCPU2 = R.drawable.cpu_icon_2
 //val appIconCPU3 = R.drawable.cpu_icon_3
 
