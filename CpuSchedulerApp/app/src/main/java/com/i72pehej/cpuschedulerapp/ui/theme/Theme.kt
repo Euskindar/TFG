@@ -13,8 +13,8 @@ private val DarkColorPalette = darkColors(
 
     primary = Azul_com_1,
     primaryVariant = Azul_base,
-    secondary = Azul_com_2,
-    secondaryVariant = Verde_deriv_1
+    secondary = Azul_com_4,
+    secondaryVariant = Azul_com_2,
 )
 
 private val LightColorPalette = lightColors(
@@ -23,17 +23,13 @@ private val LightColorPalette = lightColors(
 //    secondary = Teal200
 
     primary = Azul_base,
-    primaryVariant = Azul_com_1,
+    primaryVariant = Azul_com_5,
     secondary = Azul_com_2,
-    secondaryVariant = Verde_deriv_2
+    secondaryVariant = Azul_com_4,
 
     /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
     */
 )
 

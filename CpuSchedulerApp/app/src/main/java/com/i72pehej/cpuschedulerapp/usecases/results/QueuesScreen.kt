@@ -14,6 +14,8 @@ import com.i72pehej.cpuschedulerapp.R
  * @author Julen Perez Hernandez
  */
 
+// TODO -> FALTA DE IMPLEMENTACION DE LAS COLAS DE PROCESOS
+
 /**
  * Pantalla de colas en la que ver las diferentes colas que se crean cuando los procesos estan listos
  */

@@ -2,14 +2,19 @@ package com.i72pehej.cpuschedulerapp.util.extensions
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -44,14 +49,14 @@ fun TablaProcesos(procesos: List<Proceso>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray)
+                .background(MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
             stickyHeader {
                 Row(
                     modifier = Modifier
-                        .background(Color.Gray)
+                        .background(MaterialTheme.colors.secondaryVariant, RoundedCornerShape(5.dp))
                         .padding(4.dp)
                 ) {
                     // Agregamos cada columna a la fila de encabezado con un peso de 1f para que tengan el mismo ancho
@@ -61,12 +66,23 @@ fun TablaProcesos(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
+                    // Lineas verticales para separar columnas
+//                    Divider(
+//                        modifier = Modifier
+//                            .height(21.dp)
+//                            .width(1.dp), color = MaterialTheme.colors.secondary
+//                    )
                     Text(
                         stringResource(id = R.string.formulario_llegada),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
+//                    Divider(
+//                        modifier = Modifier
+//                            .height(21.dp)
+//                            .width(1.dp), color = MaterialTheme.colors.secondary
+//                    )
                     Text(
                         stringResource(id = R.string.formulario_duracion),
                         modifier = Modifier.weight(1f),
@@ -76,12 +92,22 @@ fun TablaProcesos(procesos: List<Proceso>) {
 
                     // En caso de tener E/S se coloca tambien en la tabla
                     if (entradaSalida) {
+//                        Divider(
+//                            modifier = Modifier
+//                                .height(21.dp)
+//                                .width(1.dp), color = MaterialTheme.colors.secondary
+//                        )
                         Text(
                             text = "E",
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
                         )
+//                        Divider(
+//                            modifier = Modifier
+//                                .height(21.dp)
+//                                .width(1.dp), color = MaterialTheme.colors.secondary
+//                        )
                         Text(
                             text = "S",
                             modifier = Modifier.weight(1f),
@@ -100,11 +126,21 @@ fun TablaProcesos(procesos: List<Proceso>) {
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
+//                    Divider(
+//                        modifier = Modifier
+//                            .height(21.dp)
+//                            .width(1.dp), color = MaterialTheme.colors.secondary
+//                    )
                     Text(
                         proceso.getLlegada().toString(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
+//                    Divider(
+//                        modifier = Modifier
+//                            .height(21.dp)
+//                            .width(1.dp), color = MaterialTheme.colors.secondary
+//                    )
                     Text(
                         proceso.getDuracion().toString(),
                         modifier = Modifier.weight(1f),
@@ -113,11 +149,21 @@ fun TablaProcesos(procesos: List<Proceso>) {
 
                     // Si tiene E/S
                     if (entradaSalida) {
+//                        Divider(
+//                            modifier = Modifier
+//                                .height(21.dp)
+//                                .width(1.dp), color = MaterialTheme.colors.secondary
+//                        )
                         Text(
                             if (proceso.getTiempoEntrada() > 0) proceso.getTiempoEntrada().toString() else "-",
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
                         )
+//                        Divider(
+//                            modifier = Modifier
+//                                .height(21.dp)
+//                                .width(1.dp), color = MaterialTheme.colors.secondary
+//                        )
                         Text(
                             if (proceso.getTiempoSalida() > 0) proceso.getTiempoSalida().toString() else "-",
                             modifier = Modifier.weight(1f),
@@ -129,13 +175,12 @@ fun TablaProcesos(procesos: List<Proceso>) {
         }
     } else {
         // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Text(
-            stringResource(id = R.string.tabla_vacia),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-        )
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                stringResource(id = R.string.tabla_vacia),
+                modifier = Modifier.padding(8.dp),
+            )
+        }
     }
 }
 
@@ -160,14 +205,14 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray)
+                .background(MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
             stickyHeader {
                 Row(
                     modifier = Modifier
-                        .background(Color.Gray)
+                        .background(MaterialTheme.colors.secondaryVariant, RoundedCornerShape(5.dp))
                         .padding(4.dp)
                 ) {
                     // Agregamos cada columna a la fila de encabezado con un peso de 1f para que tengan el mismo ancho
@@ -291,13 +336,12 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
         }
     } else {
         // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Text(
-            stringResource(id = R.string.tabla_vacia),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        )
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                stringResource(id = R.string.tabla_vacia),
+                modifier = Modifier.padding(8.dp),
+            )
+        }
     }
 }
 
@@ -319,14 +363,14 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray)
+                .background(Color.LightGray, RoundedCornerShape(5.dp))
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
             stickyHeader {
                 Row(
                     modifier = Modifier
-                        .background(Color.Gray)
+                        .background(Color.Gray, RoundedCornerShape(5.dp))
                         .padding(4.dp)
                 ) {
                     // Agregamos cada columna a la fila de encabezado con un peso de 1f para que tengan el mismo ancho
@@ -374,12 +418,11 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
         }
     } else {
         // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Text(
-            stringResource(id = R.string.tabla_vacia),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-        )
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                stringResource(id = R.string.tabla_vacia),
+                modifier = Modifier.padding(8.dp),
+            )
+        }
     }
 }

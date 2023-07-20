@@ -102,7 +102,7 @@ fun CommonTopAppBar(
                 )
             }
         },
-        elevation = 20.dp,
+        elevation = 1.dp,
         // Menu desplegable para ajustes basicos
         actions = {
             // Icono para limpiar la tabla de procesos

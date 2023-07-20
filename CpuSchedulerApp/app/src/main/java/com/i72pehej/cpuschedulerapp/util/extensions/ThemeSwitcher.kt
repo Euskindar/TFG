@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Nightlight
@@ -28,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.i72pehej.cpuschedulerapp.ui.theme.Azul_base
+import com.i72pehej.cpuschedulerapp.ui.theme.Azul_com_1
 
 /**
  * @author Julen Perez Hernandez
@@ -71,7 +72,7 @@ fun ThemeSwitcher(
             .height(size)
             .clip(shape = parentShape)
             .clickable { onClick() }
-            .background(MaterialTheme.colors.primaryVariant)
+            .background(Azul_base)
     ) {
         // Contenedor hijo que da forma al boton circular que cambia entre temas
         Box(
@@ -80,7 +81,7 @@ fun ThemeSwitcher(
                 .offset(x = offset)
                 .padding(all = padding)
                 .clip(shape = toggleShape)
-                .background(MaterialTheme.colors.primary)
+                .background(Azul_com_1)
         )
 
         // Fila para los iconos de los temas claro y oscuro
@@ -88,7 +89,7 @@ fun ThemeSwitcher(
             modifier = Modifier.border(
                 border = BorderStroke(
                     width = borderWidth,
-                    color = MaterialTheme.colors.primary
+                    color = Azul_com_1
                 ),
                 shape = parentShape
             )
@@ -103,7 +104,7 @@ fun ThemeSwitcher(
                     imageVector = Icons.Default.Nightlight,
                     contentDescription = "Icono de tema oscuro",
                     // Cambio de tonos dependiendo del tema
-                    tint = if (darkTheme) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primary
+                    tint = if (darkTheme) Azul_base else Azul_com_1
                 )
             }
 
@@ -116,7 +117,7 @@ fun ThemeSwitcher(
                     modifier = Modifier.size(iconSize),
                     imageVector = Icons.Default.LightMode,
                     contentDescription = "Icono de tema claro",
-                    tint = if (darkTheme) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant
+                    tint = if (darkTheme) Azul_com_1 else Azul_base
                 )
             }
         }

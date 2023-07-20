@@ -19,7 +19,10 @@ val Amarillo_com_1 = Color(0xFFD6A305)
 val Amarillo_com_2 = Color(0xFFA37C13)
 
 val Azul_com_1 = Color(0xFF7a63b8)
+val Azul_com_4 = Color(0xFFc9d1e4)
+val Azul_com_5 = Color(0xFFeaebfb)
 val Azul_com_2 = Color(0xFF352663)
+val Azul_com_3 = Color(0xFF322b85)
 
 val Rojo_com_1 = Color(0xFFE73057)
 val Rojo_com_2 = Color(0xFF691320)
