@@ -3,9 +3,11 @@ package com.i72pehej.cpuschedulerapp.usecases.results
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaTiemposResultados
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
@@ -21,7 +23,8 @@ fun ResultsScreen() {
     // Disposicion principal de la pantalla
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

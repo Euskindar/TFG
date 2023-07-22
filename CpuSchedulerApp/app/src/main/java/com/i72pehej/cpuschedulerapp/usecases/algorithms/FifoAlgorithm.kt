@@ -3,6 +3,7 @@ package com.i72pehej.cpuschedulerapp.usecases.algorithms
 import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
@@ -47,6 +48,9 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
         // Actualizamos su estado a proceso EJECUCION y lo guardamos
         cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
         infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+
+        println(infoEstados.last().proceso.getEstado())
+        println(infoResultadosGlobal.last().proceso.getEstado())
 
         // En caso de que el proceso tenga un evento de E/S, se ejecuta primero hasta el comienzo del evento...
         if (cabezaDeCola.getTiempoEntrada() >= 0) {
@@ -115,6 +119,9 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
     // Limpiamos el primer elemento utilizado de base para poder operar
     infoEstados.removeAt(0)
+
+    // Guardamos en la variable global para poder trabajar con ella
+    infoResultadosGlobal = infoEstados
 
     // Devolver la variable de informacion de los tiempos
     return infoEstados

@@ -13,7 +13,7 @@ import com.i72pehej.cpuschedulerapp.util.Proceso
 /**
  * Informacion del estado de un proceso en un momento determinado
  *
- * @property proceso Proceso al que se le asocia el resto de informacion de estados
+ * @property proceso El proceso asociado al momento del cambio de estado
  * @property momento Tiempo en el que el proceso adquiere un estado distinto al anterior
  */
 data class InfoGraficoEstados(

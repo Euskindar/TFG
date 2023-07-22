@@ -7,16 +7,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -359,70 +361,116 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
 fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
     if (infoRes.isNotEmpty()) {
+        // Variable que almacena el valor maximo que tendra la linea de tiempos
+        val maxMomento = infoRes.last().momento
+
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray, RoundedCornerShape(5.dp))
+                .background(MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))
                 .padding(8.dp)
         ) {
             // Agregamos una fila para el encabezado de la tabla
             stickyHeader {
                 Row(
                     modifier = Modifier
-                        .background(Color.Gray, RoundedCornerShape(5.dp))
+                        .background(MaterialTheme.colors.secondaryVariant, RoundedCornerShape(5.dp))
                         .padding(4.dp)
                 ) {
-                    // Agregamos cada columna a la fila de encabezado con un peso de 1f para que tengan el mismo ancho
+                    // Agregamos una columna inicial para los procesos
                     Text(
-                        stringResource(id = R.string.formulario_nombre),
-                        modifier = Modifier.weight(1f), // Le damos un peso de 1f para que tenga el mismo ancho que las otras columnas.
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        stringResource(id = R.string.formulario_llegada),
+                        text = "",
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        stringResource(id = R.string.formulario_duracion),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
+
+                    // Agregamos el numero de columnas correspondientes a cada momento de la linea de tiempos
+                    for (nCols in 0 until maxMomento) {
+                        Text(
+                            text = "$nCols",
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
 
+            // Variable para almacenar el nombre del proceso pasado
+            var nomPas = ""
+
             // Agregamos una fila para cada proceso en la lista de procesos
-            items(infoRes) { info ->
+            items(infoRes) { infoActual ->
+                // Guardamos el nombre del proceso del elemento para compararlo con los siguientes
+                val nom = infoActual.proceso.getNombre()
+
+                // En caso de tener un nombre de proceso distinto, colocamos la fila asociada
+//                if (nom != nomPas) {
+                // Filas
                 Row(modifier = Modifier.padding(4.dp)) {
+
+                    // Agregamos los nombres de los procesos
                     Text(
-                        info.proceso.getNombre(),
+                        text = infoActual.proceso.getNombre(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
-                    Text(
-                        info.proceso.getLlegada().toString(),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
+
+                    // Actualizamos el nombre pasado
+                    nomPas = nom
+
+                    // Separador vertical
+                    Divider(
+                        modifier = Modifier
+                            .height(21.dp)
+                            .width(1.dp), color = MaterialTheme.colors.secondary
                     )
-                    Text(
-                        info.proceso.getDuracion().toString(),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
-                    )
+
+                    // METER UN FOR DESDE LLEGADA HASTA FIN DEL PROCESO ACTUAL (utilizar lista global)
+                    // QUE COMPRUEBA SI EL MOMENTO EN QUE ESTAMOS OCURRE ALGO NUEVO CON EL PROCESO EN EL QUE ESTAMOS
+                    // SINO, COLOCA EN LA CELDA EL ELEMENTO ANTERIOR (vacio, bloqueado, x)
+
+                    // CONTROLAR EL TIEMPO DE LLEGADA Y EL MOMENTO EN EL QUE ENTRA EN EJECUCION PARA PONER TIEMPO DE ESPERA ANTES
+                    // COMPROBAR PRIMERO CUANDO ENTRA EN EJECUCION PARA PONER X
+                    // COMPROBAR E/S PARA PONER BLOQUEADO
+
+                        println("${infoActual.proceso.getNombre()}, ${infoActual.momento}, ${infoActual.proceso.getEstado()}")
+                    // Se avanza momento a momento desde el inicio del proceso hasta el final de la ejecucion
+                    for (nCols in 0 until maxMomento) {
+
+
+                        // SI PASAN COSAS, PONER COSAS
+                        if (infoActual.proceso.getEstado() == Proceso.EstadoDeProceso.EJECUCION) {
+                            Text(
+                                text = "x",
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+
+                        }
+                        // SINO PONER VACIOS
+                        else {
+                            Text(
+                                text = "",
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+//                        }
+                    }
                 }
             }
         }
-    } else {
-        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                stringResource(id = R.string.tabla_vacia),
-                modifier = Modifier.padding(8.dp),
-            )
-        }
     }
+//    else {
+//        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
+//        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text(
+//                stringResource(id = R.string.tabla_vacia),
+//                modifier = Modifier.padding(8.dp),
+//            )
+//        }
+//    }
 }

@@ -53,9 +53,9 @@ data class Proceso(
 //        this.tiempoLlegada = tiempo
 //    }
 
-//    fun getEstado(): EstadoDeProceso {
-//        return this.estado
-//    }
+    fun getEstado(): EstadoDeProceso {
+        return this.estado
+    }
 
     fun setEstado(estado: EstadoDeProceso) {
         this.estado = estado
