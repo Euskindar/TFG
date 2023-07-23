@@ -1,4 +1,6 @@
-package com.i72pehej.cpuschedulerapp.util
+package com.i72pehej.cpuschedulerapp.util.classes
+
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 
 /**
  * @author Julen Perez Hernandez
@@ -95,7 +97,7 @@ data class Proceso(
 //    fun getTiempoRespuesta(): Int {
 //        return this.tiempoRespuesta
 //    }
-//
+
 //    fun setTiempoRespuesta(tiempo: Int) {
 //        this.tiempoRespuesta = tiempo
 //    }
@@ -125,17 +127,17 @@ data class Proceso(
 
     // Tiempo en el que el proceso inicia su ejecucion
     fun tiempoInicio(): Int {
-        // Se busca en la lista de estados la primera aparicion de EJECUCION, sino devuelve -1 como "error"
+        // Se busca en la lista de estados la primera aparicion del proceso, correspondiente con el estado de EJECUCION, sino devuelve -1 como "error"
         return infoResultadosGlobal.find { it.proceso == this }?.momento ?: -1
     }
 
-//    // Tiempo que ha tardado en completarse tras entrar a la CPU
+    // Tiempo que ha tardado en completarse tras entrar a la CPU
 //    fun tiempoDeCompletado() = this.getDuracion() + this.getTiempoEspera()
-//
-//    // Comprobador de proceso finalizado
+
+    // Comprobador de proceso finalizado
 //    fun isFinished() = this.getTiempoRestante() == 0
-//
-//    // Limpieza de tiempos de control
+
+    // Limpieza de tiempos de control
 //    fun reset() {
 //        setTiempoRestante(this.getDuracion())
 //        setTiempoEspera(0)

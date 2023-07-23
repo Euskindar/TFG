@@ -56,10 +56,10 @@ import com.i72pehej.cpuschedulerapp.navigation.CrearTabs
 import com.i72pehej.cpuschedulerapp.usecases.algorithms.algoritmoFifo
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonRoundedButton
 import com.i72pehej.cpuschedulerapp.usecases.common.CommonScaffold
-import com.i72pehej.cpuschedulerapp.util.Proceso
 import com.i72pehej.cpuschedulerapp.util.anchuraFormularioNombres
 import com.i72pehej.cpuschedulerapp.util.anchuraFormularioTiempos
-import com.i72pehej.cpuschedulerapp.util.crearProceso
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso
+import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
 import com.i72pehej.cpuschedulerapp.util.extensions.ConfirmacionBackPress
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaProcesos
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal

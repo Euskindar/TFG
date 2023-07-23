@@ -1,11 +1,11 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
-import com.i72pehej.cpuschedulerapp.util.Proceso
-import com.i72pehej.cpuschedulerapp.util.crearProceso
-import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso
+import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
+import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
-import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
 /**
  * @author Julen Perez Hernandez
@@ -50,7 +50,6 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
         infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
 
         println(infoEstados.last().proceso.getEstado())
-        println(infoResultadosGlobal.last().proceso.getEstado())
 
         // En caso de que el proceso tenga un evento de E/S, se ejecuta primero hasta el comienzo del evento...
         if (cabezaDeCola.getTiempoEntrada() >= 0) {

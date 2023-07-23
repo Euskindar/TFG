@@ -1,9 +1,9 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
-import com.i72pehej.cpuschedulerapp.util.crearProceso
-import com.i72pehej.cpuschedulerapp.util.extensions.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
+import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
-import com.i72pehej.cpuschedulerapp.util.ordenarListaProcesos
 
 /**
  * @author Julen Perez Hernandez

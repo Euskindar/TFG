@@ -24,7 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.i72pehej.cpuschedulerapp.R
-import com.i72pehej.cpuschedulerapp.util.Proceso
+import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 
 /**\
  * @author Julen Perez Hernandez
@@ -407,58 +408,58 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                 val nom = infoActual.proceso.getNombre()
 
                 // En caso de tener un nombre de proceso distinto, colocamos la fila asociada
-//                if (nom != nomPas) {
-                // Filas
-                Row(modifier = Modifier.padding(4.dp)) {
+                if (nom != nomPas) {
+                    // Filas
+                    Row(modifier = Modifier.padding(4.dp)) {
 
-                    // Agregamos los nombres de los procesos
-                    Text(
-                        text = infoActual.proceso.getNombre(),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
-                    )
+                        // Agregamos los nombres de los procesos
+                        Text(
+                            text = infoActual.proceso.getNombre(),
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
 
-                    // Actualizamos el nombre pasado
-                    nomPas = nom
+                        // Actualizamos el nombre pasado
+                        nomPas = nom
 
-                    // Separador vertical
-                    Divider(
-                        modifier = Modifier
-                            .height(21.dp)
-                            .width(1.dp), color = MaterialTheme.colors.secondary
-                    )
+                        // Separador vertical
+                        Divider(
+                            modifier = Modifier
+                                .height(21.dp)
+                                .width(1.dp), color = MaterialTheme.colors.secondary
+                        )
 
-                    // METER UN FOR DESDE LLEGADA HASTA FIN DEL PROCESO ACTUAL (utilizar lista global)
-                    // QUE COMPRUEBA SI EL MOMENTO EN QUE ESTAMOS OCURRE ALGO NUEVO CON EL PROCESO EN EL QUE ESTAMOS
-                    // SINO, COLOCA EN LA CELDA EL ELEMENTO ANTERIOR (vacio, bloqueado, x)
+                        // METER UN FOR DESDE LLEGADA HASTA FIN DEL PROCESO ACTUAL (utilizar lista global)
+                        // QUE COMPRUEBA SI EL MOMENTO EN QUE ESTAMOS OCURRE ALGO NUEVO CON EL PROCESO EN EL QUE ESTAMOS
+                        // SINO, COLOCA EN LA CELDA EL ELEMENTO ANTERIOR (vacio, bloqueado, x)
 
-                    // CONTROLAR EL TIEMPO DE LLEGADA Y EL MOMENTO EN EL QUE ENTRA EN EJECUCION PARA PONER TIEMPO DE ESPERA ANTES
-                    // COMPROBAR PRIMERO CUANDO ENTRA EN EJECUCION PARA PONER X
-                    // COMPROBAR E/S PARA PONER BLOQUEADO
+                        // CONTROLAR EL TIEMPO DE LLEGADA Y EL MOMENTO EN EL QUE ENTRA EN EJECUCION PARA PONER TIEMPO DE ESPERA ANTES
+                        // COMPROBAR PRIMERO CUANDO ENTRA EN EJECUCION PARA PONER X
+                        // COMPROBAR E/S PARA PONER BLOQUEADO
 
                         println("${infoActual.proceso.getNombre()}, ${infoActual.momento}, ${infoActual.proceso.getEstado()}")
-                    // Se avanza momento a momento desde el inicio del proceso hasta el final de la ejecucion
-                    for (nCols in 0 until maxMomento) {
+                        // Se avanza momento a momento desde el inicio del proceso hasta el final de la ejecucion
+                        for (nCols in 0 until maxMomento) {
 
 
-                        // SI PASAN COSAS, PONER COSAS
-                        if (infoActual.proceso.getEstado() == Proceso.EstadoDeProceso.EJECUCION) {
-                            Text(
-                                text = "x",
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
+                            // SI PASAN COSAS, PONER COSAS
+                            if (infoActual.proceso.getEstado() == Proceso.EstadoDeProceso.EJECUCION) {
+                                Text(
+                                    text = "x",
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
 
+                            }
+                            // SINO PONER VACIOS
+                            else {
+                                Text(
+                                    text = "",
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
-                        // SINO PONER VACIOS
-                        else {
-                            Text(
-                                text = "",
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-//                        }
                     }
                 }
             }

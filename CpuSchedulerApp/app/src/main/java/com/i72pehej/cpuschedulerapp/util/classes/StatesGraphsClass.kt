@@ -1,6 +1,4 @@
-package com.i72pehej.cpuschedulerapp.util.extensions
-
-import com.i72pehej.cpuschedulerapp.util.Proceso
+package com.i72pehej.cpuschedulerapp.util.classes
 
 /**
  * @author Julen Perez Hernandez
