@@ -22,10 +22,8 @@ data class Proceso(
     private var nombre: String,
     private var tiempoLlegada: Int,
     private var duracion: Int,
-) {
-    // Estado actual del proceso, representado por la clase enumerada
     private var estado: EstadoDeProceso = EstadoDeProceso.LISTO
-
+) {
     // Listado de estados asociados a los procesos
     enum class EstadoDeProceso {
         LISTO,      // Cuando el proceso se encuentra a la espera de entrar en la CPU
@@ -128,7 +126,7 @@ data class Proceso(
     // Tiempo en el que el proceso inicia su ejecucion
     fun tiempoInicio(): Int {
         // Se busca en la lista de estados la primera aparicion del proceso, correspondiente con el estado de EJECUCION, sino devuelve -1 como "error"
-        return infoResultadosGlobal.find { it.proceso == this }?.momento ?: -1
+        return infoResultadosGlobal.find { it.getProceso().getEstado() == EstadoDeProceso.EJECUCION }?.getMomento() ?: -1
     }
 
     // Tiempo que ha tardado en completarse tras entrar a la CPU
@@ -160,9 +158,10 @@ fun crearProceso(
     nombre: String,
     tiempoLlegada: Int,
     duracion: Int,
+    estado: Proceso.EstadoDeProceso
 ): Proceso {
     // Se crea un proceso y se devuelve
-    return Proceso(nombre, tiempoLlegada, duracion)
+    return Proceso(nombre, tiempoLlegada, duracion, estado)
 }
 
 /**
@@ -180,11 +179,12 @@ fun crearProceso(
     nombre: String,
     tiempoLlegada: Int,
     duracion: Int,
+    estado: Proceso.EstadoDeProceso,
     tiempoEntrada: Int,
     tiempoSalida: Int
 ): Proceso {
     // Crea un proceso
-    val proceso = Proceso(nombre, tiempoLlegada, duracion)
+    val proceso = Proceso(nombre, tiempoLlegada, duracion, estado)
 
     // Agrega los tiempos de E/S al proceso creado
     proceso.setTiempoEntrada(tiempoEntrada)

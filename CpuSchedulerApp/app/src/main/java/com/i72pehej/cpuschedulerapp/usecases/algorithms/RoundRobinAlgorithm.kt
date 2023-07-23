@@ -1,6 +1,7 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
 import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
@@ -29,7 +30,7 @@ fun roundRobin(quantum: Int): MutableList<InfoGraficoEstados> {
     // Comienzo de la ejecucion
 
     // Variable para almacenar el progreso de los ESTADOS de cada proceso durante el algoritmo
-    val infoEstados = mutableListOf(InfoGraficoEstados(proceso = crearProceso(nombre = "-", tiempoLlegada = 0, duracion = 0), momento = 0))
+    val infoEstados = mutableListOf(InfoGraficoEstados(proceso = crearProceso(nombre = "-", tiempoLlegada = 0, duracion = 0, estado = Proceso.EstadoDeProceso.LISTO), momento = 0))
 
     // Inicializa el tiempo total en 0
     var tiempoActual = 0

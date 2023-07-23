@@ -337,6 +337,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                             nombre = nombre,
                             tiempoLlegada = tiempoLlegada.toInt(),
                             duracion = duracion.toInt(),
+                            estado = Proceso.EstadoDeProceso.LISTO,
                             tiempoEntrada = entradaSalidaInicio.toInt(),
                             tiempoSalida = entradaSalidaFin.toInt()
                         )
@@ -344,7 +345,8 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                         crearProceso(
                             nombre = nombre,
                             tiempoLlegada = tiempoLlegada.toInt(),
-                            duracion = duracion.toInt()
+                            duracion = duracion.toInt(),
+                            estado = Proceso.EstadoDeProceso.LISTO
                         )
                     }
                 )

@@ -363,7 +363,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
     if (infoRes.isNotEmpty()) {
         // Variable que almacena el valor maximo que tendra la linea de tiempos
-        val maxMomento = infoRes.last().momento
+        val maxMomento = infoRes.last().getMomento()
 
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
@@ -405,7 +405,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
             // Agregamos una fila para cada proceso en la lista de procesos
             items(infoRes) { infoActual ->
                 // Guardamos el nombre del proceso del elemento para compararlo con los siguientes
-                val nom = infoActual.proceso.getNombre()
+                val nom = infoActual.getProceso().getNombre()
 
                 // En caso de tener un nombre de proceso distinto, colocamos la fila asociada
                 if (nom != nomPas) {
@@ -414,7 +414,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
 
                         // Agregamos los nombres de los procesos
                         Text(
-                            text = infoActual.proceso.getNombre(),
+                            text = infoActual.getProceso().getNombre(),
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
                         )
@@ -437,13 +437,12 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                         // COMPROBAR PRIMERO CUANDO ENTRA EN EJECUCION PARA PONER X
                         // COMPROBAR E/S PARA PONER BLOQUEADO
 
-                        println("${infoActual.proceso.getNombre()}, ${infoActual.momento}, ${infoActual.proceso.getEstado()}")
+//                        println("${infoActual.getProceso().getNombre()}, ${infoActual.getMomento()}, ${infoActual.getProceso().getEstado()}")
                         // Se avanza momento a momento desde el inicio del proceso hasta el final de la ejecucion
                         for (nCols in 0 until maxMomento) {
 
-
                             // SI PASAN COSAS, PONER COSAS
-                            if (infoActual.proceso.getEstado() == Proceso.EstadoDeProceso.EJECUCION) {
+                            if (infoActual.getProceso().getEstado() == Proceso.EstadoDeProceso.EJECUCION) {
                                 Text(
                                     text = "x",
                                     modifier = Modifier.weight(1f),

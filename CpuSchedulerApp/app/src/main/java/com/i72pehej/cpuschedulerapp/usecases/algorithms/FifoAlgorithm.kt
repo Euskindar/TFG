@@ -4,7 +4,6 @@ import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
 import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
-import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
@@ -25,7 +24,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
     // Comienzo de la ejecucion
 
     // Variable para almacenar el progreso de los ESTADOS de cada proceso durante el algoritmo
-    val infoEstados = mutableListOf(InfoGraficoEstados(proceso = crearProceso(nombre = "-", tiempoLlegada = 0, duracion = 0), momento = 0))
+    val infoEstados = mutableListOf(InfoGraficoEstados(proceso = crearProceso(nombre = "-", tiempoLlegada = 0, duracion = 0, estado = Proceso.EstadoDeProceso.LISTO), momento = 0))
 
     // Creacion de la cola de procesos LISTOS con el primer proceso
     val colaDeListos = listaDeProcesosGlobal.toMutableList()
@@ -47,9 +46,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
         // Actualizamos su estado a proceso EJECUCION y lo guardamos
         cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-        infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
-
-        println(infoEstados.last().proceso.getEstado())
+        infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
 
         // En caso de que el proceso tenga un evento de E/S, se ejecuta primero hasta el comienzo del evento...
         if (cabezaDeCola.getTiempoEntrada() >= 0) {
@@ -57,7 +54,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
             if (tiempoActual > cabezaDeCola.getTiempoEntrada()) {
                 // Actualizamos su estado a proceso BLOQUEADO y lo guardamos
                 cabezaDeCola.setEstado(Proceso.EstadoDeProceso.BLOQUEADO)
-                infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.BLOQUEADO), momento = tiempoActual))
 
                 // Avanzamos el momento actual hasta el final del evento de E/S ()
                 tiempoActual += cabezaDeCola.getTiempoDeEsperaES()
@@ -67,7 +64,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
                 // Actualizamos su estado a proceso EJECUCION y lo guardamos
                 cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-                infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
             }
 
             // sino, el proceso se ejecutara hasta llegar al evento E/S y despues continuara
@@ -87,7 +84,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
                     // Actualizamos su estado a proceso BLOQUEADO y lo guardamos
                     cabezaDeCola.setEstado(Proceso.EstadoDeProceso.BLOQUEADO)
-                    infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                    infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.BLOQUEADO), momento = tiempoActual))
 
                     // Se guarda el tiempo de espera
                     cabezaDeCola.setTiempoEspera(cabezaDeCola.getTiempoEspera() + cabezaDeCola.getTiempoDeEsperaES())
@@ -97,7 +94,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
                     // Actualizamos su estado a proceso LISTO y lo guardamos
                     cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-                    infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+                    infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
                 }
             }
         }
@@ -107,20 +104,20 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
         // Actualizamos su estado a proceso COMPLETADO y lo guardamos
         cabezaDeCola.setEstado(Proceso.EstadoDeProceso.COMPLETADO)
-        infoEstados.add(InfoGraficoEstados(proceso = cabezaDeCola, momento = tiempoActual))
+        infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.COMPLETADO), momento = tiempoActual))
 
         // Actualizamos el proceso en la lista global
         listaDeProcesosGlobal[indexProcesoActual] = cabezaDeCola
 
         // Eliminamos de la cola el proceso terminado
         colaDeListos.removeAt(0)
+
     }
 
     // Limpiamos el primer elemento utilizado de base para poder operar
     infoEstados.removeAt(0)
 
-    // Guardamos en la variable global para poder trabajar con ella
-    infoResultadosGlobal = infoEstados
+    println(infoEstados.forEach { println("PROCESO ${it.getProceso().getNombre()} -> ${it.getProceso().getEstado()}, MOMENTO -> ${it.getMomento()}") })
 
     // Devolver la variable de informacion de los tiempos
     return infoEstados

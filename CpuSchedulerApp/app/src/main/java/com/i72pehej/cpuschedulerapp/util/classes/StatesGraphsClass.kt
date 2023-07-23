@@ -15,6 +15,23 @@ package com.i72pehej.cpuschedulerapp.util.classes
  * @property momento Tiempo en el que el proceso adquiere un estado distinto al anterior
  */
 data class InfoGraficoEstados(
-    val proceso: Proceso,
-    val momento: Int
-)
+    private var proceso: Proceso,
+    private var momento: Int
+) {
+    // Getters y Setters
+    fun getProceso(): Proceso {
+        return this.proceso
+    }
+
+//    fun setProceso(proceso: Proceso) {
+//        this.proceso = proceso
+//    }
+
+    fun getMomento(): Int {
+        return this.momento
+    }
+
+//    fun setMomento(momento: Int) {
+//        this.momento = momento
+//    }
+}
