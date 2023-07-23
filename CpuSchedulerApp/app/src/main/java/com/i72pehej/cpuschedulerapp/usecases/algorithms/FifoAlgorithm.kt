@@ -44,6 +44,9 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
         val diffTiempos = tiempoActual - cabezaDeCola.getLlegada()
         cabezaDeCola.setTiempoEspera(if (diffTiempos > 0) diffTiempos else 0)
 
+        // Si la diferencia entre el momento actual y la llegada es negativa -> La llegada esta mas lejos que el momento actual, se avanza hasta la llegada
+        if (diffTiempos < 0) { tiempoActual = cabezaDeCola.getLlegada() }
+
         // Actualizamos su estado a proceso EJECUCION y lo guardamos
         cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
         infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
@@ -116,8 +119,6 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
 
     // Limpiamos el primer elemento utilizado de base para poder operar
     infoEstados.removeAt(0)
-
-    println(infoEstados.forEach { println("PROCESO ${it.getProceso().getNombre()} -> ${it.getProceso().getEstado()}, MOMENTO -> ${it.getMomento()}") })
 
     // Devolver la variable de informacion de los tiempos
     return infoEstados
