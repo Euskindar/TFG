@@ -327,7 +327,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
     if (infoRes.isNotEmpty()) {
         // Variable que almacena el valor maximo que tendra la linea de tiempos
-        val maxMomento = infoRes.last().getMomento() + 1
+        val maxMomento = infoRes.last().getMomento()
 
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
@@ -384,24 +384,46 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                             .width(1.dp), color = MaterialTheme.colors.secondary
                     )
 
+                    // Variables para guardar el simbolo para colocar
+                    var simbolo by remember { mutableStateOf("") }
+                    var simboloAnterior by remember { mutableStateOf("") }
+
                     // Recorremos las columnas de tiempos
                     for (cols in infoRes.first().getProceso().getLlegada() until maxMomento) {
 
-                        // Variable para guardar el simbolo para colocar
-                        var simbolo by remember { mutableStateOf("") }
-
                         // Recorremos la lista de estados
                         for (itEstados in infoRes.indices) {
+
                             // Si se tiene un evento en el momento de la columna y la fila del proceso con el que estamos trabajando -> Comprobamos estados
                             if ((infoRes[itEstados].getMomento() == cols) && (nombreActual.getProceso().getNombre() == infoRes[itEstados].getProceso().getNombre())) {
+
+                                // Valor a colocar en la celda dependiendo del estado del proceso
                                 simbolo = when (infoRes[itEstados].getProceso().getEstado()) {
-                                    Proceso.EstadoDeProceso.LISTO -> "L"
-                                    Proceso.EstadoDeProceso.EJECUCION -> "x"
-                                    Proceso.EstadoDeProceso.BLOQUEADO -> "B"
-                                    Proceso.EstadoDeProceso.COMPLETADO -> "C"
+                                    Proceso.EstadoDeProceso.LISTO -> {
+                                        simboloAnterior = "L"
+                                        "L"
+                                    }
+
+                                    Proceso.EstadoDeProceso.EJECUCION -> {
+                                        simboloAnterior = "x"
+                                        "x"
+                                    }
+
+                                    Proceso.EstadoDeProceso.BLOQUEADO -> {
+                                        simboloAnterior = "B"
+                                        "B"
+                                    }
+
+                                    Proceso.EstadoDeProceso.COMPLETADO -> {
+                                        simboloAnterior = ""
+                                        "C"
+                                    }
                                 }
                             }
                         }
+
+                        // En caso de no haber evento en el momento, se repite el simbolo anterior
+                        simbolo = simboloAnterior
 
                         // Texto a poner en la celda
                         Text(
