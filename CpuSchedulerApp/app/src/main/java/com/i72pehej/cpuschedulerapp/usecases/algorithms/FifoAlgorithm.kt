@@ -40,6 +40,9 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
         // Se almacena el primer elemento de la cola (el siguiente proceso a entrar en CPU)
         cabezaDeCola = colaDeListos.first()
 
+        // Guardamos el estado inicial del proceso al llegar a la cola de LISTOS
+        infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.LISTO), momento = cabezaDeCola.getLlegada()))
+
         // Calculo de la diferencia entre el momento actual y la llegada del proceso para el tiempo de espera
         val diffTiempos = tiempoActual - cabezaDeCola.getLlegada()
         cabezaDeCola.setTiempoEspera(if (diffTiempos > 0) diffTiempos else 0)
@@ -95,7 +98,7 @@ fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
                     // Avanzamos el momento actual hasta el final del evento de E/S
                     tiempoActual += cabezaDeCola.getTiempoDeEsperaES()
 
-                    // Actualizamos su estado a proceso LISTO y lo guardamos
+                    // Actualizamos su estado a EJECUCION y lo guardamos
                     cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
                     infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
                 }

@@ -29,7 +29,6 @@ fun GraphsScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-//        Text(text = stringResource(id = R.string.graphs_name))
         TablaResultadosGraficos(infoRes = infoResultadosGlobal)
     }
 }

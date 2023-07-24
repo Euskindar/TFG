@@ -121,14 +121,11 @@ data class Proceso(
     }
 
     // Tiempo que ha tardado el proceso en completarse desde su llegada
-    private var completado = infoResultadosGlobal.find { (it.getProceso().getNombre() == this.getNombre()) && (it.getProceso().getEstado() == EstadoDeProceso.COMPLETADO) }?.getMomento() ?: -1
-    private var sumas = this.getLlegada() + this.getDuracion() + this.getTiempoEspera()
-    fun tiempoFin() = if (completado == sumas) completado else sumas
+    fun tiempoFin() = this.getLlegada() + this.getDuracion() + this.getTiempoEspera()
 
     // Tiempo en el que el proceso inicia su ejecucion
     fun tiempoInicio(): Int {
         // Se busca en la lista de estados la primera aparicion del proceso, correspondiente con el estado de EJECUCION, sino devuelve -1 como "error"
-        println(infoResultadosGlobal.find { (it.getProceso().getNombre() == this.getNombre()) && (it.getProceso().getEstado() == EstadoDeProceso.COMPLETADO) })
         return infoResultadosGlobal.find { (it.getProceso().getNombre() == this.getNombre()) && (it.getProceso().getEstado() == EstadoDeProceso.EJECUCION) }?.getMomento() ?: -1
     }
 

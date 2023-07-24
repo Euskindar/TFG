@@ -17,6 +17,10 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -69,23 +73,12 @@ fun TablaProcesos(procesos: List<Proceso>) {
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
-                    // Lineas verticales para separar columnas
-//                    Divider(
-//                        modifier = Modifier
-//                            .height(21.dp)
-//                            .width(1.dp), color = MaterialTheme.colors.secondary
-//                    )
                     Text(
                         stringResource(id = R.string.formulario_llegada),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
-//                    Divider(
-//                        modifier = Modifier
-//                            .height(21.dp)
-//                            .width(1.dp), color = MaterialTheme.colors.secondary
-//                    )
                     Text(
                         stringResource(id = R.string.formulario_duracion),
                         modifier = Modifier.weight(1f),
@@ -95,22 +88,12 @@ fun TablaProcesos(procesos: List<Proceso>) {
 
                     // En caso de tener E/S se coloca tambien en la tabla
                     if (entradaSalida) {
-//                        Divider(
-//                            modifier = Modifier
-//                                .height(21.dp)
-//                                .width(1.dp), color = MaterialTheme.colors.secondary
-//                        )
                         Text(
                             text = "E",
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
                         )
-//                        Divider(
-//                            modifier = Modifier
-//                                .height(21.dp)
-//                                .width(1.dp), color = MaterialTheme.colors.secondary
-//                        )
                         Text(
                             text = "S",
                             modifier = Modifier.weight(1f),
@@ -129,21 +112,11 @@ fun TablaProcesos(procesos: List<Proceso>) {
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
-//                    Divider(
-//                        modifier = Modifier
-//                            .height(21.dp)
-//                            .width(1.dp), color = MaterialTheme.colors.secondary
-//                    )
                     Text(
                         proceso.getLlegada().toString(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
-//                    Divider(
-//                        modifier = Modifier
-//                            .height(21.dp)
-//                            .width(1.dp), color = MaterialTheme.colors.secondary
-//                    )
                     Text(
                         proceso.getDuracion().toString(),
                         modifier = Modifier.weight(1f),
@@ -152,21 +125,11 @@ fun TablaProcesos(procesos: List<Proceso>) {
 
                     // Si tiene E/S
                     if (entradaSalida) {
-//                        Divider(
-//                            modifier = Modifier
-//                                .height(21.dp)
-//                                .width(1.dp), color = MaterialTheme.colors.secondary
-//                        )
                         Text(
                             if (proceso.getTiempoEntrada() > 0) proceso.getTiempoEntrada().toString() else "-",
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
                         )
-//                        Divider(
-//                            modifier = Modifier
-//                                .height(21.dp)
-//                                .width(1.dp), color = MaterialTheme.colors.secondary
-//                        )
                         Text(
                             if (proceso.getTiempoSalida() > 0) proceso.getTiempoSalida().toString() else "-",
                             modifier = Modifier.weight(1f),
@@ -337,15 +300,16 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                 }
             }
         }
-    } else {
-        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                stringResource(id = R.string.tabla_vacia),
-                modifier = Modifier.padding(8.dp),
-            )
-        }
     }
+//    else {
+//        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
+//        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text(
+//                stringResource(id = R.string.tabla_vacia),
+//                modifier = Modifier.padding(8.dp),
+//            )
+//        }
+//    }
 }
 
 /**
@@ -363,7 +327,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
     if (infoRes.isNotEmpty()) {
         // Variable que almacena el valor maximo que tendra la linea de tiempos
-        val maxMomento = infoRes.last().getMomento()
+        val maxMomento = infoRes.last().getMomento() + 1
 
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
@@ -388,7 +352,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     )
 
                     // Agregamos el numero de columnas correspondientes a cada momento de la linea de tiempos
-                    for (nCols in 0 until maxMomento) {
+                    for (nCols in infoRes.first().getProceso().getLlegada() until maxMomento) {
                         Text(
                             text = "$nCols",
                             modifier = Modifier.weight(1f),
@@ -399,78 +363,55 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                 }
             }
 
-            // Variable para almacenar el nombre del proceso pasado
-            var nomPas = ""
+            // Sublista con la primera aparicion de cada uno de los procesos con nombres distintos para crear las filas
+            val listaNombres = infoRes.distinctBy { it.getProceso().getNombre() }
 
             // Agregamos una fila para cada proceso en la lista de procesos
-            items(infoRes) { infoActual ->
-                // Guardamos el nombre del proceso del elemento para compararlo con los siguientes
-                val nom = infoActual.getProceso().getNombre()
+            items(listaNombres) { nombreActual ->
+                // Filas
+                Row(modifier = Modifier.padding(4.dp)) {
+                    // Agregamos los nombres de los procesos
+                    Text(
+                        text = nombreActual.getProceso().getNombre(),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
 
-                // En caso de tener un nombre de proceso distinto, colocamos la fila asociada
-                if (nom != nomPas) {
-                    // Filas
-                    Row(modifier = Modifier.padding(4.dp)) {
+                    // Separador vertical
+                    Divider(
+                        modifier = Modifier
+                            .height(21.dp)
+                            .width(1.dp), color = MaterialTheme.colors.secondary
+                    )
 
-                        // Agregamos los nombres de los procesos
+                    // Recorremos las columnas de tiempos
+                    for (cols in infoRes.first().getProceso().getLlegada() until maxMomento) {
+
+                        // Variable para guardar el simbolo para colocar
+                        var simbolo by remember { mutableStateOf("") }
+
+                        // Recorremos la lista de estados
+                        for (itEstados in infoRes.indices) {
+                            // Si se tiene un evento en el momento de la columna y la fila del proceso con el que estamos trabajando -> Comprobamos estados
+                            if ((infoRes[itEstados].getMomento() == cols) && (nombreActual.getProceso().getNombre() == infoRes[itEstados].getProceso().getNombre())) {
+                                simbolo = when (infoRes[itEstados].getProceso().getEstado()) {
+                                    Proceso.EstadoDeProceso.LISTO -> "L"
+                                    Proceso.EstadoDeProceso.EJECUCION -> "x"
+                                    Proceso.EstadoDeProceso.BLOQUEADO -> "B"
+                                    Proceso.EstadoDeProceso.COMPLETADO -> "C"
+                                }
+                            }
+                        }
+
+                        // Texto a poner en la celda
                         Text(
-                            text = infoActual.getProceso().getNombre(),
+                            text = simbolo,
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
                         )
-
-                        // Actualizamos el nombre pasado
-                        nomPas = nom
-
-                        // Separador vertical
-                        Divider(
-                            modifier = Modifier
-                                .height(21.dp)
-                                .width(1.dp), color = MaterialTheme.colors.secondary
-                        )
-
-                        // METER UN FOR DESDE LLEGADA HASTA FIN DEL PROCESO ACTUAL (utilizar lista global)
-                        // QUE COMPRUEBA SI EL MOMENTO EN QUE ESTAMOS OCURRE ALGO NUEVO CON EL PROCESO EN EL QUE ESTAMOS
-                        // SINO, COLOCA EN LA CELDA EL ELEMENTO ANTERIOR (vacio, bloqueado, x)
-
-                        // CONTROLAR EL TIEMPO DE LLEGADA Y EL MOMENTO EN EL QUE ENTRA EN EJECUCION PARA PONER TIEMPO DE ESPERA ANTES
-                        // COMPROBAR PRIMERO CUANDO ENTRA EN EJECUCION PARA PONER X
-                        // COMPROBAR E/S PARA PONER BLOQUEADO
-
-//                        println("${infoActual.getProceso().getNombre()}, ${infoActual.getMomento()}, ${infoActual.getProceso().getEstado()}")
-                        // Se avanza momento a momento desde el inicio del proceso hasta el final de la ejecucion
-                        for (nCols in 0 until maxMomento) {
-
-                            // SI PASAN COSAS, PONER COSAS
-                            if (infoActual.getProceso().getEstado() == Proceso.EstadoDeProceso.EJECUCION) {
-                                Text(
-                                    text = "x",
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
-
-                            }
-                            // SINO PONER VACIOS
-                            else {
-                                Text(
-                                    text = "",
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
                     }
                 }
             }
         }
     }
-//    else {
-//        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-//        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-//            Text(
-//                stringResource(id = R.string.tabla_vacia),
-//                modifier = Modifier.padding(8.dp),
-//            )
-//        }
-//    }
 }
