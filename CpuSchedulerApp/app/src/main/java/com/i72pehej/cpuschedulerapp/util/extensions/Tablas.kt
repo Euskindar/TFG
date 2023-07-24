@@ -400,23 +400,23 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                                 // Valor a colocar en la celda dependiendo del estado del proceso
                                 simbolo = when (infoRes[itEstados].getProceso().getEstado()) {
                                     Proceso.EstadoDeProceso.LISTO -> {
-                                        simboloAnterior = "L"
-                                        "L"
+                                        simboloAnterior = "E"
+                                        "E" // En ESPERA
                                     }
 
                                     Proceso.EstadoDeProceso.EJECUCION -> {
                                         simboloAnterior = "x"
-                                        "x"
+                                        "x" // En EJECUCION
                                     }
 
                                     Proceso.EstadoDeProceso.BLOQUEADO -> {
                                         simboloAnterior = "B"
-                                        "B"
+                                        "B" // BLOQUEADO por E/S
                                     }
 
                                     Proceso.EstadoDeProceso.COMPLETADO -> {
                                         simboloAnterior = ""
-                                        "C"
+                                        "" // COMPLETADO (celda vacia)
                                     }
                                 }
                             }
