@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 
 /**\
  * @author Julen Perez Hernandez
@@ -162,8 +163,8 @@ fun TablaProcesos(procesos: List<Proceso>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TablaTiemposResultados(procesos: List<Proceso>) {
-    // Si la lista de procesos no está vacía
-    if (procesos.isNotEmpty()) {
+    // Si la lista de estados no está vacía
+    if (infoResultadosGlobal.isNotEmpty()) {
         // Comprobar si tiene E/S
         val entradaSalida = procesos.any { it.getTiempoEntrada() > 0 }
 
