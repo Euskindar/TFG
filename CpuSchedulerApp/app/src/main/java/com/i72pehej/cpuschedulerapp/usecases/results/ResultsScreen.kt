@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaTiemposResultados
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
+import com.i72pehej.cpuschedulerapp.util.siguienteSeleccionado
 
 /**
  * @author Julen Perez Hernandez
@@ -29,6 +30,6 @@ fun ResultsScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         // Generar tabla de resultados
-        TablaTiemposResultados(procesos = listaDeProcesosGlobal)
+        if (siguienteSeleccionado.value) TablaTiemposResultados(procesos = listaDeProcesosGlobal)
     }
 }

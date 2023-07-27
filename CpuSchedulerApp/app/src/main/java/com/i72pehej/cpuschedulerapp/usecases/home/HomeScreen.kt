@@ -181,9 +181,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     // Control de estado de ejecucion de funcion agregarProceso()
     var quantumSeleccionado by remember { mutableStateOf(false) }
 
-    // Control de seleccion del checkbox para E/S
-    var checkboxSeleccionado by remember { mutableStateOf(false) }
-
     // Control para ocultar el teclado y perder el foco del formulario al terminar de agregar cada proceso
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -260,7 +257,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
     @Composable
     fun comprobarEntradaSalida(): String {
         // Control de errores solo cuando se selecciona E/S
-        if (checkboxSeleccionado) {
+        if (checkboxMarcado) {
             errorESinicio = when {
                 entradaSalidaInicio.isBlank() -> true
                 !entradaSalidaInicio.isDigitsOnly() -> true
@@ -281,7 +278,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
 
                 entradaSalidaFin.isBlank() -> stringResource(R.string.error_E_S)
                 !entradaSalidaFin.isDigitsOnly() -> stringResource(R.string.error_E_S)
-                entradaSalidaInicio.toInt() > entradaSalidaFin.toInt() -> stringResource(R.string.error_EmayorS)
+                entradaSalidaInicio.toInt() > entradaSalidaFin.toInt() -> stringResource(R.string.error_EmenorS)
 
                 else -> {
                     ""
@@ -362,7 +359,6 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 errorESinicio = false
                 errorESfin = false
                 checkboxMarcado = false
-                checkboxSeleccionado = false
                 visibleES = 0f
 
                 // Limpiamos el valor de la variable del error
@@ -380,7 +376,7 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
         ExposedDropdownMenuBox(
             modifier = Modifier.width(anchuraFormularioNombres.dp),
             expanded = expandir,
-            onExpandedChange = { expandir = !expandir }
+            onExpandedChange = { expandir = it }
         ) {
             TextField(
                 readOnly = true,
@@ -448,13 +444,17 @@ fun FormularioProceso(onSubmit: (Proceso) -> Unit) {
                 Checkbox(
                     checked = checkboxMarcado,
                     onCheckedChange = {
-                        checkboxMarcado = !checkboxMarcado
+                        checkboxMarcado = it
                         visibleES = if (checkboxMarcado) 1f else 0f
                         errorFormularioES = ""
-                        checkboxSeleccionado = !checkboxSeleccionado
                     },
                     modifier = Modifier.padding(top = 8.dp, end = 8.dp)
                 )
+
+                // Leyenda para indicar el funcionamiento del checkbox
+                if (!checkboxMarcado) {
+                    Text(text = "E/S", modifier = Modifier.padding(top = 8.dp), fontWeight = FontWeight.Bold)
+                }
             }
 
             // Campo para INICIO de bloqueo de proceso por E/S
