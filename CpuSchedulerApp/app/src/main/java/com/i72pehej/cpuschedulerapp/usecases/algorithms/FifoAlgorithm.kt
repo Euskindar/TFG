@@ -30,15 +30,13 @@ fun algoritmoFifo() {
     // Creacion de la cola de procesos LISTOS
     val colaDeListos = listaDeProcesosGlobal.toMutableList()
 
-    // Variable que almacena el primer elemento de la cola para inicializar los tiempos
-    var cabezaDeCola = colaDeListos.first()
-
     // Variable para almacenar el avance del tiempo con cada proceso
-    var momentoActual = cabezaDeCola.getLlegada()
+    var momentoActual = colaDeListos.first().getLlegada()
 
     // Consideramos que se deba completar el ultimo proceso como condicion de parada del bucle
     while (listaDeProcesosGlobal.last().getEstado() != COMPLETADO) {
-        cabezaDeCola = colaDeListos.first()
+        // Variable que almacena el primer elemento de la cola
+        val cabezaDeCola = colaDeListos.first()
 
         // Comprobamos que el proceso tenga evento de E/S
         if ((cabezaDeCola.getTiempoEntrada() > 0) && (cabezaDeCola.getTiempoEntrada() == momentoActual)) {
@@ -49,15 +47,12 @@ fun algoritmoFifo() {
                 infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = BLOQUEADO, momento = momentoActual + tiempos))
             }
 
-            // Modificamos la llegada del proceso que sale y se coloca al final de la cola para poder retomarlo desde su salida de E/S
-            cabezaDeCola.setLlegada(cabezaDeCola.getTiempoSalida())
-
             // Movemos el proceso al final de la lista de LISTOS
             colaDeListos.add(cabezaDeCola)
             colaDeListos.removeFirst()
 
             // Actualizamos el momentoActual a la llegada del siguiente proceso (-1 para considerar el aumento del bucle)
-            momentoActual = colaDeListos.first().getLlegada() - 1
+            momentoActual = colaDeListos.first().getTiempoSalida() - 1
         }
         // Si no hay evento de bloqueo de proceso...
         else {

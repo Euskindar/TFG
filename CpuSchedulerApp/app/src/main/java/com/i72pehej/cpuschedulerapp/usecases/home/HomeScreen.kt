@@ -152,6 +152,9 @@ fun llamarAlgoritmo() {
     when (selectorAlgoritmo) {
         // FIFO
         0 -> {
+            // Reseteo de los valores basicos de los procesos
+            listaDeProcesosGlobal.forEach { it.reset() }
+
             algoritmoFifo()
         }
         // RoundRobin
