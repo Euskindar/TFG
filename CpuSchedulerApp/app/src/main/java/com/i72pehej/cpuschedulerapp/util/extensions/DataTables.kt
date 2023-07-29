@@ -307,6 +307,21 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
  */
 
 /**
+ * Función de extensión para obtener el ultimo elemento que cumple con una condicion
+ *
+ * @param T Tipo generico
+ * @param predicate Condicion que se debe cumplir
+ * @return Devuleve el ultimo elemento que cumple la condicion o NULL en caso de no encontrar ninguno
+ */
+fun <T> List<T>.filterLast(predicate: (T) -> Boolean): T? {
+    return this.reversed().firstOrNull(predicate)
+}
+
+/**
+ * ===========================================================================================
+ */
+
+/**
  * Creacion de la tabla de procesos agregados
  *
  * @param infoRes Lista de los estados adquiridos por los procesos
@@ -316,6 +331,11 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
 fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
     if (infoRes.isNotEmpty()) {
+        // Ordenamos la lista por nombre
+        infoRes.sortedBy { it.getNombre() }
+
+        infoRes.forEach { println(it) }
+
         // Variable que almacena el valor maximo que tendra la linea de tiempos
         val maxMomento = infoRes.last().getMomento()
 
@@ -374,46 +394,25 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                             .width(1.dp), color = MaterialTheme.colors.secondary
                     )
 
-                    // Variables para guardar el simbolo para colocar
-                    var simbolo: String
-                    var simboloAnterior = ""
+                    // Filtramos la lista para obtener los estados de la fila actual
+                    val listaFilaActual = infoRes.filter { it.getNombre() == nombreActual.getNombre() }
 
                     // Recorremos las columnas de tiempos
-                    for (cols in infoRes.first().getMomento() until maxMomento) {
+                    for (cols in 0 until maxMomento) {
+                        var simbolo = ""
 
-                        // Recorremos la lista de estados
-//                        for (itEstados in infoRes.indices) {
-//
-//                            // Si se tiene un evento en el momento de la columna y la fila del proceso con el que estamos trabajando -> Comprobamos estados
-//                            if ((infoRes[itEstados].getMomento() == cols) && (nombreActual.getNombre() == infoRes[itEstados].getNombre())) {
-//
-//                                // Valor a colocar en la celda dependiendo del estado del proceso
-//                                when (infoRes[itEstados].getEstado()) {
-//                                    Proceso.EstadoDeProceso.LISTO -> {
-//                                        simboloAnterior = "E"
-//                                        "E" // En ESPERA
-//                                    }
-//
-//                                    Proceso.EstadoDeProceso.EJECUCION -> {
-//                                        simboloAnterior = "x"
-//                                        "x" // En EJECUCION
-//                                    }
-//
-//                                    Proceso.EstadoDeProceso.BLOQUEADO -> {
-//                                        simboloAnterior = "B"
-//                                        "B" // BLOQUEADO por E/S
-//                                    }
-//
-//                                    Proceso.EstadoDeProceso.COMPLETADO -> {
-//                                        simboloAnterior = ""
-//                                        "" // COMPLETADO (celda vacia)
-//                                    }
-//                                }.also { simbolo = it }
-//                            }
-//                        }
+                        // Para cada momento, se compara si el proceso tiene evento y se coloca el simbolo correspondiente
+                        if (listaFilaActual.any { it.getMomento() == cols }) {
 
-                        // En caso de no haber evento en el momento, se repite el simbolo anterior
-                        simbolo = simboloAnterior
+                            // EL WHEN TIENE QUE BUSCAR EL ESTADO DE LA ULTIMA APARICION DE UN ESTADO CON EL MOMENTO QUE TENEMOS AHORA
+                            simbolo = when(listaFilaActual.filterLast { it.getMomento() == cols }?.getEstado()){
+                                Proceso.EstadoDeProceso.LISTO -> "L"
+                                Proceso.EstadoDeProceso.EJECUCION -> "x"
+                                Proceso.EstadoDeProceso.BLOQUEADO -> "B"
+                                Proceso.EstadoDeProceso.COMPLETADO -> "C"
+                                else -> {""}
+                            }
+                        }
 
                         // Texto a poner en la celda
                         Text(
