@@ -145,15 +145,19 @@ fun ContenidoHome() {
  * Llamada a la ejecucion de cada algoritmo dependiendo de la opcion seleccionada en el formulario
  */
 fun llamarAlgoritmo() {
+    // Limpiar posibles resultados anteriores
+    infoResultadosGlobal.clear()
+
+    // Selector de algoritmo
     when (selectorAlgoritmo) {
         // FIFO
         0 -> {
-            infoResultadosGlobal = algoritmoFifo()
+            algoritmoFifo()
         }
         // RoundRobin
         1 -> {
             // TODO -> IMPLEMENTAR CORRECTAMENTE EL ALGORITMO
-//            infoResultadosGlobal = roundRobin(tiempoQuantum.toInt())
+//            roundRobin(tiempoQuantum.toInt())
         }
     }
 }

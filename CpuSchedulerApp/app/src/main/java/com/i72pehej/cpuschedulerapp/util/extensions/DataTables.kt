@@ -17,10 +17,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -279,22 +275,24 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
                     }
 
                     Text(
-                        proceso.tiempoInicio().toString(),  // Inicio
+                        proceso.tiempoInicio().toString(),          // Inicio
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoFin().toString(),         // Fin
+                        proceso.tiempoFin().toString(),             // Fin
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.tiempoEstancia().toString(),    // Estancia
+//                        "${proceso.getTiempoEstancia()} = ${proceso.tiempoFin()} - ${proceso.getLlegada()}",    // Estancia
+                        proceso.getTiempoEstancia().toString(),    // Estancia
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        proceso.getTiempoEspera().toString(),   // Espera
+//                        "${proceso.getTiempoEspera()} = ${proceso.getTiempoEstancia()} - ${proceso.getDuracion()}",       // Espera
+                        proceso.getTiempoEspera().toString(),       // Espera
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
@@ -302,15 +300,6 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
             }
         }
     }
-//    else {
-//        // Si la lista de procesos está vacía, mostramos un mensaje indicando que no hay procesos
-//        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-//            Text(
-//                stringResource(id = R.string.tabla_vacia),
-//                modifier = Modifier.padding(8.dp),
-//            )
-//        }
-//    }
 }
 
 /**
@@ -353,7 +342,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     )
 
                     // Agregamos el numero de columnas correspondientes a cada momento de la linea de tiempos
-                    for (nCols in infoRes.first().getProceso().getLlegada() until maxMomento) {
+                    for (nCols in infoRes.first().getMomento() until maxMomento) {
                         Text(
                             text = "$nCols",
                             modifier = Modifier.weight(1f),
@@ -365,7 +354,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
             }
 
             // Sublista con la primera aparicion de cada uno de los procesos con nombres distintos para crear las filas
-            val listaNombres = infoRes.distinctBy { it.getProceso().getNombre() }
+            val listaNombres = infoRes.distinctBy { it.getNombre() }
 
             // Agregamos una fila para cada proceso en la lista de procesos
             items(listaNombres) { nombreActual ->
@@ -373,7 +362,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                 Row(modifier = Modifier.padding(4.dp)) {
                     // Agregamos los nombres de los procesos
                     Text(
-                        text = nombreActual.getProceso().getNombre(),
+                        text = nombreActual.getNombre(),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
@@ -386,42 +375,42 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     )
 
                     // Variables para guardar el simbolo para colocar
-                    var simbolo by remember { mutableStateOf("") }
-                    var simboloAnterior by remember { mutableStateOf("") }
+                    var simbolo: String
+                    var simboloAnterior = ""
 
                     // Recorremos las columnas de tiempos
-                    for (cols in infoRes.first().getProceso().getLlegada() until maxMomento) {
+                    for (cols in infoRes.first().getMomento() until maxMomento) {
 
                         // Recorremos la lista de estados
-                        for (itEstados in infoRes.indices) {
-
-                            // Si se tiene un evento en el momento de la columna y la fila del proceso con el que estamos trabajando -> Comprobamos estados
-                            if ((infoRes[itEstados].getMomento() == cols) && (nombreActual.getProceso().getNombre() == infoRes[itEstados].getProceso().getNombre())) {
-
-                                // Valor a colocar en la celda dependiendo del estado del proceso
-                                simbolo = when (infoRes[itEstados].getProceso().getEstado()) {
-                                    Proceso.EstadoDeProceso.LISTO -> {
-                                        simboloAnterior = "E"
-                                        "E" // En ESPERA
-                                    }
-
-                                    Proceso.EstadoDeProceso.EJECUCION -> {
-                                        simboloAnterior = "x"
-                                        "x" // En EJECUCION
-                                    }
-
-                                    Proceso.EstadoDeProceso.BLOQUEADO -> {
-                                        simboloAnterior = "B"
-                                        "B" // BLOQUEADO por E/S
-                                    }
-
-                                    Proceso.EstadoDeProceso.COMPLETADO -> {
-                                        simboloAnterior = ""
-                                        "" // COMPLETADO (celda vacia)
-                                    }
-                                }
-                            }
-                        }
+//                        for (itEstados in infoRes.indices) {
+//
+//                            // Si se tiene un evento en el momento de la columna y la fila del proceso con el que estamos trabajando -> Comprobamos estados
+//                            if ((infoRes[itEstados].getMomento() == cols) && (nombreActual.getNombre() == infoRes[itEstados].getNombre())) {
+//
+//                                // Valor a colocar en la celda dependiendo del estado del proceso
+//                                when (infoRes[itEstados].getEstado()) {
+//                                    Proceso.EstadoDeProceso.LISTO -> {
+//                                        simboloAnterior = "E"
+//                                        "E" // En ESPERA
+//                                    }
+//
+//                                    Proceso.EstadoDeProceso.EJECUCION -> {
+//                                        simboloAnterior = "x"
+//                                        "x" // En EJECUCION
+//                                    }
+//
+//                                    Proceso.EstadoDeProceso.BLOQUEADO -> {
+//                                        simboloAnterior = "B"
+//                                        "B" // BLOQUEADO por E/S
+//                                    }
+//
+//                                    Proceso.EstadoDeProceso.COMPLETADO -> {
+//                                        simboloAnterior = ""
+//                                        "" // COMPLETADO (celda vacia)
+//                                    }
+//                                }.also { simbolo = it }
+//                            }
+//                        }
 
                         // En caso de no haber evento en el momento, se repite el simbolo anterior
                         simbolo = simboloAnterior

@@ -62,7 +62,7 @@ fun ThemeSwitcher(
     // Control de la posicion del boton que indica el tema en el que estamos
     val offset by animateDpAsState(
         targetValue = if (darkTheme) 0.dp else size,
-        animationSpec = animationSpec
+        animationSpec = animationSpec, label = "animacion tema"
     )
 
     // Contenedor padre que da forma al contenedor exterior

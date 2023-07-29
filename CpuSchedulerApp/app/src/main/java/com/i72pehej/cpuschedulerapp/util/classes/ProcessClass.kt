@@ -49,9 +49,9 @@ data class Proceso(
         return this.tiempoLlegada
     }
 
-//    fun setLlegada(tiempo: Int) {
-//        this.tiempoLlegada = tiempo
-//    }
+    fun setLlegada(tiempo: Int) {
+        this.tiempoLlegada = tiempo
+    }
 
     fun getEstado(): EstadoDeProceso {
         return this.estado
@@ -109,37 +109,29 @@ data class Proceso(
         this.tiempoRestante = tiempo
     }
 
-    fun tiempoEstancia() = this.tiempoFin() - this.getLlegada()
+    fun getTiempoEstancia() = this.tiempoFin() - this.getLlegada()
 
-    private var tiempoEspera: Int = 0
     fun getTiempoEspera(): Int {
-        return this.tiempoEspera
-    }
-
-    fun setTiempoEspera(tiempo: Int) {
-        this.tiempoEspera = tiempo
+        return (this.getTiempoEstancia() - this.getDuracion())
     }
 
     // Tiempo que ha tardado el proceso en completarse desde su llegada
-    fun tiempoFin() = this.getLlegada() + this.getDuracion() + this.getTiempoEspera()
+    fun tiempoFin(): Int {
+        // Se busca en la lista de estados la primera aparicion del proceso, correspondiente con el estado de COMPLETADO, sino devuelve -1 como "error"
+        return infoResultadosGlobal.find { (it.getNombre() == this.getNombre()) && (it.getEstado() == EstadoDeProceso.COMPLETADO) }?.getMomento() ?: -1
+    }
 
     // Tiempo en el que el proceso inicia su ejecucion
     fun tiempoInicio(): Int {
         // Se busca en la lista de estados la primera aparicion del proceso, correspondiente con el estado de EJECUCION, sino devuelve -1 como "error"
-        return infoResultadosGlobal.find { (it.getProceso().getNombre() == this.getNombre()) && (it.getProceso().getEstado() == EstadoDeProceso.EJECUCION) }?.getMomento() ?: -1
+        return infoResultadosGlobal.find { (it.getNombre() == this.getNombre()) && (it.getEstado() == EstadoDeProceso.EJECUCION) }?.getMomento() ?: -1
     }
 
-    // Tiempo que ha tardado en completarse tras entrar a la CPU
-//    fun tiempoDeCompletado() = this.getDuracion() + this.getTiempoEspera()
-
-    // Comprobador de proceso finalizado
-//    fun isFinished() = this.getTiempoRestante() == 0
-
     // Limpieza de tiempos de control
-//    fun reset() {
-//        setTiempoRestante(this.getDuracion())
-//        setTiempoEspera(0)
-//    }
+    fun reset() {
+        setEstado(EstadoDeProceso.LISTO)
+        setTiempoRestante(this.getDuracion())
+    }
 }
 /**
  * ===================================================================
@@ -201,29 +193,10 @@ fun crearProceso(
  * Funcion que ordena la lista de procesos por orden de llegada de forma ascendente
  */
 fun ordenarListaProcesos(listaDeProcesos: MutableList<Proceso>): List<Proceso> {
+    // Reseteamos los valores que han podido ser modificados
+    listaDeProcesos.forEach { it.reset() }
+
     listaDeProcesos.sortBy { proceso: Proceso -> proceso.getLlegada() }
 
     return listaDeProcesos
 }
-
-/**
- * ===================================================================
- */
-
-/**
- * Imprimir lista de procesos por terminal
- */
-//fun imprimirListaProcesos(listaDeProcesos: MutableList<Proceso>) {
-//    println("IMPRIMIENDO LISTADO DE PROCESOS . . .")
-//    listaDeProcesos.forEach { proceso ->
-//        println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
-//    }
-//}
-//
-///**
-// * Imprimir proceso por terminal
-// */
-//fun imprimirProceso(proceso: Proceso) {
-//    println("IMPRIMIENDO PROCESO . . .")
-//    println("NOMBRE: ${proceso.getNombre()}, LLEGADA: ${proceso.getLlegada()}, DURACION: ${proceso.getDuracion()}, ESTADO: ${proceso.getEstado()}")
-//}

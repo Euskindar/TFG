@@ -1,9 +1,12 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
-import com.i72pehej.cpuschedulerapp.util.classes.Proceso
-import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.BLOQUEADO
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.COMPLETADO
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.EJECUCION
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.LISTO
 import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
@@ -17,112 +20,90 @@ import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 /**
  * Funcion para implementar el algoritmo FIFO considerando estados
  */
-fun algoritmoFifo(): MutableList<InfoGraficoEstados> {
+fun algoritmoFifo() {
     // Ordenar la lista de procesos por tiempo de llegada
     ordenarListaProcesos(listaDeProcesosGlobal)
 
-    // Comienzo de la ejecucion
-
     // Variable para almacenar el progreso de los ESTADOS de cada proceso durante el algoritmo
-    val infoEstados = mutableListOf(InfoGraficoEstados(proceso = crearProceso(nombre = "-", tiempoLlegada = 0, duracion = 0, estado = Proceso.EstadoDeProceso.LISTO), momento = 0))
+    val infoEstados = mutableListOf(InfoGraficoEstados(nombre = "", estado = LISTO, momento = 0))
 
-    // Creacion de la cola de procesos LISTOS con el primer proceso
+    // Creacion de la cola de procesos LISTOS
     val colaDeListos = listaDeProcesosGlobal.toMutableList()
 
     // Variable que almacena el primer elemento de la cola para inicializar los tiempos
     var cabezaDeCola = colaDeListos.first()
 
     // Variable para almacenar el avance del tiempo con cada proceso
-    var tiempoActual = cabezaDeCola.getLlegada()
+    var momentoActual = cabezaDeCola.getLlegada()
 
-    // COMIENZA EL BUCLE
-    for (indexProcesoActual in 0 until colaDeListos.size) {
-        // Se almacena el primer elemento de la cola (el siguiente proceso a entrar en CPU)
+    // Consideramos que se deba completar el ultimo proceso como condicion de parada del bucle
+    while (listaDeProcesosGlobal.last().getEstado() != COMPLETADO) {
         cabezaDeCola = colaDeListos.first()
 
-        // Guardamos el estado inicial del proceso al llegar a la cola de LISTOS
-        infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.LISTO), momento = cabezaDeCola.getLlegada()))
+        // Comprobamos que el proceso tenga evento de E/S
+        if ((cabezaDeCola.getTiempoEntrada() > 0) && (cabezaDeCola.getTiempoEntrada() == momentoActual)) {
 
-        // Calculo de la diferencia entre el momento actual y la llegada del proceso para el tiempo de espera
-        val diffTiempos = tiempoActual - cabezaDeCola.getLlegada()
-        cabezaDeCola.setTiempoEspera(if (diffTiempos > 0) diffTiempos else 0)
-
-        // Si la diferencia entre el momento actual y la llegada es negativa -> La llegada esta mas lejos que el momento actual, se avanza hasta la llegada
-        if (diffTiempos < 0) { tiempoActual = cabezaDeCola.getLlegada() }
-
-        // Actualizamos su estado a proceso EJECUCION y lo guardamos
-        cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-        infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
-
-        // En caso de que el proceso tenga un evento de E/S, se ejecuta primero hasta el comienzo del evento...
-        if (cabezaDeCola.getTiempoEntrada() >= 0) {
-            // En caso de habernos pasado el evento de E/S, controlamos que el evento se ejecute en el momento en el que el proceso esta en CPU
-            if (tiempoActual > cabezaDeCola.getTiempoEntrada()) {
-                // Actualizamos su estado a proceso BLOQUEADO y lo guardamos
-                cabezaDeCola.setEstado(Proceso.EstadoDeProceso.BLOQUEADO)
-                infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.BLOQUEADO), momento = tiempoActual))
-
-                // Avanzamos el momento actual hasta el final del evento de E/S ()
-                tiempoActual += cabezaDeCola.getTiempoDeEsperaES()
-
-                // Se guarda el tiempo de espera
-                cabezaDeCola.setTiempoEspera(cabezaDeCola.getTiempoEspera() + cabezaDeCola.getTiempoDeEsperaES())
-
-                // Actualizamos su estado a proceso EJECUCION y lo guardamos
-                cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-                infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
+            // Bucle para almacenar los tiempos de bloqueo por E/S del proceso
+            for (tiempos in 0 until cabezaDeCola.getTiempoDeEsperaES()) {
+                // Guardamos el estado BLOQUEADO
+                infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = BLOQUEADO, momento = momentoActual + tiempos))
             }
 
-            // sino, el proceso se ejecutara hasta llegar al evento E/S y despues continuara
-            else {
-                // Se ejecuta el proceso hasta llegar al momento de entrada del evento E/S
-                val tiempoAvanzadoHastaEntrada = cabezaDeCola.getTiempoEntrada() - tiempoActual
-                val tRestante = if ((cabezaDeCola.getDuracion() - tiempoAvanzadoHastaEntrada) > 0) cabezaDeCola.getDuracion() - tiempoAvanzadoHastaEntrada else 0
-                cabezaDeCola.setTiempoRestante(tRestante)
+            // Modificamos la llegada del proceso que sale y se coloca al final de la cola para poder retomarlo desde su salida de E/S
+            cabezaDeCola.setLlegada(cabezaDeCola.getTiempoSalida())
 
-                // En caso de terminar su tiempo de CPU antes de llegar al evento de E/S, FIFO considera que no se puede ejecutar el evento
-                if (tRestante == 0) {
-                    // Se agrega la duracion completa del proceso al tiempo actual
-                    tiempoActual += cabezaDeCola.getDuracion()
-                } else {
-                    // Avanza el tiempo hasta entrar en el evento de E/S
-                    tiempoActual = cabezaDeCola.getTiempoEntrada()
+            // Movemos el proceso al final de la lista de LISTOS
+            colaDeListos.add(cabezaDeCola)
+            colaDeListos.removeFirst()
 
-                    // Actualizamos su estado a proceso BLOQUEADO y lo guardamos
-                    cabezaDeCola.setEstado(Proceso.EstadoDeProceso.BLOQUEADO)
-                    infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.BLOQUEADO), momento = tiempoActual))
+            // Actualizamos el momentoActual a la llegada del siguiente proceso (-1 para considerar el aumento del bucle)
+            momentoActual = colaDeListos.first().getLlegada() - 1
+        }
+        // Si no hay evento de bloqueo de proceso...
+        else {
+            // Comprobamos que le quede tiempo restante al proceso
+            if (cabezaDeCola.getTiempoRestante() > 0) {
+                // Buscamos algun proceso que este en ejecucion en este momento
+                val procesoEnEjecucion = infoEstados.any { ((it.getEstado() == EJECUCION) && (it.getMomento() == momentoActual)) }
 
-                    // Se guarda el tiempo de espera
-                    cabezaDeCola.setTiempoEspera(cabezaDeCola.getTiempoEspera() + cabezaDeCola.getTiempoDeEsperaES())
+                // Si NO hay ningun proceso en EJECUCION...
+                if (!procesoEnEjecucion) {
+                    // Pasamos a EJECUCION
+                    infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = EJECUCION, momento = momentoActual))
 
-                    // Avanzamos el momento actual hasta el final del evento de E/S
-                    tiempoActual += cabezaDeCola.getTiempoDeEsperaES()
-
-                    // Actualizamos su estado a EJECUCION y lo guardamos
-                    cabezaDeCola.setEstado(Proceso.EstadoDeProceso.EJECUCION)
-                    infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.EJECUCION), momento = tiempoActual))
+                    // Restamos una unidad al tiempoRestante
+                    cabezaDeCola.setTiempoRestante(cabezaDeCola.getTiempoRestante() - 1)
                 }
+                // Si hay otro proceso ejecutandose...
+                else {
+                    // Pasamos a LISTO == ESPERA
+                    infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = LISTO, momento = momentoActual))
+                }
+            }
+            // Si no le queda tiempo restante
+            else {
+                // Pasamos a COMPLETADO
+                infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = COMPLETADO, momento = momentoActual))
+
+                // Actualizamos el estado final del proceso
+                cabezaDeCola.setEstado(COMPLETADO)
+
+                // Eliminamos el proceso de la cola
+                colaDeListos.removeFirst()
+
+                // Actualizamos el momentoActual a la llegada del siguiente proceso (-1 para considerar el aumento del bucle)
+                val llegadaCabeza = if (colaDeListos.firstOrNull() == null) 0 else colaDeListos.first().getLlegada() - 1
+                momentoActual = llegadaCabeza
             }
         }
 
-        // ...sino, consideramos que el proceso completa su ejecucion
-        tiempoActual += cabezaDeCola.getTiempoRestante()
-
-        // Actualizamos su estado a proceso COMPLETADO y lo guardamos
-        cabezaDeCola.setEstado(Proceso.EstadoDeProceso.COMPLETADO)
-        infoEstados.add(InfoGraficoEstados(proceso = crearProceso(nombre = cabezaDeCola.getNombre(), tiempoLlegada = cabezaDeCola.getLlegada(), duracion = cabezaDeCola.getDuracion(), estado = Proceso.EstadoDeProceso.COMPLETADO), momento = tiempoActual))
-
-        // Actualizamos el proceso en la lista global
-        listaDeProcesosGlobal[indexProcesoActual] = cabezaDeCola
-
-        // Eliminamos de la cola el proceso terminado
-        colaDeListos.removeAt(0)
-
+        // Avanzamos el tiempo
+        momentoActual++
     }
 
     // Limpiamos el primer elemento utilizado de base para poder operar
     infoEstados.removeAt(0)
 
-    // Devolver la variable de informacion de los tiempos
-    return infoEstados
+    // Almacenamos la variable de informacion de los tiempos
+    infoResultadosGlobal = infoEstados
 }
