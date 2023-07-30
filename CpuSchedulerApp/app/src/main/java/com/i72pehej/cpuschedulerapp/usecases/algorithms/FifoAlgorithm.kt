@@ -8,7 +8,7 @@ import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.COMPLET
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.EJECUCION
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.LISTO
 import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
-import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
+import com.i72pehej.cpuschedulerapp.util.classes.ordenarLlegadaProcesos
 
 /**
  * @author Julen Perez Hernandez
@@ -27,7 +27,7 @@ import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
  */
 fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGraficoEstados> {
     // Ordenar la lista de procesos por tiempo de llegada
-    ordenarListaProcesos(listaProcesos)
+    ordenarLlegadaProcesos(listaProcesos)
 
     // Funcion para realizar una copia independiente del listado de procesos
     fun copiarLista(listaProcesosOriginal: SnapshotStateList<Proceso>): MutableList<Proceso> {
@@ -65,19 +65,21 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
 
         // Comprobamos que el proceso tenga evento de E/S
         if ((cabezaDeCola.getTiempoEntrada() > 0) && (cabezaDeCola.getTiempoEntrada() == momentoActual)) {
-
             // Bucle para almacenar los tiempos de bloqueo por E/S del proceso
             for (tiempos in 0 until cabezaDeCola.getTiempoDeEsperaES()) {
                 // Guardamos el estado BLOQUEADO
                 infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = BLOQUEADO, momento = momentoActual + tiempos))
             }
 
+            // Actualizar la llegada del proceso de vuelta del estado de BLOQUEO == salida del evento de E/S para retomarlo desde ese punto
+            cabezaDeCola.setLlegada(cabezaDeCola.getTiempoSalida())
+
             // Movemos el proceso al final de la lista de LISTOS
             colaDeListos.add(cabezaDeCola)
-            colaDeListos.removeFirst()
+            colaDeListos.removeAt(0)
 
             // Actualizamos el momentoActual a la llegada del siguiente proceso (-1 para considerar el aumento del bucle)
-            momentoActual = colaDeListos.first().getTiempoSalida() - 1
+            momentoActual = colaDeListos.first().getLlegada() - 1
         }
         // Si no hay evento de bloqueo de proceso...
         else {
@@ -109,7 +111,7 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
                 cabezaDeCola.setEstado(COMPLETADO)
 
                 // Eliminamos el proceso de la cola
-                colaDeListos.removeFirst()
+                colaDeListos.removeAt(0)
 
                 // Actualizamos el momentoActual a la llegada del siguiente proceso (-1 para considerar el aumento del bucle)
                 val llegadaCabeza = if (colaDeListos.firstOrNull() == null) 0 else colaDeListos.first().getLlegada() - 1

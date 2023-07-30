@@ -49,9 +49,9 @@ data class Proceso(
         return this.tiempoLlegada
     }
 
-//    fun setLlegada(tiempo: Int) {
-//        this.tiempoLlegada = tiempo
-//    }
+    fun setLlegada(tiempo: Int) {
+        this.tiempoLlegada = tiempo
+    }
 
     fun getEstado(): EstadoDeProceso {
         return this.estado
@@ -191,8 +191,12 @@ fun crearProceso(
 
 /**
  * Funcion que ordena la lista de procesos por orden de llegada de forma ascendente
+ *
+ * @param listaDeProcesos Listado de procesos que se van a ordenar por orden de llegada
+ *
+ * @return Devuelve el listado de procesos ordenado
  */
-fun ordenarListaProcesos(listaDeProcesos: MutableList<Proceso>): List<Proceso> {
+fun ordenarLlegadaProcesos(listaDeProcesos: MutableList<Proceso>): List<Proceso> {
     listaDeProcesos.sortBy { proceso: Proceso -> proceso.getLlegada() }
 
     return listaDeProcesos

@@ -331,11 +331,6 @@ fun <T> List<T>.filterLast(predicate: (T) -> Boolean): T? {
 fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
     // Si la lista de procesos no está vacía
     if (infoRes.isNotEmpty()) {
-        // Ordenamos la lista por nombre
-        infoRes.sortedBy { it.getNombre() }
-
-        infoRes.forEach { println(it) }
-
         // Variable que almacena el valor maximo que tendra la linea de tiempos
         val maxMomento = infoRes.last().getMomento() + 1
 
