@@ -337,7 +337,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
         infoRes.forEach { println(it) }
 
         // Variable que almacena el valor maximo que tendra la linea de tiempos
-        val maxMomento = infoRes.last().getMomento()
+        val maxMomento = infoRes.last().getMomento() + 1
 
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
