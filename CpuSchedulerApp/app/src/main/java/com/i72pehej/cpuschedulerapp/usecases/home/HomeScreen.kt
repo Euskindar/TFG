@@ -155,7 +155,7 @@ fun llamarAlgoritmo() {
             // Reseteo de los valores basicos de los procesos
             listaDeProcesosGlobal.forEach { it.reset() }
 
-            algoritmoFifo()
+            infoResultadosGlobal = algoritmoFifo(listaDeProcesosGlobal)
         }
         // RoundRobin
         1 -> {

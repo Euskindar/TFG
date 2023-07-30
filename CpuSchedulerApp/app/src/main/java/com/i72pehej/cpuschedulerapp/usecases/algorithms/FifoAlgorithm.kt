@@ -1,13 +1,14 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.BLOQUEADO
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.COMPLETADO
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.EJECUCION
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.LISTO
+import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
 import com.i72pehej.cpuschedulerapp.util.classes.ordenarListaProcesos
-import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
-import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
  * @author Julen Perez Hernandez
@@ -19,22 +20,46 @@ import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
  * Funcion para implementar el algoritmo FIFO considerando estados
+ *
+ * @param listaProcesos Listado de prodesos con los que realizar el algoritmo FIFO
+ *
+ * @return Devuelve el listado de estados en cada momento para cada proceso de la lista
  */
-fun algoritmoFifo() {
+fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGraficoEstados> {
     // Ordenar la lista de procesos por tiempo de llegada
-    ordenarListaProcesos(listaDeProcesosGlobal)
+    ordenarListaProcesos(listaProcesos)
+
+    // Funcion para realizar una copia independiente del listado de procesos
+    fun copiarLista(listaProcesosOriginal: SnapshotStateList<Proceso>): MutableList<Proceso> {
+        val nuevaLista = mutableListOf<Proceso>()
+
+        listaProcesosOriginal.forEach { elemento ->
+            nuevaLista.add(
+                crearProceso(
+                    nombre = elemento.getNombre(),
+                    tiempoLlegada = elemento.getLlegada(),
+                    duracion = elemento.getDuracion(),
+                    estado = elemento.getEstado(),
+                    tiempoEntrada = elemento.getTiempoEntrada(),
+                    tiempoSalida = elemento.getTiempoSalida()
+                )
+            )
+        }
+
+        return nuevaLista
+    }
 
     // Variable para almacenar el progreso de los ESTADOS de cada proceso durante el algoritmo
-    val infoEstados = mutableListOf(InfoGraficoEstados(nombre = "", estado = LISTO, momento = 0))
+    val infoEstados = mutableListOf<InfoGraficoEstados>()
 
     // Creacion de la cola de procesos LISTOS
-    val colaDeListos = listaDeProcesosGlobal.toMutableList()
+    val colaDeListos = copiarLista(listaProcesos)
 
     // Variable para almacenar el avance del tiempo con cada proceso
     var momentoActual = colaDeListos.first().getLlegada()
 
     // Consideramos que se deba completar el ultimo proceso como condicion de parada del bucle
-    while (listaDeProcesosGlobal.last().getEstado() != COMPLETADO) {
+    while (colaDeListos.isNotEmpty()) {
         // Variable que almacena el primer elemento de la cola
         val cabezaDeCola = colaDeListos.first()
 
@@ -96,9 +121,6 @@ fun algoritmoFifo() {
         momentoActual++
     }
 
-    // Limpiamos el primer elemento utilizado de base para poder operar
-    infoEstados.removeAt(0)
-
     // Almacenamos la variable de informacion de los tiempos
-    infoResultadosGlobal = infoEstados
+    return infoEstados
 }

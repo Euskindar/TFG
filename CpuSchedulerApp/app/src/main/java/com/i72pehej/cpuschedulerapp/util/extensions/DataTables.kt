@@ -398,19 +398,21 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     val listaFilaActual = infoRes.filter { it.getNombre() == nombreActual.getNombre() }
 
                     // Recorremos las columnas de tiempos
-                    for (cols in 0 until maxMomento) {
+                    for (cols in infoRes.first().getMomento() until maxMomento) {
                         var simbolo = ""
 
                         // Para cada momento, se compara si el proceso tiene evento y se coloca el simbolo correspondiente
                         if (listaFilaActual.any { it.getMomento() == cols }) {
 
                             // EL WHEN TIENE QUE BUSCAR EL ESTADO DE LA ULTIMA APARICION DE UN ESTADO CON EL MOMENTO QUE TENEMOS AHORA
-                            simbolo = when(listaFilaActual.filterLast { it.getMomento() == cols }?.getEstado()){
+                            simbolo = when (listaFilaActual.filterLast { it.getMomento() == cols }?.getEstado()) {
                                 Proceso.EstadoDeProceso.LISTO -> "L"
                                 Proceso.EstadoDeProceso.EJECUCION -> "x"
                                 Proceso.EstadoDeProceso.BLOQUEADO -> "B"
                                 Proceso.EstadoDeProceso.COMPLETADO -> "C"
-                                else -> {""}
+                                else -> {
+                                    ""
+                                }
                             }
                         }
 
