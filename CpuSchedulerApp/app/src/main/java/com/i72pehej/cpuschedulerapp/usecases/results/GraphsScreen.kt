@@ -23,6 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.i72pehej.cpuschedulerapp.ui.theme.Azul_com_3
+import com.i72pehej.cpuschedulerapp.ui.theme.Rojo_com_2
+import com.i72pehej.cpuschedulerapp.ui.theme.Verde_deriv_1
 import com.i72pehej.cpuschedulerapp.util.extensions.TablaResultadosGraficos
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 
@@ -78,10 +81,10 @@ private fun FilaLeyenda() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        SimboloDeLeyenda("E", "Espera", Color.Black)
-        SimboloDeLeyenda("X", "Ejecución", Color.Blue)
-        SimboloDeLeyenda("B", "Bloqueado", Color.Gray)
-        SimboloDeLeyenda("C", "Completado", Color.Green)
+        SimboloDeLeyenda("E", "Espera", Color.Black.copy(alpha = 0.7f))
+        SimboloDeLeyenda("X", "Ejecución", Azul_com_3.copy(alpha = 0.7f))
+        SimboloDeLeyenda("B", "Bloqueado", Rojo_com_2.copy(alpha = 0.7f))
+        SimboloDeLeyenda("C", "Completado", Verde_deriv_1.copy(alpha = 0.7f))
     }
 }
 

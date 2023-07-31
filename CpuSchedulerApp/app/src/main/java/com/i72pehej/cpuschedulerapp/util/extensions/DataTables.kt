@@ -26,6 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.i72pehej.cpuschedulerapp.R
+import com.i72pehej.cpuschedulerapp.ui.theme.Azul_com_3
+import com.i72pehej.cpuschedulerapp.ui.theme.Rojo_com_2
+import com.i72pehej.cpuschedulerapp.ui.theme.Verde_deriv_1
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
@@ -309,7 +312,7 @@ fun TablaTiemposResultados(procesos: List<Proceso>) {
  */
 
 /**
- * Función de extensión para obtener el ultimo elemento que cumple con una condicion
+ * Funcion de extension para obtener el ultimo elemento que cumple con una condicion
  *
  * @param T Tipo generico
  * @param predicate Condicion que se debe cumplir
@@ -405,22 +408,22 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                             // EL WHEN TIENE QUE BUSCAR EL ESTADO DE LA ULTIMA APARICION DE UN ESTADO CON EL MOMENTO QUE TENEMOS AHORA
                             simbolo = when (listaFilaActual.filterLast { it.getMomento() == cols }?.getEstado()) {
                                 Proceso.EstadoDeProceso.LISTO -> {
-                                    color = Color.Black
+                                    color = Color.Black.copy(alpha = 0.8f)
                                     "E"
                                 }
 
                                 Proceso.EstadoDeProceso.EJECUCION -> {
-                                    color = Color.Blue
+                                    color = Azul_com_3.copy(alpha = 0.8f)
                                     "X"
                                 }
 
                                 Proceso.EstadoDeProceso.BLOQUEADO -> {
-                                    color = Color.Gray
+                                    color = Rojo_com_2.copy(alpha = 0.8f)
                                     "B"
                                 }
 
                                 Proceso.EstadoDeProceso.COMPLETADO -> {
-                                    color = Color.Green
+                                    color = Verde_deriv_1.copy(alpha = 0.8f)
                                     "C"
                                 }
 

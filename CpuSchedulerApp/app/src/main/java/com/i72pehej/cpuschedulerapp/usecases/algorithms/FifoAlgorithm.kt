@@ -126,8 +126,6 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
         momentoActual++
     }
 
-    infoEstados.forEach { println(it) }
-
     // Almacenamos la variable de informacion de los tiempos
     return infoEstados
 }
