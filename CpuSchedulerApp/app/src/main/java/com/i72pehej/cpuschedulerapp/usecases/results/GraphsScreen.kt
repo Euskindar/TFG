@@ -78,14 +78,15 @@ private fun FilaLeyenda() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        SimboloDeLeyenda("E", "Espera", Color.Blue)
+        SimboloDeLeyenda("E", "Espera", Color.Black)
+        SimboloDeLeyenda("X", "Ejecución", Color.Blue)
+        SimboloDeLeyenda("B", "Bloqueado", Color.Gray)
         SimboloDeLeyenda("C", "Completado", Color.Green)
-        SimboloDeLeyenda("x", "Ejecución", Color.Red)
     }
 }
 
 @Composable
-private fun SimboloDeLeyenda(symbol: String, label: String, color: Color) {
+private fun SimboloDeLeyenda(simbolo: String, etiqueta: String, color: Color) {
     Row( verticalAlignment = CenterVertically) {
         Surface(
             modifier = Modifier.size(30.dp),
@@ -93,7 +94,7 @@ private fun SimboloDeLeyenda(symbol: String, label: String, color: Color) {
             color = color
         ) {
             Text(
-                text = symbol,
+                text = simbolo,
                 fontSize = 20.sp,
                 color = Color.White,
                 modifier = Modifier.align(CenterVertically),
@@ -104,7 +105,7 @@ private fun SimboloDeLeyenda(symbol: String, label: String, color: Color) {
         Spacer(modifier = Modifier.size(4.dp))
 
         Text(
-            text = label,
+            text = etiqueta,
             fontSize = 12.sp,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.8f),
             modifier = Modifier.align(CenterVertically)

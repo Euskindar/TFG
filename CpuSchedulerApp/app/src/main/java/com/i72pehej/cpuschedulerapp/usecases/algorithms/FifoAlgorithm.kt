@@ -78,6 +78,9 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
             colaDeListos.add(cabezaDeCola)
             colaDeListos.removeAt(0)
 
+            // Reordenamos la cola por tiempo de llegada para considerar que el evento E/S termine antes de que haya llegado el siguiente proceso a la cola
+            colaDeListos.sortBy { it.getLlegada() }
+
             // Actualizamos el momentoActual a la llegada del siguiente proceso (-1 para considerar el aumento del bucle)
             momentoActual = colaDeListos.first().getLlegada() - 1
         }
@@ -122,6 +125,8 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
         // Avanzamos el tiempo
         momentoActual++
     }
+
+    infoEstados.forEach { println(it) }
 
     // Almacenamos la variable de informacion de los tiempos
     return infoEstados

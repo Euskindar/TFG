@@ -19,10 +19,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.i72pehej.cpuschedulerapp.R
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
@@ -395,28 +397,57 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     // Recorremos las columnas de tiempos
                     for (cols in infoRes.first().getMomento() until maxMomento) {
                         var simbolo = ""
+                        var color = Color.Transparent
 
                         // Para cada momento, se compara si el proceso tiene evento y se coloca el simbolo correspondiente
                         if (listaFilaActual.any { it.getMomento() == cols }) {
 
                             // EL WHEN TIENE QUE BUSCAR EL ESTADO DE LA ULTIMA APARICION DE UN ESTADO CON EL MOMENTO QUE TENEMOS AHORA
                             simbolo = when (listaFilaActual.filterLast { it.getMomento() == cols }?.getEstado()) {
-                                Proceso.EstadoDeProceso.LISTO -> "L"
-                                Proceso.EstadoDeProceso.EJECUCION -> "x"
-                                Proceso.EstadoDeProceso.BLOQUEADO -> "B"
-                                Proceso.EstadoDeProceso.COMPLETADO -> "C"
+                                Proceso.EstadoDeProceso.LISTO -> {
+                                    color = Color.Black
+                                    "E"
+                                }
+
+                                Proceso.EstadoDeProceso.EJECUCION -> {
+                                    color = Color.Blue
+                                    "X"
+                                }
+
+                                Proceso.EstadoDeProceso.BLOQUEADO -> {
+                                    color = Color.Gray
+                                    "B"
+                                }
+
+                                Proceso.EstadoDeProceso.COMPLETADO -> {
+                                    color = Color.Green
+                                    "C"
+                                }
+
                                 else -> {
+                                    color = Color.Transparent
                                     ""
                                 }
                             }
                         }
 
                         // Texto a poner en la celda
+//                        Surface(
+//                            modifier = Modifier.size(20.dp),
+//                            shape = MaterialTheme.shapes.small,
+//                            color = color
+//                        ) {
                         Text(
                             text = simbolo,
-                            modifier = Modifier.weight(1f),
+                            fontSize = 15.sp,
+                            color = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .background(color)
+                                .weight(1f),
                             textAlign = TextAlign.Center
                         )
+//                        }
                     }
                 }
             }
