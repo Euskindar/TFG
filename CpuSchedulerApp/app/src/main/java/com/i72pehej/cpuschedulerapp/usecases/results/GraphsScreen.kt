@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.i72pehej.cpuschedulerapp.ui.theme.Azul_com_3
@@ -61,10 +60,8 @@ fun GraphsScreen() {
  */
 
 /**
- * Tabla leyenda graficos
- *
+ * Tabla para considerar la leyenda de los simbolos colocados en la grafica
  */
-@Preview
 @Composable
 fun TablaLeyendaGraficos() {
     Column(
@@ -75,6 +72,9 @@ fun TablaLeyendaGraficos() {
     ) { FilaLeyenda() }
 }
 
+/**
+ * Fila en la que visualizan todos los elementos de la leyenda
+ */
 @Composable
 private fun FilaLeyenda() {
     Row(
@@ -88,9 +88,16 @@ private fun FilaLeyenda() {
     }
 }
 
+/**
+ * Funcion para crear cada uno de los elementos que se colocaran en la leyenda
+ *
+ * @param simbolo Simbolo que se colocara en la tabla grafica
+ * @param etiqueta Significado al que hace referencia el simbolo
+ * @param color Color de fondo del simbolo
+ */
 @Composable
 private fun SimboloDeLeyenda(simbolo: String, etiqueta: String, color: Color) {
-    Row( verticalAlignment = CenterVertically) {
+    Row(verticalAlignment = CenterVertically) {
         Surface(
             modifier = Modifier.size(30.dp),
             shape = MaterialTheme.shapes.small,

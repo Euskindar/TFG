@@ -1,6 +1,7 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.i72pehej.cpuschedulerapp.usecases.results.crearListaColas
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.BLOQUEADO
@@ -121,6 +122,9 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
                 momentoActual = llegadaCabeza
             }
         }
+
+        // Guardamos el estado de la cola para poder visualizarla en su pagina
+        crearListaColas(colaDeListos)
 
         // Avanzamos el tiempo
         momentoActual++

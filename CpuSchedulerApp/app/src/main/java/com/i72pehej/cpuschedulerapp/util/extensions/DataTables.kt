@@ -435,11 +435,6 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                         }
 
                         // Texto a poner en la celda
-//                        Surface(
-//                            modifier = Modifier.size(20.dp),
-//                            shape = MaterialTheme.shapes.small,
-//                            color = color
-//                        ) {
                         Text(
                             text = simbolo,
                             fontSize = 15.sp,
@@ -450,7 +445,6 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                                 .weight(1f),
                             textAlign = TextAlign.Center
                         )
-//                        }
                     }
                 }
             }
