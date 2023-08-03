@@ -30,6 +30,7 @@ import com.i72pehej.cpuschedulerapp.ui.theme.Azul_com_3
 import com.i72pehej.cpuschedulerapp.ui.theme.Rojo_com_2
 import com.i72pehej.cpuschedulerapp.ui.theme.Verde_deriv_1
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 
 /**
  * @author Julen Perez Hernandez
@@ -49,7 +50,8 @@ fun QueuesScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        TablaColasDeProcesos()
+        if (listaDeColas.isNotEmpty()) TablaColasDeProcesos()
+        crearListaColas()
     }
 }
 
@@ -57,20 +59,47 @@ fun QueuesScreen() {
  * ===========================================================================================
  */
 
-// Map que almacena el listado de colas de procesos con el Momento de la cola como identificador
-private val mapDeProcesos: Map<Int, MutableList<Proceso>> = mapOf()
+/**
+ * Listado de las colas en cada momento
+ */
+private val listaDeColas: MutableList<List<String>> = mutableListOf()
 
 /**
  * Funcion que crea una lista con el orden de los procesos en la cola en cada momento
- *
- * @param cola Listado de procesos en la cola
  */
-fun crearListaColas(cola: MutableList<Proceso>) {
-    // Variable para obtener la nueva clave incrementando la anterior (en caso de ser el primer elemento se coloca 0)
-    val nuevaClave = mapDeProcesos.keys.maxOrNull()?.plus(1) ?: 0
+fun crearListaColas() {
 
-    // Se asigna el nuevo elemento al map
-    mapDeProcesos + (nuevaClave to cola)
+    // MIRAR EN LA LISTA DE ESTADOS
+    // PARA CADA MOMENTO, SACAR UNA SUBLISTA CON LOS ESTADOS DE ESE MOMENTO
+    // Y COLOCAR EN UNA LISTA (mutableList<String>) LOS NOMBRES DE LOS PROCESOS EN ORDEN:
+    // 1- ELIMINAR PROCESOS BLOQUEADOS Y COMPLETADOS (SOLO NOS INTERESAN EJECUCION O ESPERA, QUE SERIAN LOS QUE ESTARIAN EN LA COLA)
+    // 2- EJECUCION (SI HAY)
+    // 3- ORDENAR EL RESTO DE PROCESOS POR TIEMPO DE ESPERA LOCAL, COLOCANDO EL QUE MAS TIEMPO DE ESPERA TIENE PRIMERO
+
+    val primerIndice = infoResultadosGlobal.first().getMomento()
+    val ultimoIndice = infoResultadosGlobal.last().getMomento()
+
+    // Crearmos una copia de los estados para evitar trabajar con la original
+    val listaEstados = infoResultadosGlobal.toMutableList()
+
+    // Iteramos por cada columna (== momento) para obtener la lista de procesos en cola en ese momento
+    for (columna in primerIndice until ultimoIndice) {
+        // Sublista para obtener solo los elementos del momento actual
+        var subListaEstados = listaEstados.filter { it.getMomento() == columna }
+
+
+        // APLICAR EL ORDEN Y ELIMINAR BLOQ - COMPL DE LA LISTA ANTES DE DEJAR SOLO LOS NOMBRES
+
+        subListaEstados = subListaEstados.filter { (it.getEstado() != Proceso.EstadoDeProceso.BLOQUEADO) && (it.getEstado() != Proceso.EstadoDeProceso.COMPLETADO) }
+
+        // Sublista para obtener los nombres de los procesos del momento actual
+        val subListaNombres = subListaEstados.map { it.getNombre() }
+
+        // Agregamos a la lista de colas la lista de nombres de procesos
+        listaDeColas.add(subListaNombres)
+    }
+
+
 }
 
 /**
@@ -79,6 +108,10 @@ fun crearListaColas(cola: MutableList<Proceso>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TablaColasDeProcesos() {
+    // Obtenemos los valores de las claves de inicio y fin para tener un rango con el que trabajar
+    val primerIndice = infoResultadosGlobal.first().getMomento()
+    val ultimoIndice = infoResultadosGlobal.last().getMomento()
+
     // Creamos una tabla utilizando LazyColumn
     LazyColumn(
         modifier = Modifier
@@ -103,7 +136,7 @@ fun TablaColasDeProcesos() {
 
                 // Agregamos el numero de columnas correspondientes a cada momento de la linea de tiempos
 //                for (nCols in mapDeProcesos.keys.first() until mapDeProcesos.keys.max()) {
-                for (nCols in 0 until 10) {
+                for (nCols in primerIndice until ultimoIndice) {
                     Text(
                         text = "$nCols",
                         modifier = Modifier.weight(1f),
@@ -135,7 +168,7 @@ fun TablaColasDeProcesos() {
                 )
 
                 // Recorremos las columnas de tiempos
-                for (cols in 0 until 10) {
+                for (cols in primerIndice until ultimoIndice) {
                     // Para cada momento, se compara si el proceso tiene evento y se coloca el simbolo correspondiente
                     // Texto a poner en la celda
                     Text(

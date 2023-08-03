@@ -115,6 +115,16 @@ data class Proceso(
         return (this.getTiempoEstancia() - this.getDuracion())
     }
 
+    // Variable para operar con el tiempo de espera del proceso
+    private var tiempoEsperaLocal = 0
+    fun getTiempoEsperaLocal(): Int {
+        return this.tiempoEsperaLocal
+    }
+
+    fun setTiempoEsperaLocal(tiempo: Int) {
+        this.tiempoEsperaLocal = tiempo
+    }
+
     // Tiempo que ha tardado el proceso en completarse desde su llegada
     fun tiempoFin(): Int {
         // Se busca en la lista de estados la primera aparicion del proceso, correspondiente con el estado de COMPLETADO, sino devuelve -1 como "error"

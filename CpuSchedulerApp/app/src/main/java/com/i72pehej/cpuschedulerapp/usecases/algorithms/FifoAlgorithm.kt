@@ -1,7 +1,6 @@
 package com.i72pehej.cpuschedulerapp.usecases.algorithms
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.i72pehej.cpuschedulerapp.usecases.results.crearListaColas
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.BLOQUEADO
@@ -10,6 +9,7 @@ import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.EJECUCI
 import com.i72pehej.cpuschedulerapp.util.classes.Proceso.EstadoDeProceso.LISTO
 import com.i72pehej.cpuschedulerapp.util.classes.crearProceso
 import com.i72pehej.cpuschedulerapp.util.classes.ordenarLlegadaProcesos
+import com.i72pehej.cpuschedulerapp.util.listaDeProcesosGlobal
 
 /**
  * @author Julen Perez Hernandez
@@ -70,6 +70,9 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
             for (tiempos in 0 until cabezaDeCola.getTiempoDeEsperaES()) {
                 // Guardamos el estado BLOQUEADO
                 infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = BLOQUEADO, momento = momentoActual + tiempos))
+
+                // Incrementamos el tiempo de espera local del proceso para el control de las colas
+                listaDeProcesosGlobal[listaDeProcesosGlobal.indexOf(cabezaDeCola)].setTiempoEsperaLocal(cabezaDeCola.getTiempoEsperaLocal() + 1)
             }
 
             // Actualizar la llegada del proceso de vuelta del estado de BLOQUEO == salida del evento de E/S para retomarlo desde ese punto
@@ -104,6 +107,10 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
                 else {
                     // Pasamos a LISTO == ESPERA
                     infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = LISTO, momento = momentoActual))
+
+                    // Incrementamos el tiempo de espera local para el control de las colas
+                    val index = listaDeProcesosGlobal.indexOf(cabezaDeCola)
+                    if (index > 0) listaDeProcesosGlobal[index].setTiempoEsperaLocal(cabezaDeCola.getTiempoEsperaLocal() + 1)
                 }
             }
             // Si no le queda tiempo restante
@@ -122,9 +129,6 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
                 momentoActual = llegadaCabeza
             }
         }
-
-        // Guardamos el estado de la cola para poder visualizarla en su pagina
-        crearListaColas(colaDeListos)
 
         // Avanzamos el tiempo
         momentoActual++
