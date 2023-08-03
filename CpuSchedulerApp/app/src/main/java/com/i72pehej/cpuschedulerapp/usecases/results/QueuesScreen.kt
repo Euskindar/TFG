@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -59,13 +60,15 @@ fun QueuesScreen() {
  * ===========================================================================================
  */
 
+// Listado de las colas en cada momento
+val listaDeColas: MutableList<List<String>> = mutableListOf()
 
 /**
  * Funcion que crea una lista con el orden de los procesos en la cola en cada momento
  */
 fun crearListaColas() {
-    // Listado de las colas en cada momento
-    val listaDeColas: MutableList<List<String>> = mutableListOf()
+    // Limpiamos el listado para evitar sobrecarga de la lista
+    listaDeColas.clear()
 
     // Obtenemos los indices de inicio y fin del bucle
     val primerIndice = infoResultadosGlobal.first().getMomento()
@@ -98,7 +101,7 @@ fun crearListaColas() {
 fun TablaColasDeProcesos() {
     // Obtenemos los valores de las claves de inicio y fin para tener un rango con el que trabajar
     val primerIndice = infoResultadosGlobal.first().getMomento()
-    val ultimoIndice = infoResultadosGlobal.last().getMomento()
+    val ultimoIndice = infoResultadosGlobal.last().getMomento() - 1 // Ignoramos el COMPLETADO final
 
     // Creamos una tabla utilizando LazyColumn
     LazyColumn(
@@ -123,7 +126,6 @@ fun TablaColasDeProcesos() {
                 )
 
                 // Agregamos el numero de columnas correspondientes a cada momento de la linea de tiempos
-//                for (nCols in mapDeProcesos.keys.first() until mapDeProcesos.keys.max()) {
                 for (nCols in primerIndice until ultimoIndice) {
                     Text(
                         text = "$nCols",
@@ -137,13 +139,13 @@ fun TablaColasDeProcesos() {
 
         // Agregamos una fila para cada cola en cada momento
 
-        item {
+        items(listaDeColas) {colaActual ->
 
             // Filas
             Row(modifier = Modifier.padding(4.dp)) {
                 // Agregamos los nombres de los procesos
                 Text(
-                    text = "A",
+                    text = "Titulo",
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
@@ -160,7 +162,7 @@ fun TablaColasDeProcesos() {
                     // Para cada momento, se compara si el proceso tiene evento y se coloca el simbolo correspondiente
                     // Texto a poner en la celda
                     Text(
-                        text = "A",
+                        text = colaActual.toString(),
                         fontSize = 15.sp,
                         color = Color.White,
                         modifier = Modifier
