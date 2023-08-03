@@ -27,6 +27,7 @@ import com.i72pehej.cpuschedulerapp.usecases.home.ContenidoHome
 import com.i72pehej.cpuschedulerapp.usecases.results.GraphsScreen
 import com.i72pehej.cpuschedulerapp.usecases.results.QueuesScreen
 import com.i72pehej.cpuschedulerapp.usecases.results.ResultsScreen
+import com.i72pehej.cpuschedulerapp.util.infoResultadosGlobal
 import com.i72pehej.cpuschedulerapp.util.siguienteSeleccionado
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -50,11 +51,11 @@ sealed class HomeTabs(
 ) {
     object TabInicio : HomeTabs(icono = Icons.Default.Home, titulo = "Inicio", { ContenidoHome() })
 
-    object TabResultados : HomeTabs(icono = Icons.Default.Toc, titulo = "Resultado", { ResultsScreen() })
+    object TabResultados : HomeTabs(icono = Icons.Default.Toc, titulo = "Resultado", { if (infoResultadosGlobal.isNotEmpty()) ResultsScreen() })
 
-    object TabGraficos : HomeTabs(icono = Icons.Filled.Equalizer, titulo = "Gráficos", { GraphsScreen() })
+    object TabGraficos : HomeTabs(icono = Icons.Filled.Equalizer, titulo = "Gráficos", { if (infoResultadosGlobal.isNotEmpty()) GraphsScreen() })
 
-    object TabColas : HomeTabs(icono = Icons.Filled.LowPriority, titulo = "Colas", { QueuesScreen() })
+    object TabColas : HomeTabs(icono = Icons.Filled.LowPriority, titulo = "Colas", { if (infoResultadosGlobal.isNotEmpty()) QueuesScreen() })
 }
 
 /**

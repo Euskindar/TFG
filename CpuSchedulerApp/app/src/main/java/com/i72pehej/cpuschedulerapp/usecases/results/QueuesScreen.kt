@@ -50,7 +50,7 @@ fun QueuesScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        if (listaDeColas.isNotEmpty()) TablaColasDeProcesos()
+        TablaColasDeProcesos()
         crearListaColas()
     }
 }
@@ -59,23 +59,15 @@ fun QueuesScreen() {
  * ===========================================================================================
  */
 
-/**
- * Listado de las colas en cada momento
- */
-private val listaDeColas: MutableList<List<String>> = mutableListOf()
 
 /**
  * Funcion que crea una lista con el orden de los procesos en la cola en cada momento
  */
 fun crearListaColas() {
+    // Listado de las colas en cada momento
+    val listaDeColas: MutableList<List<String>> = mutableListOf()
 
-    // MIRAR EN LA LISTA DE ESTADOS
-    // PARA CADA MOMENTO, SACAR UNA SUBLISTA CON LOS ESTADOS DE ESE MOMENTO
-    // Y COLOCAR EN UNA LISTA (mutableList<String>) LOS NOMBRES DE LOS PROCESOS EN ORDEN:
-    // 1- ELIMINAR PROCESOS BLOQUEADOS Y COMPLETADOS (SOLO NOS INTERESAN EJECUCION O ESPERA, QUE SERIAN LOS QUE ESTARIAN EN LA COLA)
-    // 2- EJECUCION (SI HAY)
-    // 3- ORDENAR EL RESTO DE PROCESOS POR TIEMPO DE ESPERA LOCAL, COLOCANDO EL QUE MAS TIEMPO DE ESPERA TIENE PRIMERO
-
+    // Obtenemos los indices de inicio y fin del bucle
     val primerIndice = infoResultadosGlobal.first().getMomento()
     val ultimoIndice = infoResultadosGlobal.last().getMomento()
 
@@ -87,9 +79,7 @@ fun crearListaColas() {
         // Sublista para obtener solo los elementos del momento actual
         var subListaEstados = listaEstados.filter { it.getMomento() == columna }
 
-
-        // APLICAR EL ORDEN Y ELIMINAR BLOQ - COMPL DE LA LISTA ANTES DE DEJAR SOLO LOS NOMBRES
-
+        // Eliminamos los procesos en estados que no corresponden a la cola de LISTOS
         subListaEstados = subListaEstados.filter { (it.getEstado() != Proceso.EstadoDeProceso.BLOQUEADO) && (it.getEstado() != Proceso.EstadoDeProceso.COMPLETADO) }
 
         // Sublista para obtener los nombres de los procesos del momento actual
@@ -98,8 +88,6 @@ fun crearListaColas() {
         // Agregamos a la lista de colas la lista de nombres de procesos
         listaDeColas.add(subListaNombres)
     }
-
-
 }
 
 /**

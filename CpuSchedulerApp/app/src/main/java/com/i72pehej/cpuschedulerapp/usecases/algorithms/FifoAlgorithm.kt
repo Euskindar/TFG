@@ -71,8 +71,9 @@ fun algoritmoFifo(listaProcesos: SnapshotStateList<Proceso>): MutableList<InfoGr
                 // Guardamos el estado BLOQUEADO
                 infoEstados.add(InfoGraficoEstados(nombre = cabezaDeCola.getNombre(), estado = BLOQUEADO, momento = momentoActual + tiempos))
 
-                // Incrementamos el tiempo de espera local del proceso para el control de las colas
-                listaDeProcesosGlobal[listaDeProcesosGlobal.indexOf(cabezaDeCola)].setTiempoEsperaLocal(cabezaDeCola.getTiempoEsperaLocal() + 1)
+                // Incrementamos el tiempo de espera local para el control de las colas
+                val index = listaDeProcesosGlobal.indexOf(cabezaDeCola)
+                if (index > 0) listaDeProcesosGlobal[index].setTiempoEsperaLocal(cabezaDeCola.getTiempoEsperaLocal() + 1)
             }
 
             // Actualizar la llegada del proceso de vuelta del estado de BLOQUEO == salida del evento de E/S para retomarlo desde ese punto

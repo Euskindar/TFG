@@ -3,8 +3,8 @@ package com.i72pehej.cpuschedulerapp.util
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.i72pehej.cpuschedulerapp.R
-import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 import com.i72pehej.cpuschedulerapp.util.classes.InfoGraficoEstados
+import com.i72pehej.cpuschedulerapp.util.classes.Proceso
 
 /**
  * @author Julen Perez Hernandez
