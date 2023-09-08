@@ -153,7 +153,7 @@ fun TablaColasDeProcesos() {
                     // TODO -> CREAR UNA FUNCION QUE CREE UNA COLUMNA EN LA QUE CADA CARACTER SE COLOQUE UNO ENCIMA DEL OTRO Y QUEDE EL STRING VERTICAL
                     // TODO -> OPCION 2: UTILIZAR ITEMS() PARA RECORRER UNO POR UNO LOS CARACTERES Y CREAR UNA FILA PARA EL 1er CARACTER, OTRA PARA EL 2o, etc...
 
-                    Text(text = listaDeColas[cols].toString(), modifier = Modifier.weight(1f))
+//                    Text(text = listaDeColas[cols].toString(), modifier = Modifier.weight(1f))
                 }
             }
         }

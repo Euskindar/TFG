@@ -2,6 +2,7 @@ package com.i72pehej.cpuschedulerapp.util.extensions
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -341,15 +343,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
         // Variable que almacena el valor maximo que tendra la linea de tiempos
         val maxMomento = infoRes.last().getMomento() + 1
 
-        LazyRow(modifier = Modifier.fillMaxWidth()) {
-            itemsIndexed(items = infoRes) { item ->
-                Text(text = item)
-            }
-
-        }
-
-
-
+        val scrollHorizontal = rememberScrollState()
 
         // Creamos una tabla utilizando LazyColumn
         LazyColumn(
@@ -357,6 +351,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))
                 .padding(8.dp)
+//                .horizontalScroll(scrollHorizontal)
         ) {
             // Agregamos una fila para el encabezado de la tabla
             stickyHeader {
@@ -364,11 +359,12 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     modifier = Modifier
                         .background(MaterialTheme.colors.secondaryVariant, RoundedCornerShape(5.dp))
                         .padding(4.dp)
+                        .horizontalScroll(scrollHorizontal)
                 ) {
                     // Agregamos una columna inicial para los procesos
                     Text(
                         text = "",
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.width(35.dp),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
@@ -377,7 +373,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     for (nCols in infoRes.first().getMomento() until maxMomento) {
                         Text(
                             text = "$nCols",
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.width(35.dp),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
                         )
@@ -391,11 +387,15 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
             // Agregamos una fila para cada proceso en la lista de procesos
             items(listaNombres) { nombreActual ->
                 // Filas
-                Row(modifier = Modifier.padding(4.dp)) {
+                Row(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .horizontalScroll(scrollHorizontal)
+                ) {
                     // Agregamos los nombres de los procesos
                     Text(
                         text = nombreActual.getNombre(),
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.width(35.dp),
                         textAlign = TextAlign.Center
                     )
 
@@ -412,7 +412,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     // Recorremos las columnas de tiempos
                     for (cols in infoRes.first().getMomento() until maxMomento) {
                         var simbolo = ""
-                        var color = Color.Transparent
+                        var color = MaterialTheme.colors.primaryVariant
 
                         // Para cada momento, se compara si el proceso tiene evento y se coloca el simbolo correspondiente
                         if (listaFilaActual.any { it.getMomento() == cols }) {
@@ -440,23 +440,29 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                                 }
 
                                 else -> {
-                                    color = Color.Transparent
+                                    color = MaterialTheme.colors.primaryVariant
                                     ""
                                 }
                             }
                         }
 
-                        // Texto a poner en la celda
-                        Text(
-                            text = simbolo,
-                            fontSize = 15.sp,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .background(color)
-                                .weight(1f),
-                            textAlign = TextAlign.Center
-                        )
+                        // Elemento a poner en la celda
+                        Card(
+                            contentColor = color,
+                            elevation = 0.dp,
+                            border = null,
+                            modifier = Modifier.size(width = 35.dp, height = 25.dp)
+                        ) {
+                            Text(
+                                text = simbolo,
+                                fontSize = 15.sp,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .background(color),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
