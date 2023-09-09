@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -400,11 +398,11 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                     )
 
                     // Separador vertical
-                    Divider(
-                        modifier = Modifier
-                            .height(21.dp)
-                            .width(1.dp), color = MaterialTheme.colors.secondary
-                    )
+//                    Divider(
+//                        modifier = Modifier
+//                            .height(21.dp)
+//                            .width(1.dp), color = MaterialTheme.colors.secondary
+//                    )
 
                     // Filtramos la lista para obtener los estados de la fila actual
                     val listaFilaActual = infoRes.filter { it.getNombre() == nombreActual.getNombre() }
@@ -451,7 +449,7 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                             contentColor = color,
                             elevation = 0.dp,
                             border = null,
-                            modifier = Modifier.size(width = 35.dp, height = 25.dp)
+                            modifier = Modifier.size(width = 35.dp, height = 20.dp)
                         ) {
                             Text(
                                 text = simbolo,

@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,8 +40,11 @@ fun QueuesScreen() {
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        TablaColasDeProcesos()
+        // Creacion del listado de colas
         crearListaColas()
+
+        // Disposicion de la tabla resultante
+        TablaColasDeProcesos()
     }
 }
 
@@ -90,10 +91,6 @@ fun crearListaColas() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TablaColasDeProcesos() {
-    // Obtenemos los valores de las claves de inicio y fin para tener un rango con el que trabajar
-    val primerIndice = infoResultadosGlobal.first().getMomento()
-    val ultimoIndice = infoResultadosGlobal.last().getMomento() - 1 // Ignoramos el COMPLETADO final
-
     // Creamos una tabla utilizando LazyColumn
     LazyColumn(
         modifier = Modifier
@@ -116,45 +113,29 @@ fun TablaColasDeProcesos() {
                     fontWeight = FontWeight.Bold
                 )
 
-                // Agregamos el numero de columnas correspondientes a cada momento de la linea de tiempos
-                for (nCols in primerIndice..ultimoIndice) {
-                    Text(
-                        text = "$nCols",
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                // Agregamos la columna para el listado de colas
+                Text(
+                    text = "Cola de Procesos",
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
 
         // Agregamos una fila para cada cola en cada momento
-        item {
+        itemsIndexed(listaDeColas) { index, item ->
             // Fila de colas
             Row(modifier = Modifier.padding(4.dp)) {
-                // Agregamos los nombres de los procesos
+                // Agregamos el momento de la cola
                 Text(
-                    text = "Titulo",
+                    text = "$index |",
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
 
-                // Separador vertical
-                Divider(
-                    modifier = Modifier
-                        .height(21.dp)
-                        .width(1.dp), color = MaterialTheme.colors.secondary
-                )
-
-                // Recorremos las columnas de tiempos
-                for (cols in primerIndice..ultimoIndice) {
-                    // Texto a poner en la celda
-
-                    // TODO -> CREAR UNA FUNCION QUE CREE UNA COLUMNA EN LA QUE CADA CARACTER SE COLOQUE UNO ENCIMA DEL OTRO Y QUEDE EL STRING VERTICAL
-                    // TODO -> OPCION 2: UTILIZAR ITEMS() PARA RECORRER UNO POR UNO LOS CARACTERES Y CREAR UNA FILA PARA EL 1er CARACTER, OTRA PARA EL 2o, etc...
-
-//                    Text(text = listaDeColas[cols].toString(), modifier = Modifier.weight(1f))
-                }
+                // Agregamos la cola
+                Text(text = item.toString(), modifier = Modifier.weight(1f))
             }
         }
     }
