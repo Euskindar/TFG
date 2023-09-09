@@ -392,17 +392,10 @@ fun TablaResultadosGraficos(infoRes: List<InfoGraficoEstados>) {
                 ) {
                     // Agregamos los nombres de los procesos
                     Text(
-                        text = nombreActual.getNombre(),
+                        text = nombreActual.getNombre() + " |",
                         modifier = Modifier.width(35.dp),
                         textAlign = TextAlign.Center
                     )
-
-                    // Separador vertical
-//                    Divider(
-//                        modifier = Modifier
-//                            .height(21.dp)
-//                            .width(1.dp), color = MaterialTheme.colors.secondary
-//                    )
 
                     // Filtramos la lista para obtener los estados de la fila actual
                     val listaFilaActual = infoRes.filter { it.getNombre() == nombreActual.getNombre() }

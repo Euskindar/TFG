@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -108,7 +109,7 @@ fun TablaColasDeProcesos() {
                 // Agregamos una celda inicial en blanco para considerar la columna
                 Text(
                     text = "",
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.width(35.dp),
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold
                 )
@@ -130,7 +131,7 @@ fun TablaColasDeProcesos() {
                 // Agregamos el momento de la cola
                 Text(
                     text = "$index |",
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.width(35.dp),
                     textAlign = TextAlign.Center
                 )
 
