@@ -8,7 +8,7 @@ package com.i72pehej.cpuschedulerapp.usecases.algorithms
  * ===================================================================
  */
 
-// TODO -> NO FUNCIONA BIEN TODAVIA, EN ESPERA DE FUTURA IMPLEMENTACION CORRECTA
+// TODO -> EN ESPERA DE FUTURA IMPLEMENTACION
 
 /**
  * Funcion para implementar el algoritmo RoundRobin considerando estados
